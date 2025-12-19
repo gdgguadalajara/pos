@@ -1,0 +1,84 @@
+package com.gdgguadalajara.pos.product;
+
+import java.util.UUID;
+
+import com.gdgguadalajara.pos.account.model.AccountRole;
+import com.gdgguadalajara.pos.common.PageBuilder;
+import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.product.application.CreateProduct;
+import com.gdgguadalajara.pos.product.application.DeleteProduct;
+import com.gdgguadalajara.pos.product.application.UpdateProduct;
+import com.gdgguadalajara.pos.product.model.Product;
+import com.gdgguadalajara.pos.product.model.dto.CreateProductRequest;
+import com.gdgguadalajara.pos.product.model.dto.UpdateProductRequest;
+
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+@Path("/api/products")
+public class ProductResource {
+
+    private final CreateProduct createProduct;
+    private final UpdateProduct updateProduct;
+    private final DeleteProduct deleteProduct;
+
+    @POST
+    @Transactional
+    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    public Product create(CreateProductRequest request) {
+        return createProduct.run(request);
+    }
+
+    @GET
+    @Authenticated
+    public PaginatedResponse<Product> read(
+            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+        var query = Product.<Product>findAll();
+        return PageBuilder.of(query, page, size);
+    }
+
+    @GET
+    @Authenticated
+    @Path("/{uuid}")
+    public Product readById(UUID uuid) {
+        var product = Product.<Product>findById(uuid);
+        if (product == null)
+            throw new NotFoundException("Product no encontrado");
+        return product;
+    }
+
+    @PUT
+    @Transactional
+    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @Path("/{uuid}")
+    public Product update(UUID uuid, UpdateProductRequest request) {
+        return updateProduct.run(uuid, request);
+    }
+
+    @DELETE
+    @Transactional
+    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @Path("/{uuid}")
+    public void delete(UUID uuid) {
+        try {
+            deleteProduct.run(Product.<Product>findById(uuid));
+        } catch (Exception e) {
+        }
+    }
+
+}
