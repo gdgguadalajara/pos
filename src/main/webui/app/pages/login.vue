@@ -43,13 +43,11 @@ const onLoginSubmit = (e) => {
                 <form id="login-form" @submit.prevent="onLoginSubmit">
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">Correo</legend>
-                        <input autocomplete="email" type="text" class="input" name="email"
-                            value="cashier@gdgguadalajara.com" />
+                        <input autocomplete="email" type="text" class="input" name="email" />
                     </fieldset>
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">Contraseña</legend>
-                        <input autocomplete="current-password" type="password" name="password" class="input"
-                            value="cashier" />
+                        <input autocomplete="current-password" type="password" name="password" class="input" />
                     </fieldset>
                 </form>
                 <div class="card-actions justify-end">
