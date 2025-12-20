@@ -4,6 +4,9 @@
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue?logo=docker&logoColor=white)](https://github.com/gdgguadalajara/pos/pkgs/container/pos)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey)](https://www.linux.org/)
 
+> [!IMPORTANT]
+> **Aviso:** Este proyecto se encuentra en desarrollo y no se recomienda su uso para producción.
+
 Bienvenido a **POS (Point of Sale)**, un sistema de Punto de Venta **gratuito, libre y Cloud Native**, desarrollado por la comunidad del **Google Developer Group (GDG) Guadalajara**.
 
 Nuestro objetivo es ofrecer una solución de software robusta, ligera y fácil de desplegar para pequeños negocios, manteniendo la filosofía del **Software Libre**.
