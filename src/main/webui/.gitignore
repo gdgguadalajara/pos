@@ -24,5 +24,5 @@ logs
 !.env.example
 
 # Services
-src/main/webui/app/services
-!src/main/webui/app/services/CustomFetch.ts
+app/services/*
+!app/services/CustomFetch.ts
