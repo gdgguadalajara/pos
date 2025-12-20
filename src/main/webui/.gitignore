@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Services
+src/main/webui/app/services
+!src/main/webui/app/services/CustomFetch.ts
