@@ -7,6 +7,7 @@ import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,13 @@ public class DeleteTicketItem {
         if (ticketItem == null)
             throw new NotFoundException("TicketItem no encontrado");
         if (!ticketItem.status.equals(TicketItemStatus.ADDED))
-            throw new NotFoundException("Solo es posible eliminar un ticketItem agregado");
+            throw new ForbiddenException("Solo es posible eliminar un ticketItem agregado");
         if (!ticketItem.ticket.id.equals(ticket.id))
-            throw new NotFoundException("El ticketItem no pertenece al ticket");
+            throw new ForbiddenException("El ticketItem no pertenece al ticket");
         if (!ticket.owner.id.equals(account.user.id))
-            throw new NotFoundException("No tienes permisos para modificar este ticket");
+            throw new ForbiddenException("No tienes permisos para modificar este ticket");
         if (!ticketItem.author.id.equals(account.user.id))
-            throw new NotFoundException("No tienes permisos para eliminar este ticketItem");
+            throw new ForbiddenException("No tienes permisos para eliminar este ticketItem");
         ticket.totalAmount = ticket.totalAmount.subtract(ticketItem.unitPrice);
         ticket.persistAndFlush();
         ticketItem.delete();
