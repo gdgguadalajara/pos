@@ -101,6 +101,32 @@ public class PanacheCriteria<T extends PanacheEntityBase> {
         return this;
     }
 
+    public PanacheCriteria<T> in(String field, List<?> values) {
+        if (values != null && !values.isEmpty()) {
+            StringBuilder inClause = new StringBuilder(field + " IN (");
+            for (int i = 0; i < values.size(); i++) {
+                int index = params.size() + 1;
+                inClause.append("?").append(index);
+                params.add(values.get(i));
+                if (i < values.size() - 1) {
+                    inClause.append(", ");
+                }
+            }
+            inClause.append(")");
+            whereClause.add(inClause.toString());
+        }
+        return this;
+    }
+
+    public PanacheCriteria<T> memberOf(Object value, String collectionField) {
+        if (value != null) {
+            int index = params.size() + 1;
+            whereClause.add("?" + index + " MEMBER OF e." + collectionField);
+            params.add(value);
+        }
+        return this;
+    }
+
     private void addParam(String clause, Object value) {
         int index = params.size() + 1;
         whereClause.add(clause.replace("?", "?" + index));
