@@ -6,6 +6,7 @@
  */
 
 export type GetApiCategoriesParams = {
+availables?: boolean;
 /**
  */
 page?: number;

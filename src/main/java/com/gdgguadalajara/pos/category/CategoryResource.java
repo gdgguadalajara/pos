@@ -1,9 +1,10 @@
 package com.gdgguadalajara.pos.category;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
-import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.category.application.CreateCategory;
 import com.gdgguadalajara.pos.category.application.DeleteCategory;
 import com.gdgguadalajara.pos.category.application.UpdateCategory;
@@ -36,7 +37,6 @@ public class CategoryResource {
     private final CreateCategory createCategory;
     private final UpdateCategory updateCategory;
     private final DeleteCategory deleteCategory;
-    private final GetCurrentSession getCurrentSession;
 
     @POST
     @Transactional
@@ -49,13 +49,19 @@ public class CategoryResource {
     @Authenticated
     public PaginatedResponse<Category> read(
             @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
-        var sessionAccount = getCurrentSession.run();
-        if (sessionAccount.role.equals(AccountRole.CASHIER)) {
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size,
+            @QueryParam("availables") @DefaultValue("false") Boolean availables) {
+        if (availables) {
+            var currentDate = LocalDate.now();
+            var currentTime = LocalTime.now();
             return PanacheCriteria.of(Category.class)
                     .eq("isEnabled", true)
-                    .page(page, size)
-                    .getResult();
+                    .le("availableFrom", currentDate)
+                    .ge("availableUntil", currentDate)
+                    .le("availableFromTime", currentTime)
+                    .ge("availableUntilTime", currentTime)
+                    .memberOf(currentDate.getDayOfWeek(), "availableDays")
+                    .page(page, size).getResult();
         }
         return PanacheCriteria.of(Category.class)
                 .page(page, size)
