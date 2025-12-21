@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
+import com.gdgguadalajara.pos.ticket.application.OrderTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 
 import io.quarkus.security.Authenticated;
@@ -12,6 +13,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
 
@@ -21,6 +23,7 @@ public class TicketResource {
 
     private final CreateTicket createTicket;
     private final DeleteTicket deleteTicket;
+    private final OrderTicket orderTicket;
 
     @POST
     @Transactional
@@ -37,6 +40,14 @@ public class TicketResource {
         if (ticket == null)
             throw new NotFoundException("Ticket no encontrado");
         return ticket;
+    }
+
+    @PUT
+    @Path("/{id}/order")
+    @Transactional
+    @Authenticated
+    public Ticket order(UUID id) {
+        return orderTicket.run(id);
     }
 
     @DELETE
