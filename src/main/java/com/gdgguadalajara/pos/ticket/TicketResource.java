@@ -41,6 +41,7 @@ public class TicketResource {
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     @Authenticated
     public void delete(UUID id) {
         deleteTicket.run(id);
