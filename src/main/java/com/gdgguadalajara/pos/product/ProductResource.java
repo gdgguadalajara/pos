@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.PageBuilder;
+import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.product.application.CreateProduct;
 import com.gdgguadalajara.pos.product.application.DeleteProduct;
@@ -21,7 +22,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -58,7 +58,7 @@ public class ProductResource {
     public Product readById(UUID uuid) {
         var product = Product.<Product>findById(uuid);
         if (product == null)
-            throw new NotFoundException("Product no encontrado");
+            throw DomainException.notFound("Product no encontrado");
         return product;
     }
 

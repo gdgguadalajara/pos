@@ -11,6 +11,7 @@ import com.gdgguadalajara.pos.category.application.UpdateCategory;
 import com.gdgguadalajara.pos.category.model.Category;
 import com.gdgguadalajara.pos.category.model.dto.CreateCategoryRequest;
 import com.gdgguadalajara.pos.category.model.dto.UpdateCategoryRequest;
+import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
@@ -23,7 +24,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -74,7 +74,7 @@ public class CategoryResource {
     public Category readById(UUID uuid) {
         var category = Category.<Category>findById(uuid);
         if (category == null)
-            throw new NotFoundException("Categoria no encontrada");
+            throw DomainException.notFound("Categoria no encontrada");
         return category;
     }
 

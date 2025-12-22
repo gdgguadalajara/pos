@@ -6,12 +6,12 @@ import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
 import com.gdgguadalajara.pos.ticket.application.OrderTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import io.quarkus.security.Authenticated;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -38,7 +38,7 @@ public class TicketResource {
     public Ticket readById(UUID id) {
         var ticket = Ticket.<Ticket>findById(id);
         if (ticket == null)
-            throw new NotFoundException("Ticket no encontrado");
+            throw DomainException.notFound("Ticket no encontrado");
         return ticket;
     }
 

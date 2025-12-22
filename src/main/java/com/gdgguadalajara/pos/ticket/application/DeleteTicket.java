@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 
@@ -21,9 +21,9 @@ public class DeleteTicket {
             return;
         var session = getCurrentSession.run();
         if (!ticket.owner.id.equals(session.id))
-            throw new ForbiddenException("No puedes modificar este ticket");
+            throw DomainException.forbidden("No puedes modificar este ticket");
         if (ticket.items.size() > 0)
-            throw new ForbiddenException("No puedes eliminar un ticket con items");
+            throw DomainException.badRequest("No puedes eliminar un ticket con items");
         ticket.delete();
     }
 }

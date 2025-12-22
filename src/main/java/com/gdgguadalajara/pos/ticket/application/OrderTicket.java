@@ -5,10 +5,9 @@ import java.util.UUID;
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
-import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
@@ -21,9 +20,9 @@ public class OrderTicket {
         var session = getCurrentSession.run();
         var ticket = Ticket.<Ticket>findById(uuid);
         if (ticket == null)
-            throw new NotFoundException("Ticket no encontrado");
+            throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(session.user.id))
-            throw new ForbiddenException("No puedes modificar este ticket");
+            throw DomainException.forbidden("No puedes modificar este ticket");
         ticket.items.forEach(item -> {
             item.status = TicketItemStatus.ORDERED;
             item.persistAndFlush();
