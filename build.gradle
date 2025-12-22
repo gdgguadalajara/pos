@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-jdbc-h2'
     implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-rest-jackson'
@@ -18,7 +19,6 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-validator'
     implementation 'io.quarkus:quarkus-smallrye-jwt'
     implementation 'io.quarkiverse.quinoa:quarkus-quinoa:2.7.0'
-    implementation 'io.quarkiverse.jdbc:quarkus-jdbc-sqlite:3.0.11'
     implementation 'io.quarkus:quarkus-smallrye-jwt-build'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-hibernate-orm'
