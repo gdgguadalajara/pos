@@ -17,7 +17,7 @@ El proyecto está diseñado como un monolito moderno optimizado para la nube, as
 
 * **Backend:** Java 21 + Quarkus.
 * **Frontend:** Nuxt (Vue.js) servido mediante Quarkus Quinoa.
-* **Base de Datos:** SQLite (Embebida).
+* **Base de Datos:** H2 (Embebida).
 * **Estilos:** Tailwind CSS + **daisyUI** (Componentes listos para usar).
 
 ## 🐳 Despliegue con Docker (Linux)
@@ -40,7 +40,7 @@ docker run -d \
   ghcr.io/gdgguadalajara/pos:latest
 ```
 
-* **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.sqlite3` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
+* **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.db` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
 
 ### 3. Primeros Pasos
 
@@ -60,7 +60,7 @@ Las variables más comunes para entornos de producción son:
 | Variable de Entorno           | Propiedad Equivalente         | Descripción                       | Valor por Defecto                             |
 | ----------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------- |
 | `QUARKUS_HTTP_PORT`           | `quarkus.http.port`           | Puerto donde escucha el servidor. | `8080`                                        |
-| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:sqlite:data/gdgguadalajara_pos.sqlite3` |
+| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:h2:file:./data/gdgguadalajara_pos.db;AUTO_SERVER=TRUE` |
 | `QUARKUS_LOG_LEVEL`           | `quarkus.log.level`           | Nivel de detalle de los logs.     | `INFO`                                        |
 
 **Ejemplo: Cambiar el puerto a 9090:**
