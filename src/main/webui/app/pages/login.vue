@@ -28,7 +28,7 @@ const onLoginSubmit = (e) => {
             case AccountRole.CASHIER:
                 return navigateTo('/cashier')
         }
-    }).catch(() => toast.error({ title: 'Error', message: 'Error en credenciales' }))
+    }).catch((e) => toast.error({ title: 'Error', message: e.message }))
 }
 </script>
 
