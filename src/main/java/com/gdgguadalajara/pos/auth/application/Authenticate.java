@@ -35,11 +35,11 @@ public class Authenticate {
                 .firstResult();
 
         if (account == null)
-            throw DomainException.badRequest("Bad Crendetials");
+            throw DomainException.badRequest("Error en usuario o contraseña");
 
         switch (account.status) {
             case AccountStatus.PENDING_SETUP:
-                throw DomainException.badRequest("Pide tu link de invitacion para iniciar sesion");
+                throw DomainException.badRequest("Pide tu link de invitacion para configurar tus credenciales");
             case AccountStatus.LOCKED:
                 throw DomainException.badRequest("Cuenta bloqueada, contacta al administrador");
             case AccountStatus.DISABLED:
