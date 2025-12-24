@@ -1,4 +1,5 @@
 <script setup>
+import { TicketItemStatus } from '~/models';
 import { getApiTicketsId } from '~/services/ticket-resource/ticket-resource';
 import { deleteApiTicketsTicketIdItemsTicketItemId, postApiTicketsTicketIdItemsProductId } from '~/services/ticket-ticket-item-resource/ticket-ticket-item-resource';
 
@@ -24,7 +25,9 @@ const removeProduct = (productUuid) => deleteApiTicketsTicketIdItemsTicketItemId
                     <span class="flex-none">${{ groupedItems?.[key]?.[0].unitPrice }}/cu</span>
                 </div>
                 <div class="flex justify-between">
-                    <button class="btn btn-xs" @click="removeProduct(groupedItems?.[key]?.[0].id)">
+                    <button class="btn btn-xs"
+                        :disabled="!groupedItems?.[key]?.some(item => item.status == TicketItemStatus.ADDED)"
+                        @click="removeProduct(groupedItems?.[key]?.find(item => item.status == TicketItemStatus.ADDED).id)">
                         <Icon name="material-symbols:remove-rounded" class="text-2xl" />
                     </button>
                     <p class="text-center">{{ groupedItems?.[key]?.length }}</p>
