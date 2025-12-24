@@ -40,12 +40,12 @@ public class FloorResource {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
-    public void delete(UUID id) {
+    public void delete(UUID uuid) {
         try {
-            deleteFloor.run(Floor.findById(id));
+            deleteFloor.run(Floor.findById(uuid));
         } catch (Exception e) {
         }
     }

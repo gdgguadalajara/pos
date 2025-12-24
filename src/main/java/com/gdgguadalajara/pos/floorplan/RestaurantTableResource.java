@@ -44,14 +44,14 @@ public class RestaurantTableResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
     public RestaurantTable update(UUID uuid, UpdateRestaurantTableRequest request) {
         return updateRestaurantTable.run(uuid, request);
     }
 
-    @Path("/{id}")
+    @Path("/{uuid}")
     @DELETE
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
