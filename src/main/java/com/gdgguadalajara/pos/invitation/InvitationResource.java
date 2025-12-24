@@ -27,7 +27,7 @@ public class InvitationResource {
     private final CreateInvitation createInvitation;
 
     @GET
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     public PaginatedResponse<Invitation> read(
             @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
             @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
@@ -45,7 +45,7 @@ public class InvitationResource {
     }
 
     @POST
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
     public Invitation create(@Valid CreateInvitationRequest request) {
         return createInvitation.run(request);

@@ -18,7 +18,7 @@ import jakarta.ws.rs.QueryParam;
 public class UserResource {
 
     @GET
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     public PaginatedResponse<User> getAll(
             @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
             @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {

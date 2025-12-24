@@ -33,7 +33,7 @@ public class ProductCategoryResource {
 
     @POST
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{categoryId}")
     public Product create(UUID productId, UUID categoryId) {
         return createProductCategory.run(productId, categoryId);
@@ -41,7 +41,7 @@ public class ProductCategoryResource {
 
     @DELETE
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{categoryId}")
     public void remove(UUID productId, UUID categoryId) {
         removeProductCategory.run(productId, categoryId);

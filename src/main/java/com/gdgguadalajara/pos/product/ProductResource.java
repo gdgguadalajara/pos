@@ -41,7 +41,7 @@ public class ProductResource {
 
     @POST
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Product create(CreateProductRequest request) {
         return createProduct.run(request);
     }
@@ -85,7 +85,7 @@ public class ProductResource {
 
     @PUT
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public Product update(UUID uuid, UpdateProductRequest request) {
         return updateProduct.run(uuid, request);
@@ -93,7 +93,7 @@ public class ProductResource {
 
     @DELETE
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public void delete(UUID uuid) {
         try {

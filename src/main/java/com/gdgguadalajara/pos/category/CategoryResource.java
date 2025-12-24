@@ -40,7 +40,7 @@ public class CategoryResource {
 
     @POST
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Category create(CreateCategoryRequest request) {
         return createCategory.run(request);
     }
@@ -85,7 +85,7 @@ public class CategoryResource {
 
     @PUT
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public Category update(UUID uuid, UpdateCategoryRequest request) {
         return updateCategory.run(uuid, request);
@@ -93,7 +93,7 @@ public class CategoryResource {
 
     @DELETE
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public void delete(UUID uuid) {
         try {

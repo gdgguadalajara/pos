@@ -66,7 +66,7 @@ public class CategoryProductResouce {
 
     @POST
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{productId}")
     public Category create(UUID categoryId, UUID productId) {
         return createCategoryProduct.run(categoryId, productId);
@@ -74,7 +74,7 @@ public class CategoryProductResouce {
 
     @DELETE
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{productId}")
     public void delete(UUID categoryId, UUID productId) {
         removeCategoryProduct.run(categoryId, productId);
