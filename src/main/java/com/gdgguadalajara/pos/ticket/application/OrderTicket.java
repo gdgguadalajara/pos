@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
@@ -23,10 +24,14 @@ public class OrderTicket {
             throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(session.user.id))
             throw DomainException.forbidden("No puedes modificar este ticket");
-        ticket.items.forEach(item -> {
-            item.status = TicketItemStatus.ORDERED;
-            item.persistAndFlush();
-        });
+        if (!ticket.status.equals(TicketStatus.OPEN))
+            throw DomainException.badRequest("No puedes modificar este ticket");
+        ticket.items.stream()
+                .filter(item -> item.status.equals(TicketItemStatus.ADDED))
+                .forEach(item -> {
+                    item.status = TicketItemStatus.ORDERED;
+                    item.persistAndFlush();
+                });
         return ticket;
     }
 }
