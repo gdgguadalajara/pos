@@ -1,11 +1,14 @@
 package com.gdgguadalajara.pos.product;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.product.application.CreateProduct;
 import com.gdgguadalajara.pos.product.application.DeleteProduct;
 import com.gdgguadalajara.pos.product.application.UpdateProduct;
@@ -50,6 +53,24 @@ public class ProductResource {
             @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
         var query = Product.<Product>findAll();
         return PageBuilder.of(query, page, size);
+    }
+
+    @GET
+    @Authenticated
+    @Path("/availables")
+    public PaginatedResponse<Product> readAvailables(
+            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+        var currentDate = LocalDate.now();
+        var currentTime = LocalTime.now();
+        return PanacheCriteria.of(Product.class)
+                .eq("isEnabled", true)
+                .le("availableFrom", currentDate)
+                .ge("availableUntil", currentDate)
+                .le("availableFromTime", currentTime)
+                .ge("availableUntilTime", currentTime)
+                .memberOf(currentDate.getDayOfWeek(), "availableDays")
+                .page(page, size).getResult();
     }
 
     @GET

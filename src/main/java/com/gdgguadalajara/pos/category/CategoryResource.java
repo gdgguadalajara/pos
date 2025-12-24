@@ -49,23 +49,28 @@ public class CategoryResource {
     @Authenticated
     public PaginatedResponse<Category> read(
             @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size,
-            @QueryParam("availables") @DefaultValue("false") Boolean availables) {
-        if (availables) {
-            var currentDate = LocalDate.now();
-            var currentTime = LocalTime.now();
-            return PanacheCriteria.of(Category.class)
-                    .eq("isEnabled", true)
-                    .le("availableFrom", currentDate)
-                    .ge("availableUntil", currentDate)
-                    .le("availableFromTime", currentTime)
-                    .ge("availableUntilTime", currentTime)
-                    .memberOf(currentDate.getDayOfWeek(), "availableDays")
-                    .page(page, size).getResult();
-        }
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
         return PanacheCriteria.of(Category.class)
                 .page(page, size)
                 .getResult();
+    }
+
+    @GET
+    @Authenticated
+    @Path("/availables")
+    public PaginatedResponse<Category> readAvailables(
+            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+        var currentDate = LocalDate.now();
+        var currentTime = LocalTime.now();
+        return PanacheCriteria.of(Category.class)
+                .eq("isEnabled", true)
+                .le("availableFrom", currentDate)
+                .ge("availableUntil", currentDate)
+                .le("availableFromTime", currentTime)
+                .ge("availableUntilTime", currentTime)
+                .memberOf(currentDate.getDayOfWeek(), "availableDays")
+                .page(page, size).getResult();
     }
 
     @GET
