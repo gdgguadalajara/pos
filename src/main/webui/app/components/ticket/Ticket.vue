@@ -5,7 +5,7 @@ const props = defineProps(['ticket'])
 const route = useRoute()
 
 useState('currentCategory', () => route.query.category)
-const ticket = useState('ticket')
+const ticket = useState('ticket', () => props.ticket)
 
 onMounted(() => {
     ticket.value = props.ticket
@@ -27,7 +27,7 @@ onMounted(() => {
                 <div class="divider m-0"></div>
                 <div class="flex flex-row justify-between">
                     <span>Total:</span>
-                    <span>${{ ticket.totalAmount }}</span>
+                    <span>${{ ticket?.totalAmount }}</span>
                 </div>
                 <div class="divider m-0"></div>
                 <TicketActions />
