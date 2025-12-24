@@ -1,6 +1,6 @@
 <script setup>
 import { AccountRole } from '~/models';
-import { deleteApiTicketsId, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
+import { deleteApiTicketsId, putApiTicketsIdOrder, putApiTicketsIdPay } from '~/services/ticket-resource/ticket-resource';
 
 const toast = useToast()
 
@@ -17,6 +17,10 @@ const order = () => putApiTicketsIdOrder(ticket.value.id)
         }
     })
 
+const pay = () => putApiTicketsIdPay(ticket.value.id)
+    .then(_ => toast.success({ title: 'Ticket pagado con éxito' }))
+    .then(_ => navigateTo('/cashier/tickets'))
+
 const cancel = () => deleteApiTicketsId(ticket.value.id)
     .then(_ => toast.success({ title: 'Ticket cancelado con éxito' }))
     .then(_ => navigateTo('/cashier/tickets'))
@@ -24,8 +28,8 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
 
 <template>
     <div class="grid grid-cols-2 gap-1">
-        <button class="btn btn-accent">Pagar</button>
-        <button class="btn">4</button>
+        <button class="btn btn-accent" @click="pay">Pagar</button>
+        <div></div>
         <button class="btn btn-error" :disabled="!!ticket.items.length" @click="cancel">Cancelar</button>
         <button class="btn btn-primary" @click="order">Ordenar</button>
     </div>

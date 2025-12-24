@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
 import com.gdgguadalajara.pos.ticket.application.OrderTicket;
+import com.gdgguadalajara.pos.ticket.application.PayTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
@@ -24,6 +25,7 @@ public class TicketResource {
     private final CreateTicket createTicket;
     private final DeleteTicket deleteTicket;
     private final OrderTicket orderTicket;
+    private final PayTicket payTicket;
 
     @POST
     @Transactional
@@ -48,6 +50,14 @@ public class TicketResource {
     @Authenticated
     public Ticket order(UUID id) {
         return orderTicket.run(id);
+    }
+
+    @PUT
+    @Path("/{id}/pay")
+    @Transactional
+    @Authenticated
+    public Ticket pay(UUID id) {
+        return payTicket.run(id);
     }
 
     @DELETE
