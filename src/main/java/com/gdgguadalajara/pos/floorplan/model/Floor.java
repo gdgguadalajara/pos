@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Floor extends PanacheEntityBase {
 
@@ -30,6 +32,7 @@ public class Floor extends PanacheEntityBase {
     public Integer gridHeight;
 
     @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     public List<RestaurantTable> tables;
 
     @CreationTimestamp

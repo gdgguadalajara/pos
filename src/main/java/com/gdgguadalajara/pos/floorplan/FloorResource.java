@@ -5,9 +5,12 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.floorplan.application.CreateFloor;
+import com.gdgguadalajara.pos.floorplan.application.CreateRestaurantTable;
 import com.gdgguadalajara.pos.floorplan.application.DeleteFloor;
 import com.gdgguadalajara.pos.floorplan.model.Floor;
+import com.gdgguadalajara.pos.floorplan.model.RestaurantTable;
 import com.gdgguadalajara.pos.floorplan.model.dto.CreateFloorRequest;
+import com.gdgguadalajara.pos.floorplan.model.dto.CreateRestaurantTableRequest;
 
 import io.quarkus.panache.common.Sort;
 import io.quarkus.security.Authenticated;
@@ -25,12 +28,28 @@ public class FloorResource {
 
     private final CreateFloor createFloor;
     private final DeleteFloor deleteFloor;
+    private final CreateRestaurantTable createRestaurantTable;
 
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
     public Floor create(CreateFloorRequest request) {
         return createFloor.run(request);
+    }
+
+    @POST
+    @Path("/{floorId}/tables")
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
+    @Transactional
+    public RestaurantTable create(UUID floorId, CreateRestaurantTableRequest request) {
+        return createRestaurantTable.run(floorId, request);
+    }
+
+    @GET
+    @Path("/{floorId}/tables")
+    @Authenticated
+    public List<RestaurantTable> readRestaurantTablesByFloor(UUID floorId) {
+        return RestaurantTable.<RestaurantTable>find("floor.id", floorId).list();
     }
 
     @GET
