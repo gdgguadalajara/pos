@@ -36,7 +36,7 @@ public class FloorResource {
     @GET
     @Authenticated
     public List<Floor> read() {
-        return Floor.<Floor>listAll(Sort.by("createdAt"));
+        return Floor.<Floor>listAll(Sort.by("levelOrder"));
     }
 
     @DELETE
