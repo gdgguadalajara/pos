@@ -17,6 +17,12 @@ public class CreateRestaurantTable {
         var floor = Floor.<Floor>findById(floorId);
         if (floor == null)
             throw DomainException.notFound("Piso no encontrado");
+        var tableVerify = RestaurantTable
+                .<RestaurantTable>find("floor.id = ?1 AND posX = ?2 AND posY = ?3", floorId, request.posX(),
+                        request.posY())
+                .firstResult();
+        if (tableVerify != null)
+            throw DomainException.badRequest("Ya existe una mesa en la posición indicada");
         var table = new RestaurantTable();
         table.floor = floor;
         table.name = request.name();
