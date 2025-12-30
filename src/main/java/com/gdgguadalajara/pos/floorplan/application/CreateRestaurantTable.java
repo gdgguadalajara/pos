@@ -23,6 +23,8 @@ public class CreateRestaurantTable {
                 .firstResult();
         if (tableVerify != null)
             throw DomainException.badRequest("Ya existe una mesa en la posición indicada");
+        if (floor.gridHeight < request.posY() || floor.gridWidth < request.posX())
+            throw DomainException.badRequest("La mesa está fuera del piso");
         var table = new RestaurantTable();
         table.floor = floor;
         table.name = request.name();
