@@ -7,15 +7,25 @@ import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
 import com.gdgguadalajara.pos.ticket.application.OrderTicket;
 import com.gdgguadalajara.pos.ticket.application.PayTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.account.model.AccountRole;
+import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.DomainException;
+import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 
+import io.quarkus.panache.common.Sort;
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
 import lombok.AllArgsConstructor;
 
 @Path("/api/tickets")
@@ -32,6 +42,14 @@ public class TicketResource {
     @Authenticated
     public Ticket create() {
         return createTicket.run();
+    }
+
+    @GET
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
+    public PaginatedResponse<Ticket> read(
+            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+        return PageBuilder.of(Ticket.findAll(Sort.by("createdAt")), page, size);
     }
 
     @GET
