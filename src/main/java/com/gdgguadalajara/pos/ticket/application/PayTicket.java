@@ -1,5 +1,6 @@
 package com.gdgguadalajara.pos.ticket.application;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
@@ -33,6 +34,7 @@ public class PayTicket {
                     item.persistAndFlush();
                 });
         ticket.status = TicketStatus.PAID;
+        ticket.closedAt = LocalDateTime.now();
         ticket.persistAndFlush();
         return ticket;
     }
