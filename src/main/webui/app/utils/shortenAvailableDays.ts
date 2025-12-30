@@ -1,4 +1,4 @@
-export default function shortenAvailableDays(availableDays: string[]): string | string[] {
+export default function (availableDays: string[]): string | string[] {
     const dayConfig: { [key: string]: { order: number, label: string } } = {
         MONDAY: { order: 1, label: "Lun" },
         TUESDAY: { order: 2, label: "Mar" },
