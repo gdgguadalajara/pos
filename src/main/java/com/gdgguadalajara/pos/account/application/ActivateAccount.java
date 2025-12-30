@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 public class ActivateAccount {
 
     public Account run(ActivateAccountRequest request) {
-        var passwordSHA = new DigestUtils(MessageDigestAlgorithms.SHA3_256).digestAsHex(request.password());
         var invitation = Invitation.<Invitation>find("token", request.invitationToken()).firstResult();
         if (invitation == null)
             throw DomainException.notFound("Invitación no encontrada");
@@ -30,6 +29,7 @@ public class ActivateAccount {
         var account = invitation.user.account;
         if (!invitation.user.account.status.equals(AccountStatus.PENDING_SETUP))
             throw DomainException.forbidden("Esta cuenta ya ah sido activada");
+        var passwordSHA = new DigestUtils(MessageDigestAlgorithms.SHA3_256).digestAsHex(request.password());
         invitation.usedAt = LocalDateTime.now();
         account.status = AccountStatus.ACTIVE;
         account.password = passwordSHA;
