@@ -47,9 +47,11 @@ docker run -d \
 Una vez que el contenedor esté corriendo, abre tu navegador en `http://localhost:8080`.
 
 #### Credenciales por defecto
-
-* **Usuario:** `admin@gdgguadalajara.com`
-* **Contraseña:** `admin`
+| Usuario                      | Contraseña |
+| ---------------------------- | ---------- |
+| `admin@gdgguadalajara.com`   | `admin`    |
+| `cashier@gdgguadalajara.com` | `cashier`  |
+| `waiter@gdgguadalajara.com`  | `waiter`   |
 
 ## ⚙️ Configuración Avanzada
 
