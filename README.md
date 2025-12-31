@@ -57,11 +57,11 @@ El sistema viene preconfigurado para funcionar inmediatamente. Sin embargo, pued
 
 Las variables más comunes para entornos de producción son:
 
-| Variable de Entorno           | Propiedad Equivalente         | Descripción                       | Valor por Defecto                             |
-| ----------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------- |
-| `QUARKUS_HTTP_PORT`           | `quarkus.http.port`           | Puerto donde escucha el servidor. | `8080`                                        |
-| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:h2:file:./data/gdgguadalajara_pos.db;AUTO_SERVER=TRUE` |
-| `QUARKUS_LOG_LEVEL`           | `quarkus.log.level`           | Nivel de detalle de los logs.     | `INFO`                                        |
+| Variable de Entorno           | Propiedad Equivalente         | Descripción                       | Valor por Defecto                                         |
+| ----------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------------------- |
+| `QUARKUS_HTTP_PORT`           | `quarkus.http.port`           | Puerto donde escucha el servidor. | `8080`                                                    |
+| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:h2:file:./data/gdgguadalajara_pos;AUTO_SERVER=TRUE` |
+| `QUARKUS_LOG_LEVEL`           | `quarkus.log.level`           | Nivel de detalle de los logs.     | `INFO`                                                    |
 
 **Ejemplo: Cambiar el puerto a 9090:**
 
