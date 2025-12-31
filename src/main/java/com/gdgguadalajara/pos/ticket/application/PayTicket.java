@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.common.model.DomainException;
+import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
@@ -28,13 +29,20 @@ public class PayTicket {
         if (!ticket.status.equals(TicketStatus.OPEN))
             throw DomainException.badRequest("No puedes modificar este ticket");
         ticket.items.stream()
-                .filter(item -> item.status.equals(TicketItemStatus.ADDED) || item.status.equals(TicketItemStatus.ORDERED))
+                .filter(item -> item.status.equals(TicketItemStatus.ADDED)
+                        || item.status.equals(TicketItemStatus.ORDERED))
                 .forEach(item -> {
                     item.status = TicketItemStatus.PAID;
                     item.persistAndFlush();
                 });
         ticket.status = TicketStatus.PAID;
         ticket.closedAt = LocalDateTime.now();
+        var table = ticket.table;
+        if (table != null) {
+            table.status = RestaurantTableStatus.AVAILABLE;
+            table.persistAndFlush();
+        }
+        ticket.table = null;
         ticket.persistAndFlush();
         return ticket;
     }
