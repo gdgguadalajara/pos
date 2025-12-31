@@ -26,7 +26,7 @@ El proyecto está diseñado como un monolito moderno optimizado para la nube, as
 Antes de iniciar, debes generar tus propias llaves para la firma de tokens. Puedes usar nuestro script o generarlas manualmente. Asegúrate de que estén en una carpeta llamada `pos_data`:
 
 ```bash
-./scripts/create-jwt-pem.sh # Esto creará las llaves en ./data/
+./scripts/create-jwt-pem.sh  # Esto creará las llaves en ./data/
 mv data pos_data             # Renombramos para el volumen de Docker
 ```
 
@@ -36,8 +36,8 @@ mv data pos_data             # Renombramos para el volumen de Docker
 docker run -d \
   --name pos-gdg \
   -p 8080:8080 \
-  -v $(pwd)/pos_data:/work/data \
-  ghcr.io/gdgguadalajara/pos:latest
+  -v $(pwd)/data:/deployments/data \
+  ghcr.io/gdgguadalajara/pos:standalone
 ```
 
 * **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.db` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
