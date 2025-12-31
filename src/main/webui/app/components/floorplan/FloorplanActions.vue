@@ -14,6 +14,7 @@ const createTable = (e) => {
         posY: y
     })
         .then(_ => refreshNuxtData(`getApiFloorsFloorIdTables-${currentFloor.value.id}`))
+        .then(_ => e.target.reset())
         .then(_ => closeModal(`create_table_${currentFloor.value.id}_modal`))
         .then(_ => toast.success({ title: "Nueva mesa", message: "Creada con éxito" }))
         .catch(_ => toast.error({ title: "Error", message: "No se ha podido crear la mesa" }))
