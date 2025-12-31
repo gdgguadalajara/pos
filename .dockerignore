@@ -4,3 +4,4 @@
 !build/*-runner.jar
 !build/lib/*
 !build/quarkus-app/*
+!build/jvm-app
