@@ -20,27 +20,38 @@ El proyecto está diseñado como un monolito moderno optimizado para la nube, as
 * **Base de Datos:** H2 (Embebida).
 * **Estilos:** Tailwind CSS + **daisyUI** (Componentes listos para usar).
 
-## 🐳 Despliegue con Docker (Linux)
+## 🐳 Despliegue rápido con Docker (Recomendado)
 
-### 1. Preparación de seguridad
-Antes de iniciar, debes generar tus propias llaves para la firma de tokens. Puedes usar nuestro script o generarlas manualmente. Asegúrate de que estén en una carpeta llamada `pos_data`:
+La versión Standalone es ideal para evaluar el sistema localmente. Incluye una base de datos H2 y llaves de seguridad preconfiguradas para que puedas empezar en segundos.
 
-```bash
-./scripts/create-jwt-pem.sh  # Esto creará las llaves en ./data/
-mv data pos_data             # Renombramos para el volumen de Docker
-```
-
-### 2. Ejecutar el sistema
+### Opción A: Prueba rápida (No apta para producción)
+Usa este comando si solo quieres ver cómo funciona el sistema. Nota: Los datos se borrarán al detener el contenedor.
 
 ```bash
-docker run -d \
-  --name pos-gdg \
-  -p 8080:8080 \
-  -v $(pwd)/data:/deployments/data \
+podman run -p 8080:8080 \
+  -e TZ=America/Mexico_City \
+  --rm --name pos-test \
   ghcr.io/gdgguadalajara/pos:standalone
 ```
 
-* **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.db` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
+### Opción B: Uso Persistente (Recomendado)
+Usa esta opción para guardar tus ventas, productos y usar tus propias llaves de seguridad.
+
+#### 1. Generar tus propias llaves
+```bash
+./scripts/create-jwt-pem.sh
+```
+
+#### 2. Lanzar con volumen persistente:
+```bash
+podman run -p 8080:8080 \
+  -v $(pwd)/data:/deployments/data:Z \
+  -e TZ=America/Mexico_City \
+  --name pos-standalone \
+  ghcr.io/gdgguadalajara/pos:standalone
+```
+
+Al usar el volumen, tanto la base de datos (gdgguadalajara_pos.mv.db) como tus llaves se guardarán en tu carpeta local ./data.
 
 ### 3. Primeros Pasos
 
