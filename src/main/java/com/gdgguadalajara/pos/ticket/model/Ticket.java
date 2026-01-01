@@ -1,5 +1,6 @@
 package com.gdgguadalajara.pos.ticket.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTable;
@@ -30,8 +31,8 @@ public class Ticket extends PanacheEntityBase {
     @JoinColumn(name = "user_id", nullable = false)
     public User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "table_id", nullable = true)
+    @OneToOne(mappedBy = "ticket")
+    @JsonBackReference
     public RestaurantTable table;
 
     @JdbcTypeCode(SqlTypes.JSON)

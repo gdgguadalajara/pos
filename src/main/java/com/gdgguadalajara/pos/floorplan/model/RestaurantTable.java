@@ -9,6 +9,9 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gdgguadalajara.pos.ticket.model.Ticket;
+
 @Entity
 public class RestaurantTable extends PanacheEntityBase {
 
@@ -31,6 +34,11 @@ public class RestaurantTable extends PanacheEntityBase {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public RestaurantTableStatus status;
+
+    @JsonManagedReference
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ticket_id")
+    public Ticket ticket;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "floor_id")

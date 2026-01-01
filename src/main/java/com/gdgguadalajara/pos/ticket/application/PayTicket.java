@@ -40,6 +40,7 @@ public class PayTicket {
         var table = ticket.table;
         if (table != null) {
             table.status = RestaurantTableStatus.AVAILABLE;
+            table.ticket = null;
             table.persistAndFlush();
         }
         ticket.table = null;
