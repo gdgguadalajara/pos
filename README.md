@@ -17,7 +17,7 @@ El proyecto está diseñado como un monolito moderno optimizado para la nube, as
 
 * **Backend:** Java 21 + Quarkus.
 * **Frontend:** Nuxt (Vue.js) servido mediante Quarkus Quinoa.
-* **Base de Datos:** SQLite (Embebida).
+* **Base de Datos:** H2 (Embebida).
 * **Estilos:** Tailwind CSS + **daisyUI** (Componentes listos para usar).
 
 ## 🐳 Despliegue con Docker (Linux)
@@ -26,7 +26,7 @@ El proyecto está diseñado como un monolito moderno optimizado para la nube, as
 Antes de iniciar, debes generar tus propias llaves para la firma de tokens. Puedes usar nuestro script o generarlas manualmente. Asegúrate de que estén en una carpeta llamada `pos_data`:
 
 ```bash
-./scripts/create-jwt-pem.sh # Esto creará las llaves en ./data/
+./scripts/create-jwt-pem.sh  # Esto creará las llaves en ./data/
 mv data pos_data             # Renombramos para el volumen de Docker
 ```
 
@@ -36,20 +36,22 @@ mv data pos_data             # Renombramos para el volumen de Docker
 docker run -d \
   --name pos-gdg \
   -p 8080:8080 \
-  -v $(pwd)/pos_data:/work/data \
-  ghcr.io/gdgguadalajara/pos:latest
+  -v $(pwd)/data:/deployments/data \
+  ghcr.io/gdgguadalajara/pos:standalone
 ```
 
-* **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.sqlite3` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
+* **`/work/data`**: Ahora contiene tanto `gdgguadalajara_pos.db` como `privateKey.pem` y `publicKey.pem`. Todo lo sensible está bajo tu control fuera del contenedor.
 
 ### 3. Primeros Pasos
 
 Una vez que el contenedor esté corriendo, abre tu navegador en `http://localhost:8080`.
 
 #### Credenciales por defecto
-
-* **Usuario:** `admin@gdgguadalajara.com`
-* **Contraseña:** `admin`
+| Usuario                      | Contraseña |
+| ---------------------------- | ---------- |
+| `admin@gdgguadalajara.com`   | `admin`    |
+| `cashier@gdgguadalajara.com` | `cashier`  |
+| `waiter@gdgguadalajara.com`  | `waiter`   |
 
 ## ⚙️ Configuración Avanzada
 
@@ -57,11 +59,11 @@ El sistema viene preconfigurado para funcionar inmediatamente. Sin embargo, pued
 
 Las variables más comunes para entornos de producción son:
 
-| Variable de Entorno           | Propiedad Equivalente         | Descripción                       | Valor por Defecto                             |
-| ----------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------- |
-| `QUARKUS_HTTP_PORT`           | `quarkus.http.port`           | Puerto donde escucha el servidor. | `8080`                                        |
-| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:sqlite:data/gdgguadalajara_pos.sqlite3` |
-| `QUARKUS_LOG_LEVEL`           | `quarkus.log.level`           | Nivel de detalle de los logs.     | `INFO`                                        |
+| Variable de Entorno           | Propiedad Equivalente         | Descripción                       | Valor por Defecto                                         |
+| ----------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------------------- |
+| `QUARKUS_HTTP_PORT`           | `quarkus.http.port`           | Puerto donde escucha el servidor. | `8080`                                                    |
+| `QUARKUS_DATASOURCE_JDBC_URL` | `quarkus.datasource.jdbc.url` | Ruta de conexión a la BD.         | `jdbc:h2:file:./data/gdgguadalajara_pos;AUTO_SERVER=TRUE` |
+| `QUARKUS_LOG_LEVEL`           | `quarkus.log.level`           | Nivel de detalle de los logs.     | `INFO`                                                    |
 
 **Ejemplo: Cambiar el puerto a 9090:**
 

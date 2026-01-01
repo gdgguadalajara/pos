@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.category.model.Category;
 import com.gdgguadalajara.pos.category.model.dto.UpdateCategoryRequest;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class UpdateCategory {
@@ -14,7 +14,7 @@ public class UpdateCategory {
     public Category run(UUID uuid, UpdateCategoryRequest request) {
         var category = Category.<Category>findById(uuid);
         if (category == null)
-            throw new NotFoundException("Category not found");
+            throw DomainException.notFound("Categoria no encontrada");
         category.name = request.name();
         category.description = request.description();
         category.isEnabled = request.isEnabled();

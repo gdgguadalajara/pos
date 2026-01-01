@@ -1,10 +1,14 @@
 package com.gdgguadalajara.pos.product;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.PageBuilder;
+import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.product.application.CreateProduct;
 import com.gdgguadalajara.pos.product.application.DeleteProduct;
 import com.gdgguadalajara.pos.product.application.UpdateProduct;
@@ -21,7 +25,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -38,7 +41,7 @@ public class ProductResource {
 
     @POST
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Product create(CreateProductRequest request) {
         return createProduct.run(request);
     }
@@ -54,17 +57,35 @@ public class ProductResource {
 
     @GET
     @Authenticated
+    @Path("/availables")
+    public PaginatedResponse<Product> readAvailables(
+            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
+            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+        var currentDate = LocalDate.now();
+        var currentTime = LocalTime.now();
+        return PanacheCriteria.of(Product.class)
+                .eq("isEnabled", true)
+                .le("availableFrom", currentDate)
+                .ge("availableUntil", currentDate)
+                .le("availableFromTime", currentTime)
+                .ge("availableUntilTime", currentTime)
+                .memberOf(currentDate.getDayOfWeek(), "availableDays")
+                .page(page, size).getResult();
+    }
+
+    @GET
+    @Authenticated
     @Path("/{uuid}")
     public Product readById(UUID uuid) {
         var product = Product.<Product>findById(uuid);
         if (product == null)
-            throw new NotFoundException("Product no encontrado");
+            throw DomainException.notFound("Product no encontrado");
         return product;
     }
 
     @PUT
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public Product update(UUID uuid, UpdateProductRequest request) {
         return updateProduct.run(uuid, request);
@@ -72,7 +93,7 @@ public class ProductResource {
 
     @DELETE
     @Transactional
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public void delete(UUID uuid) {
         try {

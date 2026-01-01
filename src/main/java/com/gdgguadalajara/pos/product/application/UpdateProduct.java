@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.product.model.dto.UpdateProductRequest;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class UpdateProduct {
@@ -14,7 +14,7 @@ public class UpdateProduct {
     public Product run(UUID uuid, UpdateProductRequest request) {
         var product = Product.<Product>findById(uuid);
         if (product == null)
-            throw new NotFoundException("Producto no encontrado");
+            throw DomainException.notFound("Producto no encontrado");
         product.name = request.name();
         product.description = request.description();
         product.price = request.price();

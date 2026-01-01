@@ -12,10 +12,9 @@ import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.ForbiddenException;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
@@ -29,22 +28,22 @@ public class CreateTicketItem {
         var account = getCurrentSession.run();
         var product = Product.<Product>findById(productId);
         if (product == null)
-            throw new NotFoundException("Producto no encontrado");
+            throw DomainException.notFound("Producto no encontrado");
         if (!product.isEnabled)
-            throw new ForbiddenException("No se puede agregar un producto inactivo al ticket");
+            throw DomainException.badRequest("No se puede agregar un producto inactivo al ticket");
         var localDateNow = LocalDate.now();
         var localTimeNow = LocalTime.now();
         if (product.availableFrom.isAfter(localDateNow) || product.availableUntil.isBefore(localDateNow))
-            throw new ForbiddenException("El producto no está disponible en este momento");
+            throw DomainException.badRequest("El producto no está disponible en este momento");
         if (localTimeNow.isBefore(product.availableFromTime) || localTimeNow.isAfter(product.availableUntilTime))
-            throw new ForbiddenException("El producto no está disponible en este momento del día");
+            throw DomainException.badRequest("El producto no está disponible en este momento del día");
         if (!product.availableDays.contains(localDateNow.getDayOfWeek()))
-            throw new ForbiddenException("El producto no está disponible en este día de la semana");
+            throw DomainException.badRequest("El producto no está disponible en este día de la semana");
         var ticket = Ticket.<Ticket>findById(ticketId);
         if (ticket == null)
-            throw new NotFoundException("Ticket no encontrado");
+            throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(account.user.id))
-            throw new ForbiddenException("No tienes permisos para modificar este ticket");
+            throw DomainException.forbidden("No tienes permisos para modificar este ticket");
         var ticketItem = new TicketItem();
         ticketItem.ticket = ticket;
         ticketItem.author = account.user;

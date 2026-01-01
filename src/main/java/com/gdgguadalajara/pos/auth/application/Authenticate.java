@@ -12,10 +12,10 @@ import com.gdgguadalajara.pos.account.model.Account;
 import com.gdgguadalajara.pos.account.model.AccountStatus;
 import com.gdgguadalajara.pos.auth.model.dto.AuthenticateRequest;
 import com.gdgguadalajara.pos.auth.model.dto.AuthenticateResponse;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -35,15 +35,15 @@ public class Authenticate {
                 .firstResult();
 
         if (account == null)
-            throw new BadRequestException("Bad Crendetials");
+            throw DomainException.badRequest("Error en usuario o contraseña");
 
         switch (account.status) {
             case AccountStatus.PENDING_SETUP:
-                throw new BadRequestException("Pide tu link de invitacion para iniciar sesion");
+                throw DomainException.badRequest("Pide tu link de invitacion para configurar tus credenciales");
             case AccountStatus.LOCKED:
-                throw new BadRequestException("Cuenta bloqueada, contacta al administrador");
+                throw DomainException.badRequest("Cuenta bloqueada, contacta al administrador");
             case AccountStatus.DISABLED:
-                throw new BadRequestException("Cuenta inhabilitada, contacta al administrador");
+                throw DomainException.badRequest("Cuenta inhabilitada, contacta al administrador");
         }
 
         var jwt = Jwt

@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.user.model.User;
 
@@ -47,6 +48,7 @@ public class TicketItem extends PanacheEntityBase {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
+    @JsonIgnore
     public Map<String, Object> productSnapshot;
 
     @CreationTimestamp

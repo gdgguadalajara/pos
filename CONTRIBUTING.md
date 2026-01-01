@@ -14,7 +14,7 @@ Para que te sientas cómodo navegando por el código, aquí está lo que usamos:
 
 * **Backend:** Java 21 + Quarkus.
 * **Frontend:** Nuxt (Vue.js) servido mediante la extensión Quarkus Quinoa.
-* **Base de Datos:** SQLite3 (Embebida, no requiere configuración externa).
+* **Base de Datos:** H2 (Embebida, no requiere configuración externa).
 * **Frontend:** Utilizamos **Tailwind CSS** junto con **daisyUI**. Antes de crear un componente desde cero, por favor revisa la [documentación de daisyUI](https://daisyui.com/components/) para utilizar las clases de componentes existentes (ej. `btn`, `card`, `modal`). Esto mantiene la consistencia visual del Punto de Venta.
 
 ## Pre-requisitos
@@ -65,7 +65,7 @@ Para levantar tanto el backend (Quarkus) como el frontend (Nuxt/Quinoa) en modo 
 ```
 
 * **¿Por qué `-Dvertx.disableURIValidation=true`?** Este flag es necesario para evitar conflictos de validación de URIs durante el desarrollo con el proxy de frontend.
-* **Base de Datos:** No necesitas levantar Docker ni instalar nada extra. La aplicación usará SQLite en modo embebido automáticamente.
+* **Base de Datos:** No necesitas levantar Docker ni instalar nada extra. La aplicación usará H2 en modo embebido automáticamente.
 
 Una vez inicie, podrás acceder a la aplicación generalmente en `http://localhost:8080`.
 

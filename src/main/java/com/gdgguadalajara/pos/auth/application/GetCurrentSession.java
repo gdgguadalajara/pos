@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import com.gdgguadalajara.pos.account.model.Account;
+import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
@@ -19,7 +19,7 @@ public class GetCurrentSession {
     public Account run() {
         var account = Account.<Account>findById(UUID.fromString(jwt.getSubject()));
         if (account == null)
-            throw new NotFoundException("Account not found");
+            throw DomainException.notFound("Cuenta no encontrada");
         return account;
     }
 }

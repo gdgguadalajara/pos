@@ -25,4 +25,6 @@ logs
 
 # Services
 app/services/*
+app/models/*
 !app/services/CustomFetch.ts
+openapi.*

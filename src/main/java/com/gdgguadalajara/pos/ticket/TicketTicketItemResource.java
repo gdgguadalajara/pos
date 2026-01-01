@@ -3,10 +3,12 @@ package com.gdgguadalajara.pos.ticket;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.ticketItem.application.CreateTicketItem;
+import com.gdgguadalajara.pos.ticketItem.application.DeleteTicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 
 import io.quarkus.security.Authenticated;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import lombok.AllArgsConstructor;
 public class TicketTicketItemResource {
 
     private final CreateTicketItem createTicketItem;
+    private final DeleteTicketItem deleteTicketItem;
 
     @POST
     @Path("/{productId}")
@@ -25,4 +28,11 @@ public class TicketTicketItemResource {
         return createTicketItem.run(ticketId, productId);
     }
 
+    @DELETE
+    @Path("/{ticketItemId}")
+    @Authenticated
+    @Transactional
+    public void delete(UUID ticketId, UUID ticketItemId) {
+        deleteTicketItem.run(ticketId, ticketItemId);
+    }
 }
