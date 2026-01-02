@@ -1,5 +1,6 @@
 package com.gdgguadalajara.pos.ticket;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
@@ -10,6 +11,7 @@ import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.payment.model.Payment;
 
 import io.quarkus.panache.common.Sort;
 import io.quarkus.security.Authenticated;
@@ -74,5 +76,12 @@ public class TicketResource {
     @Authenticated
     public void delete(UUID id) {
         deleteTicket.run(id);
+    }
+
+    @GET
+    @Authenticated
+    @Path("/{id}/payments")
+    public List<Payment> read(UUID id) {
+        return Payment.<Payment>find("ticket.id", id).list();
     }
 }

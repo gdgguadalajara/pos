@@ -62,14 +62,31 @@ const prevPage = () => {
                                     <td>{{ ticket.status }}</td>
                                     <td>
                                         <div class="flex gap-1">
-                                            <button class="btn btn-outline btn-sm btn-info"
-                                                @click="openModal(`ticket-items-${ticket.id}`)">
-                                                <Icon name="material-symbols:receipt-long-outline-rounded"
-                                                    class="text-2xl" />
-                                            </button>
+                                            <div class="tooltip" data-tip="Productos">
+                                                <button class="btn btn-outline btn-sm btn-primary"
+                                                    @click="openModal(`ticket-items-${ticket.id}`)">
+                                                    <Icon name="material-symbols:receipt-long-outline-rounded"
+                                                        class="text-2xl" />
+                                                </button>
+                                            </div>
                                             <dialog :id="`ticket-items-${ticket.id}`" class="modal">
                                                 <div class="modal-box max-w-2xl max-h-4/5">
-                                                    <TicketItemsTable :items="ticket.items" />
+                                                    <AdminTicketsTicketProductsTable :items="ticket.items" />
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
+                                            <div class="tooltip" data-tip="Pagos">
+                                                <button class="btn btn-outline btn-sm btn-info"
+                                                    @click="openModal(`ticket-payments-${ticket.id}`)">
+                                                    <Icon name="material-symbols:payments-outline-rounded"
+                                                        class="text-2xl" />
+                                                </button>
+                                            </div>
+                                            <dialog :id="`ticket-payments-${ticket.id}`" class="modal">
+                                                <div class="modal-box max-w-2xl max-h-4/5">
+                                                    <AdminTicketsTicketPaymentsTable :ticketId="ticket.id" />
                                                 </div>
                                                 <form method="dialog" class="modal-backdrop">
                                                     <button>close</button>
