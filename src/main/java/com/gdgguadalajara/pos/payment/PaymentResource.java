@@ -7,6 +7,7 @@ import com.gdgguadalajara.pos.payment.model.Payment;
 import com.gdgguadalajara.pos.payment.model.dto.CreatePaymentRequest;
 
 import io.quarkus.security.Authenticated;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class PaymentResource {
     @POST
     @Authenticated
     @Path("/{ticketId}")
+    @Transactional
     public Payment create(UUID ticketId, CreatePaymentRequest request) {
         return createPayment.run(ticketId, request);
     }
