@@ -23,6 +23,8 @@ public class CreatePayment {
         var ticket = Ticket.<Ticket>findById(ticketid);
         if (ticket == null)
             throw DomainException.notFound("Ticket no encontrado");
+        if(ticket.items.size() == 0)
+            throw DomainException.badRequest("El ticket no tiene items");
         payment.ticket = ticket;
         payment.amount = createPaymentRequest.amount();
         payment.method = createPaymentRequest.method();
