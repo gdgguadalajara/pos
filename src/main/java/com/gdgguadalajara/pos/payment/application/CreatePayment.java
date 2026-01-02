@@ -30,10 +30,10 @@ public class CreatePayment {
         payment.method = createPaymentRequest.method();
         payment.externalReference = createPaymentRequest.externalReference();
         payment.changeGiven = ticket.totalAmount.subtract(createPaymentRequest.amount());
-        payment.persist();
+        payment.persistAndFlush();
         var payments = Payment.<Payment>find("ticket.id", ticket.id).list();
         var totalPayments = payments.stream().map(p -> p.amount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        if (totalPayments.compareTo(ticket.totalAmount) < 0)
+        if (totalPayments.compareTo(ticket.totalAmount) >= 0)
             payTicket.run(ticket);
         return payment;
     }
