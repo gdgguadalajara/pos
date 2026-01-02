@@ -71,7 +71,7 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
                 </form>
                 <div class="modal-action">
                     <form method="dialog">
-                        <button class="btn">Close</button>
+                        <button class="btn">Cerrar</button>
                     </form>
                     <button type="submit" class="btn btn-primary" form="pay_ticket_form">
                         Pagar
@@ -94,7 +94,7 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
             </div>
             <div class="modal-action">
                 <form method="dialog" @submit.prevent="() => navigateTo('/cashier/tickets')">
-                    <button class="btn">Close</button>
+                    <button class="btn">Cerrar</button>
                 </form>
             </div>
         </div>
