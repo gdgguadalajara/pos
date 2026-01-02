@@ -89,8 +89,8 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
     <dialog id="change_given_modal" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold">Cambio</h3>
-            <div class="text-2xl grid place-content-center">
-                Cambio: ${{ changeGiven }}
+            <div class="text-6xl grid place-content-center">
+                ${{ changeGiven }}
             </div>
             <div class="modal-action">
                 <form method="dialog" @submit.prevent="() => navigateTo('/cashier/tickets')">
