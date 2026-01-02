@@ -38,6 +38,7 @@ const pay = (e) => {
             toast.success({ title: 'Pago registrado con exito' })
         })
         .then(_ => toast.success({ title: 'Ticket pagado con éxito' }))
+        .catch(err => toast.error({ title: err.message }))
 }
 
 const cancel = () => deleteApiTicketsId(ticket.value.id)
