@@ -6,8 +6,10 @@ definePageMeta({
     middleware: ['only-cashier'],
 })
 
+const session = useSession()
+
 const { data: paginatedTickets } = useAsyncData('myTickets', () =>
-    getApiUsersUserIdTickets(getCurrentSession().id, { status: TicketStatus.OPEN }))
+    getApiUsersUserIdTickets(session.value.id, { status: TicketStatus.OPEN }))
 </script>
 
 <template>
