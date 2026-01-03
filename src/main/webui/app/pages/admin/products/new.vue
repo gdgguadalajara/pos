@@ -24,8 +24,8 @@ const onSubmitCreateProduct = (e) => {
         price: +e.target.price.value,
         isEnabled: true, // TODO
         // TODO: add categories to link
-        availableFrom: new Date(e.target.available_from.value),
-        availableUntil: new Date(e.target.available_until.value),
+        availableFrom: dayjs(e.target.available_from.value).toISOString(),
+        availableUntil: dayjs(e.target.available_until.value).toISOString(),
         availableFromTime: e.target.available_from_hour.value,
         availableUntilTime: e.target.available_until_hour.value,
         availableDays: availableDays
@@ -57,14 +57,13 @@ const onSubmitCreateProduct = (e) => {
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible desde</legend>
-                            <input :value="new Date().toISOString().split('T')[0]" type="date" name="available_from"
+                            <input :value="dayjs().format('YYYY-MM-DD')" type="date" name="available_from"
                                 class="input w-full" />
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible hasta</legend>
-                            <input
-                                :value="new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate()).toISOString().split('T')[0]"
-                                type="date" name="available_until" class="input w-full" />
+                            <input :value="dayjs().add(1, 'year').format('YYYY-MM-DD')" type="date"
+                                name="available_until" class="input w-full" />
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible desde la hora</legend>
