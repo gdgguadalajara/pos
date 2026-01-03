@@ -33,11 +33,12 @@ const pay = (e) => {
                 openModal('change_given_modal')
                 return toast.success({ title: 'Ticket pagado con éxito' })
             }
-            if (payment.ticket.status == TicketStatus.PAID)
+            if (payment.ticket.status == TicketStatus.PAID) {
+                toast.success({ title: 'Ticket pagado con éxito' })
                 return navigateTo('/cashier/tickets')
+            }
             toast.success({ title: 'Pago registrado con exito' })
         })
-        .then(_ => toast.success({ title: 'Ticket pagado con éxito' }))
         .catch(err => toast.error({ title: err.message }))
 }
 
