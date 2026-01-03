@@ -3,6 +3,7 @@ package com.gdgguadalajara.pos.payment.application;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.gdgguadalajara.pos.cashsession.application.GetCurrentCashSession;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.payment.model.Payment;
 import com.gdgguadalajara.pos.payment.model.dto.CreatePaymentRequest;
@@ -17,8 +18,12 @@ import lombok.AllArgsConstructor;
 public class CreatePayment {
 
     private final PayTicket payTicket;
+    private final GetCurrentCashSession getCurrentCashSession;
 
     public Payment run(UUID ticketid, CreatePaymentRequest createPaymentRequest) {
+        var currentCashSession = getCurrentCashSession.run();
+        if (currentCashSession == null)
+            throw DomainException.forbidden("No hay una sesión de caja abierta");
         var payment = new Payment();
         var ticket = Ticket.<Ticket>findById(ticketid);
         if (ticket == null)

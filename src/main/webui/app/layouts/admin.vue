@@ -87,6 +87,13 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         </NuxtLink>
                     </li>
                     <li>
+                        <NuxtLink to="/admin/cash-sessions"
+                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Sesiones de caja">
+                            <Icon name="material-symbols:point-of-sale-rounded" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Sesiones de caja</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
                         <NuxtLink to="/admin/tickets" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Tickets">
                             <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
