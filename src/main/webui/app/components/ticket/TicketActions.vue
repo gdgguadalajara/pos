@@ -27,6 +27,7 @@ const pay = (e) => {
         return toast.error({ title: 'El monto ingresado es menor al total del ticket' })
     postApiPaymentsTicketId(ticket.value.id, { amount, method })
         .then(payment => {
+            refreshNuxtData('getApiCashSessionsSummary')
             if (method === PaymentMethod.CASH && payment.ticket.status == TicketStatus.PAID && payment.changeGiven > 0) {
                 changeGiven.value = payment.changeGiven
                 closeModal('pay_ticket_modal')
