@@ -11,6 +11,7 @@ public record GetCashSessionSummaryResponse(
         LocalDateTime openingDate,
         User openedBy,
         BigDecimal initialBalance,
+        BigDecimal totalExpenses,
         BigDecimal totalSales,
         Long salesCount,
         BigDecimal expectedBalance) {

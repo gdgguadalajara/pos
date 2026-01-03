@@ -150,6 +150,16 @@ CREATE TABLE public.user_pos (
     name character varying(255) NOT NULL
 );
 
+CREATE TABLE public.expense (
+    id uuid PRIMARY KEY,
+    description character varying(255) NOT NULL,
+    amount numeric(38,2) NOT NULL,
+    category character varying(50) NOT NULL,
+    createdat timestamp(6) without time zone NOT NULL,
+    created_by_user_id uuid NOT NULL,
+    CONSTRAINT expense_category_check CHECK (((category)::text = ANY ((ARRAY['SUPPLIES'::character varying, 'CLEANING'::character varying, 'MAINTENANCE'::character varying, 'WAGES'::character varying, 'OTHER'::character varying])::text[])))
+);
+
 ALTER TABLE ONLY public.account
     ADD CONSTRAINT account_pkey PRIMARY KEY (id);
 
@@ -248,3 +258,6 @@ ALTER TABLE ONLY public.invitation
 
 ALTER TABLE ONLY public.category_available_days
     ADD CONSTRAINT fkss606wiif65x2ia8tfqwon4bn FOREIGN KEY (category_id) REFERENCES public.category(id);
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT fk_expense_user FOREIGN KEY (created_by_user_id) REFERENCES public.user_pos(id);
