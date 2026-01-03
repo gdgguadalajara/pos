@@ -40,6 +40,7 @@ public class CashSession extends PanacheEntityBase {
     public BigDecimal initialBalance;
 
     public BigDecimal totalSales;
+    public BigDecimal totalExpenses;
     public BigDecimal reportedBalance;
     public BigDecimal difference;
 

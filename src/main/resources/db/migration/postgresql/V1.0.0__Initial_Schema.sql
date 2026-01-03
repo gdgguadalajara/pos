@@ -16,6 +16,7 @@ CREATE TABLE public.cashsession (
     initialbalance numeric(38,2) NOT NULL,
     reportedbalance numeric(38,2),
     totalsales numeric(38,2),
+    totalexpenses numeric(38,2),
     closingdate timestamp(6) without time zone,
     openingdate timestamp(6) without time zone NOT NULL,
     closed_by_id uuid,

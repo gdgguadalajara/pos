@@ -9,6 +9,7 @@ import com.gdgguadalajara.pos.cashsession.model.CashSession;
 import com.gdgguadalajara.pos.cashsession.model.CashSessionStatus;
 import com.gdgguadalajara.pos.cashsession.model.dto.CloseCashSessionRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
+import com.gdgguadalajara.pos.expense.model.Expense;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,8 +36,16 @@ public class CloseCashSession {
                         BigDecimal.class)
                 .setParameter("opened", currentCashSession.openingDate)
                 .getSingleResult();
-        var expected = currentCashSession.initialBalance.add((sales != null) ? (BigDecimal) sales : BigDecimal.ZERO);
+        var totalExpenses = Expense.getEntityManager()
+                .createQuery("SELECT SUM(e.amount) FROM Expense e WHERE createdAt BETWEEN :openingDate AND NOW()",
+                        BigDecimal.class)
+                .setParameter("openingDate", currentCashSession.openingDate)
+                .getSingleResult();
+        totalExpenses = (totalExpenses != null) ? totalExpenses : BigDecimal.ZERO;
+        sales = (sales != null) ? sales : BigDecimal.ZERO;
+        var expected = currentCashSession.initialBalance.add(sales).subtract(totalExpenses);
         currentCashSession.totalSales = sales;
+        currentCashSession.totalExpenses = totalExpenses;
         currentCashSession.closingDate = LocalDateTime.now();
         currentCashSession.closedBy = currentSession.user;
         currentCashSession.reportedBalance = request.reportedBalance();
