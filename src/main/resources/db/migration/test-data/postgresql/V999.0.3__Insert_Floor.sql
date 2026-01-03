@@ -1,0 +1,2 @@
+INSERT INTO floor(gridheight, gridwidth, levelorder, createdat, updatedat, id, name) VALUES
+(5, 10, 0, '2025-12-31 11:28:39.649726', '2025-12-31 11:28:39.649747', '46d5756d-b720-4d15-95ac-3eb6aa02a067', 'Planta baja');
