@@ -5,46 +5,33 @@ definePageMeta({
     middleware: ['only-admin'],
 })
 
-const toast = useToast()
+const { params, setParam } = useParams('adminGetApiUsersParams', { page: 1, sort: 'name' })
 
-const currentPage = ref(1)
+const { data: paginatedUsers, status, refresh } = useAsyncData('getApiUsers', () => getApiUsers(params.value))
 
-const { data: paginatedUsers, status, refresh } = useAsyncData('admin_users', () => getApiUsers({
-    page: currentPage.value
-}))
-
-const nextPage = () => {
-    if (paginatedUsers.value.meta.nextPage) {
-        currentPage.value += 1
-        refresh()
-    }
-}
-const prevPage = () => {
-    if (paginatedUsers.value.meta.prevPage) {
-        currentPage.value -= 1
-        refresh()
-    }
-}
-
-const copyId = (text) =>
-    navigator.clipboard.writeText(text)
-        .then(_ => toast.info({ title: "ID Copiado" }))
+const nextPage = () => setParam('page', params.value.page + 1)
+const prevPage = () => setParam('page', params.value.page - 1)
 
 const accountStatusToText = (status) => {
     switch (status) {
-        case 'PENDING_SETUP':
-            return 'No configurado'
-        case 'ACTIVE':
-            return 'Activo'
-        case 'LOCKED':
-            return 'Bloqueado'
-        case 'DISABLED':
-            return 'Deshabilitado'
-        default:
-            return status
+        case 'PENDING_SETUP': return 'No configurado'
+        case 'ACTIVE': return 'Activo'
+        case 'LOCKED': return 'Bloqueado'
+        case 'DISABLED': return 'Deshabilitado'
+        default: return status
     }
 }
 
+const accountRoleToText = (status) => {
+    switch (status) {
+        case 'ADMIN': return 'Administrador'
+        case 'CASHIER': return 'Cajero'
+        case 'WAITER': return 'Mesero'
+        default: return status
+    }
+}
+
+watch(params, () => refresh())
 </script>
 
 <template>
@@ -65,6 +52,7 @@ const accountStatusToText = (status) => {
                             Invitaciones
                         </NuxtLink>
                     </div>
+                    <AdminUsersFilters />
                     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                         <table class="table table-zebra">
                             <thead class="bg-base-200">
@@ -88,7 +76,7 @@ const accountStatusToText = (status) => {
                                 </tr>
                                 <tr v-if="status == 'success'" v-for="user in paginatedUsers.data" :key="user.id">
                                     <td>
-                                        <button class="btn btn-link" @click="copyId(user.id)">
+                                        <button class="btn btn-link" @click="copy(user.id, 'ID copiado')">
                                             {{ user.id.slice(0, 8) }}...
                                         </button>
                                     </td>
@@ -96,7 +84,7 @@ const accountStatusToText = (status) => {
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.account.username }}</td>
                                     <td>{{ accountStatusToText(user.account.status) }}</td>
-                                    <td>{{ user.account.role }}</td>
+                                    <td>{{ accountRoleToText(user.account.role) }}</td>
                                     <td>
                                         <div class="flex gap-1">
                                         </div>
