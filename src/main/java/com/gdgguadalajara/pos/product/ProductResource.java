@@ -1,34 +1,33 @@
 package com.gdgguadalajara.pos.product;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
-import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.model.dto.PaginationRequestParams;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.product.application.CreateProduct;
 import com.gdgguadalajara.pos.product.application.DeleteProduct;
 import com.gdgguadalajara.pos.product.application.UpdateProduct;
 import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.product.model.dto.CreateProductRequest;
+import com.gdgguadalajara.pos.product.model.dto.ReadProductsFilter;
 import com.gdgguadalajara.pos.product.model.dto.UpdateProductRequest;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Positive;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -48,19 +47,23 @@ public class ProductResource {
 
     @GET
     @Authenticated
-    public PaginatedResponse<Product> read(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
-        var query = Product.<Product>findAll();
-        return PageBuilder.of(query, page, size);
+    public PaginatedResponse<Product> read(@BeanParam @Valid ReadProductsFilter filter) {
+        var criteria = PanacheCriteria.of(Product.class)
+                .eq("isEnabled", filter.isEnabled)
+                .eq("id", filter.id)
+                .like("name", filter.name)
+                .orderBy(filter.sort)
+                .page(filter.page, filter.size);
+        if (filter.availableDays != null)
+            for (DayOfWeek day : filter.availableDays)
+                criteria.memberOf(day, "availableDays");
+        return criteria.getResult();
     }
 
     @GET
     @Authenticated
     @Path("/availables")
-    public PaginatedResponse<Product> readAvailables(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+    public PaginatedResponse<Product> readAvailables(@BeanParam @Valid PaginationRequestParams params) {
         var currentDate = LocalDate.now();
         var currentTime = LocalTime.now();
         return PanacheCriteria.of(Product.class)
@@ -70,7 +73,7 @@ public class ProductResource {
                 .le("availableFromTime", currentTime)
                 .ge("availableUntilTime", currentTime)
                 .memberOf(currentDate.getDayOfWeek(), "availableDays")
-                .page(page, size).getResult();
+                .page(params.page, params.size).getResult();
     }
 
     @GET
