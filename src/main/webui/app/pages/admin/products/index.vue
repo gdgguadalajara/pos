@@ -7,39 +7,21 @@ definePageMeta({
 })
 
 const toast = useToast()
+const { params, setParam } = useParams('adminGetApiProductsParams', { page: 1, sort: 'name' })
 
-const currentPage = ref(1)
-
-const { data: paginatedProducts, status, refresh } = useAsyncData('admin_products', () => getApiProducts({
-    page: currentPage.value
-}))
-
-
-const nextPage = () => {
-    if (paginatedProducts.value.meta.nextPage) {
-        currentPage.value += 1
-        refresh()
-    }
-}
-const prevPage = () => {
-    if (paginatedProducts.value.meta.prevPage) {
-        currentPage.value -= 1
-        refresh()
-    }
-}
-
-const copyId = (text) =>
-    navigator.clipboard.writeText(text)
-        .then(_ => toast.info({ title: "ID Copiado" }))
+const { data: paginatedProducts, status, refresh } = useAsyncData('getApiProducts', () => getApiProducts(params.value))
 
 const deleteProduct = (product) =>
     deleteApiProductsUuid(product.id)
-        .then(() => {
-            refresh()
-            closeModal(`delete_${product.id}_modal`)
-            toast.info({ title: "Producto eliminado" })
-        })
-        .catch(() => toast.error({ title: "Error al eliminar producto" }))
+        .then(_ => refresh())
+        .then(_ => closeModal(`delete_${product.id}_modal`))
+        .then(_ => toast.info({ title: "Producto eliminado" }))
+        .catch(_ => toast.error({ title: "Error al eliminar producto" }))
+
+const prevPage = _ => setParam('page', params.value.page - 1)
+const nextPage = _ => setParam('page', params.value.page + 1)
+
+watch(params, _ => refresh())
 </script>
 
 <template>
@@ -47,11 +29,12 @@ const deleteProduct = (product) =>
         <NuxtLayout name="admin" title="Productos">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <div class="flex justify-end mb-3">
+                    <div class="mb-3">
                         <NuxtLink to="/admin/products/new" class="btn btn-primary">
                             Nuevo Producto
                         </NuxtLink>
                     </div>
+                    <AdminProductsFilters />
                     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                         <table class="table table-zebra">
                             <thead class="bg-base-200">
@@ -78,7 +61,7 @@ const deleteProduct = (product) =>
                                 <tr v-if="status == 'success'" v-for="product in paginatedProducts.data"
                                     :key="product.id">
                                     <td>
-                                        <button class="btn btn-link" @click="copyId(product.id)">
+                                        <button class="btn btn-link" @click="copy(product.id, 'ID copiado')">
                                             {{ product.id.slice(0, 8) }}...
                                         </button>
                                     </td>
