@@ -13,17 +13,15 @@ const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_c
 
 const deleteCategory = (category) =>
     deleteApiCategoriesUuid(category.id)
-        .then(() => {
-            refresh()
-            closeModal(`delete_${category.id}_modal`)
-            toast.info({ title: "Categoria eliminada" })
-        })
-        .catch(() => toast.error({ title: "Error al eliminar categoria" }))
+        .then(_ => refresh())
+        .then(_ => closeModal(`delete_${category.id}_modal`))
+        .then(_ => toast.info({ title: "Categoria eliminada" }))
+        .catch(_ => toast.error({ title: "Error al eliminar categoria" }))
 
-const prevPage = () => setParam(page, params.value.page - 1)
-const nextPage = () => setParam(page, params.value.page + 1)
+const prevPage = _ => setParam('page', params.value.page - 1)
+const nextPage = _ => setParam('page', params.value.page + 1)
 
-watch(params, () => refresh())
+watch(params, _ => refresh())
 </script>
 
 <template>
