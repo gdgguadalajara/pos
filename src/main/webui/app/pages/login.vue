@@ -42,7 +42,7 @@ const onLoginSubmit = (e) => {
                 <h2 class="card-title">Punto de Venta</h2>
                 <form id="login-form" @submit.prevent="onLoginSubmit">
                     <fieldset class="fieldset">
-                        <legend class="fieldset-legend">Correo</legend>
+                        <legend class="fieldset-legend">Usuario o Correo</legend>
                         <input autocomplete="email" type="text" class="input" name="email" />
                     </fieldset>
                     <fieldset class="fieldset">
