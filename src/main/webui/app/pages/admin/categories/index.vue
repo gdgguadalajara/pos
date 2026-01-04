@@ -59,7 +59,7 @@ const deleteCategory = (category) =>
                                 <tr v-if="status == 'success'" v-for="category in paginatedCategories.data"
                                     :key="category.id">
                                     <td>
-                                        <button class="btn btn-link" @click="copyId(category.id)">
+                                        <button class="btn btn-link" @click="copy(category.id, 'ID copiado')">
                                             {{ category.id.slice(0, 8) }}...
                                         </button>
                                     </td>
