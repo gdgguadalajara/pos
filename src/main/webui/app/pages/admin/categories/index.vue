@@ -7,7 +7,7 @@ definePageMeta({
 })
 
 const toast = useToast()
-const { params, setParam } = useFilters('categoryFilters', { page: 1, sort: 'name' })
+const { params, setParam } = useParams('adminGetApiCategoriesParams', { page: 1, sort: 'name' })
 
 const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_categories', () => getApiCategories(params.value))
 

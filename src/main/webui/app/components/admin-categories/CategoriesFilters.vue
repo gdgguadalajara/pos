@@ -1,5 +1,5 @@
 <script setup>
-const { setParam } = useFilters('categoryFilters', { page: 1 })
+const { setParam } = useFilters('adminGetApiCategoriesParams', { page: 1 })
 
 const onSubmitFilters = (e) => {
     const checkedBoxes = document.querySelectorAll('input[name="day_of_week"]:checked')

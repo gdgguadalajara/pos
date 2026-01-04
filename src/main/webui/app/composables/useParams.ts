@@ -17,6 +17,6 @@ export default function (key: string, initialParas: { [x: string]: any }) {
         params: filteredParams,
         setParam,
         clearParam,
-        filters,
+        allParams: filters,
     }
 }
