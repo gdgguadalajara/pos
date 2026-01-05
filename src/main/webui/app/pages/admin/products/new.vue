@@ -1,6 +1,6 @@
 <script setup>
+import dayjs from 'dayjs'
 import { DayOfWeek } from '~/models'
-import { postApiCategories } from '~/services/category-resource/category-resource'
 import { postApiProducts } from '~/services/product-resource/product-resource'
 
 definePageMeta({
@@ -31,12 +31,9 @@ const onSubmitCreateProduct = (e) => {
         availableDays: availableDays
     }
     postApiProducts(payload)
-        .then(() => {
-            e.target.reset()
-            toast.success({ title: "Producto creado" })
-            navigateTo("/admin/products")
-
-        })
+        .then(_ => e.target.reset())
+        .then(_ => toast.success({ title: "Producto creado" }))
+        .then(_ => navigateTo("/admin/products"))
         .catch(() => toast.error({ title: "Error al crear producto" }))
 }
 </script>
