@@ -1,13 +1,13 @@
 <script setup>
 import dayjs from 'dayjs';
-import { } from '~/services/cash-session-tickets-resource/cash-session-tickets-resource';
 import { getApiPayments } from '~/services/payment-resource/payment-resource';
 
 const { cashSessionId } = defineProps(['cashSessionId'])
 
-const { params, setParam } = useParams('getApiPayments', { page: 1, cashSessionId })
+const { params, setParam } = useParams(`adminGetApiCashSessionPayments-${cashSessionId}`, { page: 1, cashSessionId })
 
-const { data: paginatedPayments, status, refresh } = useAsyncData('getApiPayments', () => getApiPayments(params.value), { default: () => [] })
+const { data: paginatedPayments, status, refresh } = useAsyncData(`getApiPayments-${cashSessionId}`,
+    () => getApiPayments(params.value), { default: () => [] })
 
 const prevPage = _ => setParam('page', params.value.page - 1)
 const nextPage = _ => setParam('page', params.value.page + 1)

@@ -14,6 +14,9 @@ public class ReadExpensesFilter extends PaginationRequestParams {
     @QueryParam("id")
     public UUID id;
 
+    @QueryParam("cashSessionId")
+    public UUID cashSessionId;
+
     @QueryParam("createdBy")
     public String createdBy;
 
@@ -22,7 +25,7 @@ public class ReadExpensesFilter extends PaginationRequestParams {
 
     @QueryParam("category")
     public ExpenseCategory category;
-    
+
     @QueryParam("createdAt")
     public LocalDate createdAt;
 }

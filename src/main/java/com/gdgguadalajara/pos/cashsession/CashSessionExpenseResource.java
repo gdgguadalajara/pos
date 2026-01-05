@@ -30,7 +30,7 @@ public class CashSessionExpenseResource {
     private final CreateExpense createExpense;
 
     @POST
-    @RolesAllowed({ AccountRole.ADMIN_ROLE })
+    @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
     @Transactional
     public Expense createExpense(UUID id, CreateExpenseRequest request) {
         return createExpense.run(id, request);

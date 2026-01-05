@@ -6,7 +6,9 @@ definePageMeta({
     middleware: ['only-admin'],
 })
 
-const { params } = useParams('adminGetApiCashSessionsParams', { page: 1 })
+const route = useRoute()
+
+const { params } = useParams('adminGetApiCashSessionsParams', { page: 1, id: route.query.id })
 
 const { data: PaginatedCashSessions, status, refresh } = useAsyncData('getApiCashSessions', () => getApiCashSessions(params.value))
 
@@ -33,6 +35,7 @@ watch(params, _ => refresh())
                                     <th>Cerro</th>
                                     <th>Balance inicial</th>
                                     <th>Ventas totales</th>
+                                    <th>Gastos totales</th>
                                     <th>Balance reportado</th>
                                     <th>Diferencia</th>
                                     <th>Estado</th>
@@ -55,11 +58,14 @@ watch(params, _ => refresh())
                                         </button>
                                     </td>
                                     <td>{{ cashSession.openedBy.name }}</td>
-                                    <td>{{ cashSession.closedBy.name }}</td>
+                                    <td>{{ cashSession.closedBy?.name }}</td>
                                     <td>{{ dayjs(cashSession.openingDate).format('DD/MM/YYYY HH:mm') }}</td>
-                                    <td>{{ dayjs(cashSession.closingDate).format('DD/MM/YYYY HH:mm') }}</td>
+                                    <td>{{ cashSession.closingDate
+                                        ? dayjs(cashSession.closingDate).format('DD/MM/YYYY HH: mm')
+                                        : '' }}</td>
                                     <td>${{ cashSession.initialBalance }}</td>
                                     <td>${{ cashSession.totalSales }}</td>
+                                    <td>${{ cashSession.totalExpenses }}</td>
                                     <td>${{ cashSession.reportedBalance }}</td>
                                     <td>${{ cashSession.difference }}</td>
                                     <td>{{ cashSession.status }}</td>
@@ -74,14 +80,14 @@ watch(params, _ => refresh())
                                             </div>
                                             <dialog :id="`tickets-cashsession-${cashSession.id}`" class="modal">
                                                 <div class="modal-box max-w-4xl max-h-4/5">
-                                                    <AdminCashSessionsPayments :cashSession-id="cashSession.id" />
+                                                    <AdminCashSessionsPayments :cashSessionId="cashSession.id" />
                                                 </div>
                                                 <form method="dialog" class="modal-backdrop">
                                                     <button>close</button>
                                                 </form>
                                             </dialog>
                                             <div class="tooltip" data-tip="Notas">
-                                                <button class="btn btn-outline btn-sm btn-primary"
+                                                <button class="btn btn-outline btn-sm btn-info"
                                                     @click="openModal(`tickets-cashsession-${cashSession.id}-notes`)">
                                                     <Icon name="material-symbols:notes-rounded" class="text-2xl" />
                                                 </button>
@@ -90,6 +96,22 @@ watch(params, _ => refresh())
                                                 <div class="modal-box max-w-4xl max-h-4/5">
                                                     <h2 class="text-2xl">Notas</h2>
                                                     <p>{{ cashSession.note }}</p>
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
+                                            <div class="tooltip" data-tip="Gastos">
+                                                <button class="btn btn-outline btn-sm btn-secondary"
+                                                    @click="openModal(`tickets-cashsession-${cashSession.id}-expenses`)">
+                                                    <Icon name="material-symbols:point-of-sale-rounded"
+                                                        class="text-2xl" />
+                                                </button>
+                                            </div>
+                                            <dialog :id="`tickets-cashsession-${cashSession.id}-expenses`"
+                                                class="modal">
+                                                <div class="modal-box max-w-4xl max-h-4/5">
+                                                    <AdminCashSessionsExpenses :cashSessionId="cashSession.id" />
                                                 </div>
                                                 <form method="dialog" class="modal-backdrop">
                                                     <button>close</button>

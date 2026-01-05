@@ -1,6 +1,8 @@
 <script setup>
 const { setParam } = useParams('adminGetApiCashSessionsParams')
 
+const route = useRoute()
+
 const onSubmitFilters = (e) => {
     setParam({
         id: e.target.search_id.value,
@@ -17,7 +19,7 @@ const onSubmitFilters = (e) => {
     <form class="flex items-end gap-2 mb-3" @submit.prevent="onSubmitFilters">
         <div class="fieldset flex-1 p-0">
             <legend class="fieldset-legend">ID</legend>
-            <input type="text" class="input w-full" name="search_id" />
+            <input type="text" class="input w-full" name="search_id" :value="route.query.id" />
         </div>
         <div class="fieldset flex-1 p-0">
             <legend class="fieldset-legend">Abierto por</legend>

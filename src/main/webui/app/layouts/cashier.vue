@@ -80,6 +80,13 @@ const session = useSession()
                             <span class="is-drawer-close:hidden">Tickets</span>
                         </NuxtLink>
                     </li>
+                    <li>
+                        <NuxtLink to="/cashier/expenses" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Gastos">
+                            <Icon name="material-symbols:wallet" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Gastos</span>
+                        </NuxtLink>
+                    </li>
                     <li></li>
                     <li>
                         <NuxtLink to="/logout" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
