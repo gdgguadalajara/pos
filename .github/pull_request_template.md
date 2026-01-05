@@ -1,14 +1,3 @@
-Un **PR Template** es una de las mejores herramientas para mantener la calidad del código, especialmente cuando manejas diferentes perfiles de base de datos (H2/Postgres) y despliegues (Nativo/Standalone).
-
-Para activarlo en GitHub, debes crear un archivo llamado `pull_request_template.md` dentro de la carpeta `.github/` en la raíz de tu proyecto.
-
-Aquí tienes una propuesta diseñada específicamente para tu **POS**:
-
----
-
-### Contenido para `.github/pull_request_template.md`
-
-```markdown
 # 🚀 Descripción del Cambio
 
 ## 📝 Resumen
