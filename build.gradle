@@ -33,7 +33,7 @@ dependencies {
 }
 
 group = 'com.gdgguadalajara.pos'
-version = '0.0.1-PREVIEW'
+version = '0.0.2-PREVIEW'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
