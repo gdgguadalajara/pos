@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.gdgguadalajara.pos.cashsession.model.CashSession;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 
 import java.math.BigDecimal;
@@ -20,6 +21,10 @@ public class Payment extends PanacheEntityBase {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ticket_id", nullable = false)
     public Ticket ticket;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cash_session_id", nullable = false)
+    public CashSession cashSession;
 
     @Column(nullable = false)
     public BigDecimal amount;

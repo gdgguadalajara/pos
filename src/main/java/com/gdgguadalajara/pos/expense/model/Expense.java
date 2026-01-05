@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.gdgguadalajara.pos.cashsession.model.CashSession;
 import com.gdgguadalajara.pos.user.model.User;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -30,6 +31,10 @@ public class Expense extends PanacheEntityBase {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_user_id", nullable = false)
     public User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cash_session_id")
+    public CashSession cashSession;
 
     @Column(nullable = false)
     public String description;

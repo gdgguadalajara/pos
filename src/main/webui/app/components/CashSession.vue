@@ -1,12 +1,21 @@
 <script setup>
-import { getApiCashSessionsCurrent, getApiCashSessionsSummary, postApiCashSessionsOpen, putApiCashSessionsClose } from '~/services/cash-session-resource/cash-session-resource';
+import { getApiCashSessionsCurrent, getApiCashSessionsCurrentSummary, postApiCashSessionsOpen, putApiCashSessionsClose } from '~/services/cash-session-resource/cash-session-resource';
 
 const toast = useToast()
+const cashSessionState = useState('cashSession')
 
-const { data: cashSession, status, refresh } = useAsyncData('getApiCashSessionsCurrent', () => getApiCashSessionsCurrent())
+const {
+    data: cashSession,
+    status,
+    refresh
+} = useAsyncData('getApiCashSessionsCurrent', () => getApiCashSessionsCurrent())
 
-const { data: summary, status: statusSummary, refresh: refreshSummary } = useAsyncData('getApiCashSessionsSummary', () => getApiCashSessionsSummary(),
-    { immediate: cashSession.id })
+const {
+    data: summary,
+    status: statusSummary,
+    refresh: refreshSummary
+} = useAsyncData('getApiCashSessionsSummary', () => getApiCashSessionsCurrentSummary(),
+    { immediate: status.value == 'success' })
 
 const openCashSession = (e) =>
     postApiCashSessionsOpen({ initialBalance: +e.target.initialBalance.value })
@@ -23,10 +32,11 @@ const closeCashSession = (e) =>
         .then(_ => closeModal('close_cash_session'))
 
 watch([status, cashSession], ([status, cashSession]) => {
-    if (status == 'success' && !cashSession.id)
+    if (status == 'error')
         openModal('open_cash_session')
-    if (status == 'success' && cashSession.id)
-        refreshSummary()
+    if (status != 'success') return
+    cashSessionState.value = cashSession
+    refreshSummary()
 })
 </script>
 
@@ -34,8 +44,7 @@ watch([status, cashSession], ([status, cashSession]) => {
     <div v-if="status == 'pending'" class="grid place-items-center">
         <span class="loading loading-ring loading-xl"></span>
     </div>
-    <button v-if="status == 'success' && !cashSession.id" @click="openModal('open_cash_session')"
-        class="btn btn-primary btn-outline">
+    <button v-if="status == 'error'" @click="openModal('open_cash_session')" class="btn btn-primary btn-outline">
         Abrir Caja
     </button>
     <dialog id="open_cash_session" class="modal">
@@ -57,8 +66,7 @@ watch([status, cashSession], ([status, cashSession]) => {
             </div>
         </div>
     </dialog>
-    <button v-if="status == 'success' && !!cashSession.id" @click="openModal('close_cash_session')"
-        class="btn btn-warning btn-outline">
+    <button v-if="status == 'success'" @click="openModal('close_cash_session')" class="btn btn-warning btn-outline">
         Cerrar Caja
     </button>
     <dialog id="close_cash_session" class="modal">
@@ -67,13 +75,6 @@ watch([status, cashSession], ([status, cashSession]) => {
             <form v-if="statusSummary == 'success'" id="close_cash_session_form" class="grid grid-cols-2 gap-1"
                 @submit.prevent="closeCashSession">
                 <fieldset class="fieldset">
-                    <legend class="fieldset-legend">Balance inicial:</legend>
-                    <div
-                        class="h-10 w-full grid items-center px-3 border rounded border-base-content/20 shadow shadow-base-content/3">
-                        ${{ summary.initialBalance }}
-                    </div>
-                </fieldset>
-                <fieldset class="fieldset">
                     <legend class="fieldset-legend">Ventas totales:</legend>
                     <div
                         class="h-10 w-full grid items-center px-3 border rounded border-base-content/20 shadow shadow-base-content/3">
@@ -81,10 +82,17 @@ watch([status, cashSession], ([status, cashSession]) => {
                     </div>
                 </fieldset>
                 <fieldset class="fieldset">
-                    <legend class="fieldset-legend">Tickets totales:</legend>
+                    <legend class="fieldset-legend">Gastos totales:</legend>
                     <div
                         class="h-10 w-full grid items-center px-3 border rounded border-base-content/20 shadow shadow-base-content/3">
-                        {{ summary.salesCount }}
+                        ${{ summary.totalExpenses }}
+                    </div>
+                </fieldset>
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Balance inicial:</legend>
+                    <div
+                        class="h-10 w-full grid items-center px-3 border rounded border-base-content/20 shadow shadow-base-content/3">
+                        ${{ summary.initialBalance }}
                     </div>
                 </fieldset>
                 <fieldset class="fieldset">

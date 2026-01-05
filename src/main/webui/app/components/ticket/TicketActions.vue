@@ -1,11 +1,12 @@
 <script setup>
 import { AccountRole, PaymentMethod, TicketStatus } from '~/models';
-import { postApiPaymentsTicketId } from '~/services/payment-resource/payment-resource';
+import { postApiCashSessionsIdTicketsTicketIdPayments } from '~/services/cash-session-ticket-payments-resource/cash-session-ticket-payments-resource';
 import { deleteApiTicketsId, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
 
 const toast = useToast()
 
 const ticket = useState('ticket')
+const cashSession = useState('cashSession')
 
 const changeGiven = ref(0)
 
@@ -25,7 +26,7 @@ const pay = (e) => {
     const method = e.target.payment_method.value
     if (amount < ticket.value.totalAmount)
         return toast.error({ title: 'El monto ingresado es menor al total del ticket' })
-    postApiPaymentsTicketId(ticket.value.id, { amount, method })
+    postApiCashSessionsIdTicketsTicketIdPayments(cashSession.value.id, ticket.value.id, { amount, method })
         .then(payment => {
             refreshNuxtData('getApiCashSessionsSummary')
             if (method === PaymentMethod.CASH && payment.ticket.status == TicketStatus.PAID && payment.changeGiven > 0) {

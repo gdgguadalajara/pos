@@ -15,7 +15,6 @@ import com.gdgguadalajara.pos.cashsession.model.dto.ReadCashSessionFilter;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
-import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -73,13 +72,13 @@ public class CashSessionResource {
 
     @GET
     @Path("/current")
-    @Authenticated
+    @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
     public CashSession current() {
         return getCurrentCashSession.run();
     }
 
     @GET
-    @Path("/summary")
+    @Path("/current/summary")
     @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
     public GetCashSessionSummaryResponse summary() {
         return getCashSessionSummary.run();

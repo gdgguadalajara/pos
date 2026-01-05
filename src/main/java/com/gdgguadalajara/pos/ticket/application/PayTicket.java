@@ -2,7 +2,6 @@ package com.gdgguadalajara.pos.ticket.application;
 
 import java.time.LocalDateTime;
 
-import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
@@ -16,12 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PayTicket {
 
-    private final GetCurrentSession getCurrentSession;
-
     public Ticket run(Ticket ticket) {
-        var session = getCurrentSession.run();
-        if (!ticket.owner.id.equals(session.user.id))
-            throw DomainException.forbidden("No puedes modificar este ticket");
         if (!ticket.status.equals(TicketStatus.OPEN))
             throw DomainException.badRequest("No puedes modificar este ticket");
         ticket.items.stream()

@@ -1,9 +1,9 @@
 package com.gdgguadalajara.pos.payment.application;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-import com.gdgguadalajara.pos.cashsession.application.GetCurrentCashSession;
+import com.gdgguadalajara.pos.cashsession.model.CashSession;
+import com.gdgguadalajara.pos.cashsession.model.CashSessionStatus;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.payment.model.Payment;
 import com.gdgguadalajara.pos.payment.model.dto.CreatePaymentRequest;
@@ -18,19 +18,15 @@ import lombok.AllArgsConstructor;
 public class CreatePayment {
 
     private final PayTicket payTicket;
-    private final GetCurrentCashSession getCurrentCashSession;
 
-    public Payment run(UUID ticketid, CreatePaymentRequest createPaymentRequest) {
-        var currentCashSession = getCurrentCashSession.run();
-        if (currentCashSession == null)
-            throw DomainException.forbidden("No hay una sesión de caja abierta");
-        var payment = new Payment();
-        var ticket = Ticket.<Ticket>findById(ticketid);
-        if (ticket == null)
-            throw DomainException.notFound("Ticket no encontrado");
+    public Payment run(Ticket ticket, CashSession cashSession, CreatePaymentRequest createPaymentRequest) {
+        if (cashSession.status.equals(CashSessionStatus.CLOSED))
+            throw DomainException.badRequest("La sesión de caja no está abierta");
         if (ticket.items.size() == 0)
             throw DomainException.badRequest("El ticket no tiene items");
+        var payment = new Payment();
         payment.ticket = ticket;
+        payment.cashSession = cashSession;
         payment.amount = createPaymentRequest.amount();
         payment.method = createPaymentRequest.method();
         payment.externalReference = createPaymentRequest.externalReference();

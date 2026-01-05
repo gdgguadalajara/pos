@@ -65,16 +65,16 @@ watch(params, _ => refresh())
                                     <td>{{ cashSession.status }}</td>
                                     <td>
                                         <div class="flex gap-1">
-                                            <div class="tooltip" data-tip="Tickets">
+                                            <div class="tooltip" data-tip="Pagos">
                                                 <button class="btn btn-outline btn-sm btn-primary"
                                                     @click="openModal(`tickets-cashsession-${cashSession.id}`)">
-                                                    <Icon name="material-symbols:receipt-long-outline-rounded"
+                                                    <Icon name="material-symbols:payments-outline-rounded"
                                                         class="text-2xl" />
                                                 </button>
                                             </div>
                                             <dialog :id="`tickets-cashsession-${cashSession.id}`" class="modal">
                                                 <div class="modal-box max-w-4xl max-h-4/5">
-                                                    <AdminCashSessionsTickets :cashSession-id="cashSession.id" />
+                                                    <AdminCashSessionsPayments :cashSession-id="cashSession.id" />
                                                 </div>
                                                 <form method="dialog" class="modal-backdrop">
                                                     <button>close</button>
