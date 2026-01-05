@@ -1,5 +1,7 @@
 package com.gdgguadalajara.pos.cashsession;
 
+import java.math.BigDecimal;
+
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.cashsession.application.CloseCashSession;
 import com.gdgguadalajara.pos.cashsession.application.GetCashSessionSummary;
@@ -9,21 +11,19 @@ import com.gdgguadalajara.pos.cashsession.model.CashSession;
 import com.gdgguadalajara.pos.cashsession.model.dto.CloseCashSessionRequest;
 import com.gdgguadalajara.pos.cashsession.model.dto.GetCashSessionSummaryResponse;
 import com.gdgguadalajara.pos.cashsession.model.dto.OpenCashSessionRequest;
-import com.gdgguadalajara.pos.common.PageBuilder;
+import com.gdgguadalajara.pos.cashsession.model.dto.ReadCashSessionFilter;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Positive;
-import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import lombok.AllArgsConstructor;
 
 @Path("/api/cash-sessions")
@@ -37,10 +37,22 @@ public class CashSessionResource {
 
     @GET
     @RolesAllowed({ AccountRole.ADMIN_ROLE })
-    public PaginatedResponse<CashSession> read(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
-        return PageBuilder.of(CashSession.findAll(), page, size);
+    public PaginatedResponse<CashSession> read(@BeanParam @Valid ReadCashSessionFilter filter) {
+        var criteria = PanacheCriteria.of(CashSession.class)
+                .eq("id", filter.id)
+                .like("openedBy.name", filter.openedBy)
+                .like("closedBy.name", filter.closedBy)
+                .page(filter.page, filter.size)
+                .orderBy("openingDate");
+        if (filter.openingDate != null)
+            criteria.ge("openingDate", filter.openingDate.atStartOfDay())
+                    .le("openingDate", filter.openingDate.plusDays(1).atStartOfDay());
+        if (filter.closingDate != null)
+            criteria.ge("closingDate", filter.closingDate.atStartOfDay())
+                    .le("closingDate", filter.closingDate.plusDays(1).atStartOfDay());
+        if (filter.negatives)
+            criteria.lt("difference", BigDecimal.ZERO);
+        return criteria.getResult();
     }
 
     @POST
