@@ -33,7 +33,7 @@ public class TicketItem extends PanacheEntityBase {
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     public UUID originalProductId;
 
     @Column(nullable = false)
