@@ -61,10 +61,10 @@ const prevPage = () => {
                     <td>
                         <div class="flex gap-1">
                             <div class="tooltip" data-tip="Ver detalles">
-                                <button class="btn btn-outline btn-sm btn-primary"
-                                    @click="navigateTo(`/admin/tickets?id=${ticket.id}`, { open: '_blank' })">
+                                <NuxtLink :to="`/admin/tickets?id=${ticket.id}`" target="_blank"
+                                    class="btn btn-outline btn-sm btn-primary">
                                     <Icon name="material-symbols:document-search-outline-rounded" class="text-2xl" />
-                                </button>
+                                </NuxtLink>
                             </div>
                         </div>
                     </td>
