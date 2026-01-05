@@ -7,6 +7,7 @@ definePageMeta({
 })
 
 const toast = useToast()
+const session = useSession()
 const currentFloor = useState('cashier-current-floor', () => null)
 
 const { data: floors } = useAsyncData('getApiFloors', () => getApiFloors())
@@ -20,7 +21,7 @@ const openTable = (table) => putApiTablesUuidOpen(table.id)
 
 const openTicket = (table) => navigateTo(`/cashier/tickets/${table.ticket.id}`)
 
-const isMyTable = (table) => table.ticket.owner.id == getCurrentSession().id
+const isMyTable = (table) => table.ticket.owner.id == session.value.id
 
 const arrangedTables = computed(() => arrangeTables(currentFloor.value, tables.value ?? []))
 

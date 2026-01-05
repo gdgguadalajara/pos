@@ -27,7 +27,7 @@ public class Ticket extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.UUID)
     public UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     public User owner;
 

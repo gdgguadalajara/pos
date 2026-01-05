@@ -1,27 +1,32 @@
 package com.gdgguadalajara.pos.user;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
-import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.user.model.User;
+import com.gdgguadalajara.pos.user.model.dto.ReadUsersFilter;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Positive;
-import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 
 @Path("/api/users")
 public class UserResource {
 
     @GET
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    public PaginatedResponse<User> getAll(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
-        return PageBuilder.of(User.findAll(), page, size);
+    public PaginatedResponse<User> getAll(@BeanParam @Valid ReadUsersFilter filter) {
+        return PanacheCriteria.of(User.class)
+                .eq("id", filter.id)
+                .like("name", filter.name)
+                .like("email", filter.email)
+                .like("account.username", filter.username)
+                .eq("account.status", filter.status)
+                .eq("account.role", filter.role)
+                .orderBy(filter.sort)
+                .page(filter.page, filter.size)
+                .getResult();
     }
 }

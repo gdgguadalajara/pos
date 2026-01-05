@@ -6,7 +6,7 @@ const props = defineProps({
     }
 })
 
-const user = JSON.parse(localStorage.getItem(Keys.USER))
+const session = useSession()
 </script>
 
 <template>
@@ -21,10 +21,11 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     <div class="px-4">{{ props.title }}</div>
                 </div>
                 <div class="flex items-center gap-1 flex-none mr-3">
+                    <CashSession />
                     <div class="dropdown">
                         <div tabindex="0" role="button" class="btn btn-dash btn-ghost">
                             <Icon name="material-symbols:account-circle" class="text-2xl" />
-                            {{ user.name }}
+                            {{ session.name }}
                         </div>
                         <ul tabindex="-1"
                             class="dropdown-content menu bg-base-100 rounded-box z-1 mt-1 w-40 px-3 py-1 shadow-sm">
@@ -52,8 +53,15 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     </li>
                     <li></li>
                     <li>
-                        <NuxtLink to="/cashier/quick-sales" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Venta rapida">
+                        <NuxtLink to="/cashier/dashboard" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Dashboard">
+                            <Icon name="material-symbols:dashboard-outline-rounded" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Dashboard</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/cashier/quick-sales"
+                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Venta rapida">
                             <Icon name="material-symbols:point-of-sale-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Venta rapida</span>
                         </NuxtLink>

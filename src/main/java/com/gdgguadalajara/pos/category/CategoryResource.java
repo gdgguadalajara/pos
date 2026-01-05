@@ -1,5 +1,6 @@
 package com.gdgguadalajara.pos.category;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -10,24 +11,23 @@ import com.gdgguadalajara.pos.category.application.DeleteCategory;
 import com.gdgguadalajara.pos.category.application.UpdateCategory;
 import com.gdgguadalajara.pos.category.model.Category;
 import com.gdgguadalajara.pos.category.model.dto.CreateCategoryRequest;
+import com.gdgguadalajara.pos.category.model.dto.ReadCategoriesFilter;
 import com.gdgguadalajara.pos.category.model.dto.UpdateCategoryRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
+import com.gdgguadalajara.pos.common.model.dto.PaginationRequestParams;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Positive;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -47,20 +47,23 @@ public class CategoryResource {
 
     @GET
     @Authenticated
-    public PaginatedResponse<Category> read(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
-        return PanacheCriteria.of(Category.class)
-                .page(page, size)
-                .getResult();
+    public PaginatedResponse<Category> read(@BeanParam @Valid ReadCategoriesFilter filter) {
+        var criteria = PanacheCriteria.of(Category.class)
+                .eq("isEnabled", filter.isEnabled)
+                .eq("id", filter.id)
+                .like("name", filter.name)
+                .orderBy(filter.sort)
+                .page(filter.page, filter.size);
+        if (filter.availableDays != null)
+            for (DayOfWeek day : filter.availableDays)
+                criteria.memberOf(day, "availableDays");
+        return criteria.getResult();
     }
 
     @GET
     @Authenticated
     @Path("/availables")
-    public PaginatedResponse<Category> readAvailables(
-            @QueryParam("page") @DefaultValue("1") @Positive @Valid Integer page,
-            @QueryParam("size") @DefaultValue("10") @Positive @Max(100) @Valid Integer size) {
+    public PaginatedResponse<Category> readAvailables(@BeanParam @Valid PaginationRequestParams params) {
         var currentDate = LocalDate.now();
         var currentTime = LocalTime.now();
         return PanacheCriteria.of(Category.class)
@@ -70,7 +73,9 @@ public class CategoryResource {
                 .le("availableFromTime", currentTime)
                 .ge("availableUntilTime", currentTime)
                 .memberOf(currentDate.getDayOfWeek(), "availableDays")
-                .page(page, size).getResult();
+                .page(params.page, params.size)
+                .orderBy("name")
+                .getResult();
     }
 
     @GET

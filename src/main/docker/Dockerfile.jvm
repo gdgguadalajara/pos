@@ -92,10 +92,10 @@ RUN chown -R 185 /deployments/data && \
 USER 185
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=185 build/jvm-app/lib/ /deployments/lib/
-COPY --chown=185 build/jvm-app/*.jar /deployments/
-COPY --chown=185 build/jvm-app/app/ /deployments/app/
-COPY --chown=185 build/jvm-app/quarkus/ /deployments/quarkus/
+COPY --chown=185 build/quarkus-app/lib/ /deployments/lib/
+COPY --chown=185 build/quarkus-app/*.jar /deployments/
+COPY --chown=185 build/quarkus-app/app/ /deployments/app/
+COPY --chown=185 build/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 \

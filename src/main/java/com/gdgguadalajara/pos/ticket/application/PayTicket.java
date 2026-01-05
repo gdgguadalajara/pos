@@ -1,7 +1,6 @@
 package com.gdgguadalajara.pos.ticket.application;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.common.model.DomainException;
@@ -19,11 +18,8 @@ public class PayTicket {
 
     private final GetCurrentSession getCurrentSession;
 
-    public Ticket run(UUID uuid) {
+    public Ticket run(Ticket ticket) {
         var session = getCurrentSession.run();
-        var ticket = Ticket.<Ticket>findById(uuid);
-        if (ticket == null)
-            throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(session.user.id))
             throw DomainException.forbidden("No puedes modificar este ticket");
         if (!ticket.status.equals(TicketStatus.OPEN))

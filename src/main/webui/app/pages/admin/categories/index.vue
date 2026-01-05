@@ -7,21 +7,21 @@ definePageMeta({
 })
 
 const toast = useToast()
+const { params, setParam } = useParams('adminGetApiCategoriesParams', { page: 1, sort: 'name' })
 
-const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_categories', () => getApiCategories())
-
-const copyId = (text) =>
-    navigator.clipboard.writeText(text)
-        .then(_ => toast.info({ title: "ID Copiado" }))
+const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_categories', () => getApiCategories(params.value))
 
 const deleteCategory = (category) =>
     deleteApiCategoriesUuid(category.id)
-        .then(() => {
-            refresh()
-            closeModal(`delete_${category.id}_modal`)
-            toast.info({ title: "Categoria eliminada" })
-        })
-        .catch(() => toast.error({ title: "Error al eliminar categoria" }))
+        .then(_ => refresh())
+        .then(_ => closeModal(`delete_${category.id}_modal`))
+        .then(_ => toast.info({ title: "Categoria eliminada" }))
+        .catch(_ => toast.error({ title: "Error al eliminar categoria" }))
+
+const prevPage = _ => setParam('page', params.value.page - 1)
+const nextPage = _ => setParam('page', params.value.page + 1)
+
+watch(params, _ => refresh())
 </script>
 
 <template>
@@ -29,11 +29,12 @@ const deleteCategory = (category) =>
         <NuxtLayout name="admin" title="Categorias">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <div class="flex justify-end mb-3">
-                        <NuxtLink to="/admin/categories/new" class="btn btn-primary">
+                    <div class="mb-3">
+                        <NuxtLink to="/admin/categories/new" class="btn btn-primary flex-none">
                             Nueva Categoria
                         </NuxtLink>
                     </div>
+                    <AdminCategoriesFilters />
                     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                         <table class="table table-zebra">
                             <thead class="bg-base-200">
@@ -59,7 +60,7 @@ const deleteCategory = (category) =>
                                 <tr v-if="status == 'success'" v-for="category in paginatedCategories.data"
                                     :key="category.id">
                                     <td>
-                                        <button class="btn btn-link" @click="copyId(category.id)">
+                                        <button class="btn btn-link" @click="copy(category.id, 'ID copiado')">
                                             {{ category.id.slice(0, 8) }}...
                                         </button>
                                     </td>

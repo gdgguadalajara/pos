@@ -134,6 +134,10 @@ public class PanacheCriteria<T extends PanacheEntityBase> {
     }
 
     public PanacheCriteria<T> orderBy(String orderBy) {
+        if (orderBy.contains(",")) {
+            String[] parts = orderBy.split(",");
+            orderBy = parts[0] + " " + parts[1].toUpperCase();
+        }
         this.orderBy = orderBy;
         return this;
     }

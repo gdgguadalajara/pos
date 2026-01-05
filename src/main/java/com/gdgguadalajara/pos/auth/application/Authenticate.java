@@ -31,7 +31,7 @@ public class Authenticate {
     public AuthenticateResponse run(AuthenticateRequest request) {
         var passwordSHA = new DigestUtils(MessageDigestAlgorithms.SHA3_256).digestAsHex(request.password());
         var account = Account
-                .<Account>find("password = ?1 AND username = ?2 OR user.email = ?2 ", passwordSHA, request.email())
+                .<Account>find("password = ?1 AND (username = ?2 OR user.email = ?2) ", passwordSHA, request.email())
                 .firstResult();
 
         if (account == null)

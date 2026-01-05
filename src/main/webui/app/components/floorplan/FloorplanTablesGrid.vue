@@ -6,7 +6,7 @@ const toast = useToast()
 const currentFloor = useState('admin-current-floor')
 const isDragActive = ref(false)
 
-const { data: tables } = useAsyncData(`getApiFloorsFloorIdTables-${currentFloor.value.id}`,
+const { data: tables, refresh: refreshTables } = useAsyncData(`getApiFloorsFloorIdTables-${currentFloor.value.id}`,
     () => getApiFloorsFloorIdTables(currentFloor.value.id))
 
 const dragStartHandler = (table) => (e) => {
@@ -38,6 +38,8 @@ const deleteTable = (tableId) => deleteApiTablesUuid(tableId)
     .then(_ => document.activeElement.blur())
 
 const arrangedTables = computed(() => arrangeTables(currentFloor.value, tables.value ?? []))
+
+watch(currentFloor, _ => refreshTables())
 </script>
 
 <template>
