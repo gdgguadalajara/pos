@@ -1,6 +1,6 @@
 <script setup>
 
-const props = defineProps(['ticket'])
+const props = defineProps(['ticket', 'isQuicksale'])
 
 const route = useRoute()
 
@@ -30,7 +30,7 @@ onMounted(() => {
                     <span>${{ ticket?.totalAmount }}</span>
                 </div>
                 <div class="divider m-0"></div>
-                <TicketActions />
+                <TicketActions :isQuicksale="props.isQuicksale" />
             </div>
         </div>
     </div>

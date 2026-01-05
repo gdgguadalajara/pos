@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 postApiTickets()
-    .then(ticket => navigateTo(`/cashier/tickets/${ticket.id}`))
+    .then(ticket => navigateTo(`/cashier/tickets/${ticket.id}/quicksale`))
 </script>
 
 <template>

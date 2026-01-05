@@ -3,6 +3,8 @@ import { AccountRole, PaymentMethod, TicketStatus } from '~/models';
 import { postApiCashSessionsIdTicketsTicketIdPayments } from '~/services/cash-session-ticket-payments-resource/cash-session-ticket-payments-resource';
 import { deleteApiTicketsId, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
 
+const { isQuicksale } = defineProps(['isQuicksale'])
+
 const toast = useToast()
 
 const ticket = useState('ticket')
@@ -51,7 +53,8 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
 
 <template>
     <div class="grid grid-cols-2 gap-1">
-        <button class="btn btn-info" @click="openModal('pay_ticket_modal')" :disabled="!ticket.items.length">
+        <button class="btn btn-info" :class="{ 'col-span-2': !isQuicksale }" @click="openModal('pay_ticket_modal')"
+            :disabled="!ticket.items.length">
             Pagar
         </button>
         <dialog id="pay_ticket_modal" class="modal">
@@ -86,8 +89,8 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
                 <button>close</button>
             </form>
         </dialog>
-        <div></div>
-        <button class="btn btn-error" :disabled="!!ticket.items.length" @click="cancel">Cancelar</button>
+        <button v-if="!isQuicksale" class="btn btn-error" :disabled="!!ticket.items.length"
+            @click="cancel">Cancelar</button>
         <button class="btn btn-primary" @click="order">Ordenar</button>
     </div>
     <dialog id="change_given_modal" class="modal">
