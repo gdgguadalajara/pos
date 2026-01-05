@@ -59,7 +59,7 @@ const copyId = (text) =>
                                     </th>
                                 </tr>
                                 <tr v-if="status == 'success'" v-for="cashSession in PaginatedCashSessions.data"
-                                    :key="cashSession.id" class="bg-red-500/10">
+                                    :key="cashSession.id" :class="{ 'bg-red-500/10': cashSession.difference < 0 }">
                                     <td>
                                         <button class="btn btn-link" @click="copyId(cashSession.id)">
                                             {{ cashSession.id.slice(0, 8) }}...
