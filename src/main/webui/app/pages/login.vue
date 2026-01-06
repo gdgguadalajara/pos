@@ -36,7 +36,7 @@ const onLoginSubmit = (e) => {
     <div class="grid place-items-center h-screen">
         <div class="card lg:card-side bg-base-200 shadow-sm max-w-lg">
             <figure>
-                <img src="/favicon.svg" alt="favicon" class="h-42 lg:h-52 ml-5" />
+                <img src="/favicon.svg" alt="favicon" class="h-42 mt-6 lg:mt-0 lg:h-52 lg:ml-5" />
             </figure>
             <div class="card-body">
                 <h2 class="card-title">Punto de Venta</h2>
