@@ -19,7 +19,10 @@ const openTable = (table) => putApiTablesUuidOpen(table.id)
 
 const openTicket = (table) => navigateTo(`/${session.value.account.role.toLowerCase()}/tickets/${table.ticket.id}`)
 
-const isMyTable = (table) => table.ticket.owner.id == session.value.id
+const isMyTable = (table) => {
+    console.log(table.ticket.owner.id, session.value.id);
+    return table.ticket.owner.id == session.value.id
+}
 
 const arrangedTables = computed(() => arrangeTables(currentFloor.value, tables.value ?? [], !isLgScreen.value))
 
@@ -72,8 +75,8 @@ watchEffect(() => {
                             </template>
                             <template v-else-if="table.status == 'OCCUPIED'">
                                 <div @click="openTicket(table)"
-                                    class="grid place-content-center aspect-square bg-base-100 rounded-lg border"
-                                    :class="isMyTable(table) ? 'border-primary cursor-pointer' : 'border-error'">
+                                    class="grid place-content-center aspect-square bg-base-100 rounded-lg border cursor-pointer"
+                                    :class="isMyTable(table) ? 'border-primary' : 'border-error'">
                                     {{ table.name }}
                                 </div>
                             </template>

@@ -24,7 +24,7 @@ watchEffect(() => {
 
 <template>
     <div class="flex-none card bg-base-100">
-        <div class="card-body not-lg:p-3 flex-row overflow-auto">
+        <div class="card-body p-3 flex-row overflow-auto">
             <button class="btn" :class="{ 'btn-primary': category.id == route.query.category }"
                 @click="setCategory(category)" v-for="category in paginatedCategories?.data" :key="category.id">
                 {{ category.name }}

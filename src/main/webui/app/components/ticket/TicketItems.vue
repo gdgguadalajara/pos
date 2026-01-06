@@ -3,6 +3,7 @@ import { TicketItemStatus } from '~/models';
 import { getApiTicketsId } from '~/services/ticket-resource/ticket-resource';
 import { deleteApiTicketsTicketIdItemsTicketItemId, postApiTicketsTicketIdItemsProductId } from '~/services/ticket-ticket-item-resource/ticket-ticket-item-resource';
 
+const toast = useToast()
 const ticket = useState('ticket')
 const isTakeAway = useState('isTakeAway')
 const groupedItems = computed(() => Object.groupBy(ticket.value.items, (item) => item.originalProductId))
@@ -11,10 +12,13 @@ const keysGroupedItems = computed(() => Object.keys(groupedItems.value).sort())
 const addProduct = (productUuid) => postApiTicketsTicketIdItemsProductId(ticket.value.id, productUuid, { isTakeAway: isTakeAway.value })
     .then(_ => getApiTicketsId(ticket.value.id))
     .then(ticket => useState('ticket').value = ticket)
+    .catch(err => toast.error({ title: err.message }))
+
 
 const removeProduct = (productUuid) => deleteApiTicketsTicketIdItemsTicketItemId(ticket.value.id, productUuid)
     .then(_ => getApiTicketsId(ticket.value.id))
     .then(ticket => useState('ticket').value = ticket)
+    .catch(err => toast.error({ title: err.message }))
 </script>
 
 <template>

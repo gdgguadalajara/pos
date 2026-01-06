@@ -1,5 +1,5 @@
 <script setup>
-import { AccountRole, PaymentMethod, TicketStatus } from '~/models';
+import { AccountRole, PaymentMethod, TicketItemStatus, TicketStatus } from '~/models';
 import { postApiCashSessionsIdTicketsTicketIdPayments } from '~/services/cash-session-ticket-payments-resource/cash-session-ticket-payments-resource';
 import { deleteApiTicketsId, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
 
@@ -9,25 +9,24 @@ const toast = useToast()
 
 const ticket = useState('ticket')
 const cashSession = useState('cashSession')
+const session = useSession()
+const role = session.value.account.role
 
 const changeGiven = ref(0)
 
 const order = () => putApiTicketsIdOrder(ticket.value.id)
     .then(_ => toast.success({ title: 'Productos ordenados con éxito' }))
-    .then(_ => {
-        switch (getCurrentUserRole()) {
-            case AccountRole.ADMIN:
-                return navigateTo('/admin')
-            case AccountRole.CASHIER:
-                return navigateTo('/cashier/tickets')
-        }
-    })
+    .then(_ => navigateTo(`/${role}/tickets`))
 
 const pay = (e) => {
     const amount = +e.target.amount.value
     const method = e.target.payment_method.value
     if (amount < ticket.value.totalAmount)
         return toast.error({ title: 'El monto ingresado es menor al total del ticket' })
+    if (!cashSession.value)
+        return Promise.resolve()
+            .then(toast.error({ title: 'No hay una sesión de caja abierta' }))
+            .then(_ => closeModal('pay_ticket_modal'))
     postApiCashSessionsIdTicketsTicketIdPayments(cashSession.value.id, ticket.value.id, { amount, method })
         .then(payment => {
             refreshNuxtData('getApiCashSessionsSummary')
@@ -39,7 +38,7 @@ const pay = (e) => {
             }
             if (payment.ticket.status == TicketStatus.PAID) {
                 toast.success({ title: 'Ticket pagado con éxito' })
-                return navigateTo('/cashier/tickets')
+                return navigateTo(`/${role}/tickets`)
             }
             toast.success({ title: 'Pago registrado con exito' })
         })
@@ -48,13 +47,13 @@ const pay = (e) => {
 
 const cancel = () => deleteApiTicketsId(ticket.value.id)
     .then(_ => toast.success({ title: 'Ticket cancelado con éxito' }))
-    .then(_ => navigateTo('/cashier/tickets'))
+    .then(_ => navigateTo(`/${role}/tickets`))
 </script>
 
 <template>
     <div class="grid grid-cols-2 gap-1">
-        <button class="btn btn-info" :class="{ 'col-span-2': !isQuicksale }" @click="openModal('pay_ticket_modal')"
-            :disabled="!ticket.items.length">
+        <button v-if="role != AccountRole.WAITER" class="btn btn-info" :class="{ 'col-span-2': !isQuicksale }"
+            @click="openModal('pay_ticket_modal')" :disabled="!ticket.items.length">
             Pagar
         </button>
         <dialog id="pay_ticket_modal" class="modal">
@@ -90,7 +89,8 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
             </form>
         </dialog>
         <button class="btn btn-error" :disabled="!!ticket.items.length" @click="cancel">Cancelar</button>
-        <button v-if="!isQuicksale" class="btn btn-primary" @click="order">Ordenar</button>
+        <button v-if="!isQuicksale" class="btn btn-primary"
+            :disabled="!ticket.items.some(i => i.status == TicketItemStatus.ADDED)" @click="order">Ordenar</button>
     </div>
     <dialog id="change_given_modal" class="modal">
         <div class="modal-box">
@@ -99,12 +99,12 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
                 ${{ changeGiven }}
             </div>
             <div class="modal-action">
-                <form method="dialog" @submit.prevent="() => navigateTo('/cashier/tickets')">
+                <form method="dialog" @submit.prevent="() => navigateTo(`/${role}/tickets`)">
                     <button class="btn">Cerrar</button>
                 </form>
             </div>
         </div>
-        <form method="dialog" class="modal-backdrop" @submit.prevent="() => navigateTo('/cashier/tickets')">
+        <form method="dialog" class="modal-backdrop" @submit.prevent="() => navigateTo(`/${role}/tickets`)">
             <button>close</button>
         </form>
     </dialog>

@@ -59,14 +59,14 @@ const session = useSession()
                         </NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/cashier/tables" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        <NuxtLink to="/waiter/tables" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Mesas">
                             <Icon name="material-symbols:table-bar-outline-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Mesas</span>
                         </NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/cashier/tickets" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        <NuxtLink to="/waiter/tickets" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Tickets">
                             <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Tickets</span>

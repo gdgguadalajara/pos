@@ -32,8 +32,8 @@ onMounted(() => {
         ]">
             <input type="checkbox" class="hidden" id="collapsable-ticket" />
             <label for="collapsable-ticket"
-                class="flex-none lg:hidden collapse-title p-3 text-center bg-primary shadow-xl">
-                Ticket
+                class="flex items-center justify-center gap-2 font-bold lg:hidden collapse-title p-3 text-center bg-primary shadow-xl">
+                Ticket <div class="badge badge-info font-medium">{{ ticket.items.length }}</div>
             </label>
             <div :class="['not-lg:grow lg:h-full card-body p-3', { 'collapse-content': !isLgScreen }]">
                 <template v-if="isLgScreen">

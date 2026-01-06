@@ -4,7 +4,7 @@ import { TicketServiceType, TicketStatus } from '~/models';
 import { getApiUsersUserIdTickets } from '~/services/users-ticket-resource/users-ticket-resource';
 
 definePageMeta({
-    middleware: ['only-cashier'],
+    middleware: ['only-waiter'],
 })
 
 const session = useSession()
@@ -23,10 +23,10 @@ const serviceToText = (service) => {
 
 <template>
     <div>
-        <NuxtLayout name="cashier" title="Tickets">
+        <NuxtLayout name="waiter" title="Tickets">
             <div class="card bg-base-200">
                 <div class="card-body grid grid-cols-2 lg:grid-cols-4">
-                    <NuxtLink v-if="paginatedTickets?.data.length" :to="`/cashier/tickets/${ticket.id}`"
+                    <NuxtLink v-if="paginatedTickets?.data.length" :to="`/waiter/tickets/${ticket.id}`"
                         class="card bg-base-100 cursor-pointer" v-for="ticket in paginatedTickets?.data"
                         :key="ticket.id">
                         <div class="card-body">
