@@ -21,7 +21,7 @@ watch(status, () => {
 
 <template>
     <div>
-        <NuxtLayout name="cashier" :title="`Ticket #${ticket ? ticket?.id : 'cargando...'}`">
+        <NuxtLayout name="cashier" :title="`Ticket #${ticket ? ticket?.id.slice(0, 8) : 'cargando...'}`">
             <div v-if="status != 'success'" class="grid place-items-center h-screen">
                 <span class="loading loading-ring loading-xl"></span>
             </div>

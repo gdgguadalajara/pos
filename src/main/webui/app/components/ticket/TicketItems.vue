@@ -4,10 +4,11 @@ import { getApiTicketsId } from '~/services/ticket-resource/ticket-resource';
 import { deleteApiTicketsTicketIdItemsTicketItemId, postApiTicketsTicketIdItemsProductId } from '~/services/ticket-ticket-item-resource/ticket-ticket-item-resource';
 
 const ticket = useState('ticket')
+const isTakeAway = useState('isTakeAway')
 const groupedItems = computed(() => Object.groupBy(ticket.value.items, (item) => item.originalProductId))
 const keysGroupedItems = computed(() => Object.keys(groupedItems.value).sort())
 
-const addProduct = (productUuid) => postApiTicketsTicketIdItemsProductId(ticket.value.id, productUuid)
+const addProduct = (productUuid) => postApiTicketsTicketIdItemsProductId(ticket.value.id, productUuid, { isTakeAway: isTakeAway.value })
     .then(_ => getApiTicketsId(ticket.value.id))
     .then(ticket => useState('ticket').value = ticket)
 
@@ -17,7 +18,7 @@ const removeProduct = (productUuid) => deleteApiTicketsTicketIdItemsTicketItemId
 </script>
 
 <template>
-    <div class="grow flex flex-col gap-1">
+    <div class="flex-1 flex flex-col gap-1 overflow-y-auto">
         <div class="card bg-base-100" v-for="key in keysGroupedItems" :key="key">
             <div class="card-body p-3">
                 <div class="flex flex-row justify-between">

@@ -3,5 +3,8 @@
 </script>
 
 <template>
-    <WorkInProgress />
+    <div>
+        <NuxtLayout name="waiter" title="Waiter">
+        </NuxtLayout>
+    </div>
 </template>
