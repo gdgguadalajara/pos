@@ -22,11 +22,11 @@ public class OpenRestaurantTable {
     private final CreateTicket createTicket;
     private final ObjectMapper objectMapper;
 
-    public RestaurantTable run(UUID uuid) {
+    public RestaurantTable run(UUID uuid, OpenRestauranTableRequest request) {
         var restaurantTable = RestaurantTable.<RestaurantTable>findById(uuid);
         if (!restaurantTable.status.equals(RestaurantTableStatus.AVAILABLE))
             throw DomainException.badRequest("La mesa no está disponible");
-        var ticket = createTicket.run(new CreateTicketRequest(TicketServiceType.DINE_IN));
+        var ticket = createTicket.run(new CreateTicketRequest(TicketServiceType.DINE_IN, request.dinerCount()));
         restaurantTable.status = RestaurantTableStatus.OCCUPIED;
         restaurantTable.ticket = ticket;
         restaurantTable.persistAndFlush();

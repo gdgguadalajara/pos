@@ -13,7 +13,7 @@ const { data: floors } = useAsyncData('getApiFloors', () => getApiFloors())
 const { data: tables, refresh: refreshTables } = useAsyncData(`getApiFloorsFloorIdTables-${currentFloor.value?.id}`,
     () => getApiFloorsFloorIdTables(currentFloor.value.id), { immediate: currentFloor.value })
 
-const openTable = (table) => putApiTablesUuidOpen(table.id)
+const openTable = (table) => (e) => putApiTablesUuidOpen(table.id, { dinerCount: +e.target.dinerCount.value })
     .then(table => navigateTo(`/${session.value.account.role.toLowerCase()}/tickets/${table.ticket.id}`))
     .catch(err => toast.error({ title: 'Error', message: err.message }))
 
@@ -68,17 +68,39 @@ watchEffect(() => {
                         <div v-for="table in arrangedTables" class="contents">
                             <div v-if="!table" class="aspect-square bg-base-100 rounded-lg"></div>
                             <template v-else-if="table.status == 'AVAILABLE'">
-                                <div @click="openTable(table)"
-                                    class="grid place-content-center aspect-square bg-base-100 rounded-lg border border-success cursor-pointer">
+                                <button @click="openModal(`open_table_modal-${table.id}`)" class=" grid place-content-center aspect-square bg-base-100 rounded-lg border
+                                    border-success cursor-pointer">
                                     {{ table.name }}
-                                </div>
+                                </button>
+                                <dialog :id="`open_table_modal-${table.id}`" class="modal">
+                                    <div class="modal-box">
+                                        <h3 class="text-lg font-bold">{{ table.name }}</h3>
+                                        <form :id="`open_table_form-${table.id}`" class="flex flex-col gap-1"
+                                            @submit.prevent="e => openTable(table)(e)">
+                                            <fieldset class="fieldset">
+                                                <legend class="fieldset-legend">Comensales:</legend>
+                                                <input type="number" class="input w-full" name="dinerCount" />
+                                            </fieldset>
+                                        </form>
+                                        <div class="modal-action">
+                                            <form method="dialog">
+                                                <button class="btn">Cerrar</button>
+                                            </form>
+                                            <button type="submit" class="btn btn-primary"
+                                                :form="`open_table_form-${table.id}`">Abrir</button>
+                                        </div>
+                                    </div>
+                                    <form method="dialog" class="modal-backdrop">
+                                        <button>close</button>
+                                    </form>
+                                </dialog>
                             </template>
                             <template v-else-if="table.status == 'OCCUPIED'">
-                                <div @click="openTicket(table)"
+                                <button @click="openTicket(table)"
                                     class="grid place-content-center aspect-square bg-base-100 rounded-lg border cursor-pointer"
                                     :class="isMyTable(table) ? 'border-primary' : 'border-error'">
                                     {{ table.name }}
-                                </div>
+                                </button>
                             </template>
                         </div>
                     </div>

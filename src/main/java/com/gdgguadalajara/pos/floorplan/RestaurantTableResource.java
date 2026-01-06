@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.floorplan.application.DeleteRestauranTable;
+import com.gdgguadalajara.pos.floorplan.application.OpenRestauranTableRequest;
 import com.gdgguadalajara.pos.floorplan.application.OpenRestaurantTable;
 import com.gdgguadalajara.pos.floorplan.application.UpdateRestaurantTable;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTable;
@@ -12,6 +13,7 @@ import com.gdgguadalajara.pos.floorplan.model.dto.UpdateRestaurantTableRequest;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -48,7 +50,7 @@ public class RestaurantTableResource {
     @Path("/{uuid}/open")
     @Authenticated
     @Transactional
-    public RestaurantTable open(UUID uuid) {
-        return openRestaurantTable.run(uuid);
+    public RestaurantTable open(UUID uuid, @Valid OpenRestauranTableRequest request) {
+        return openRestaurantTable.run(uuid, request);
     }
 }

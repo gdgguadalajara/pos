@@ -6,7 +6,7 @@ definePageMeta({
     middleware: ['only-cashier'],
 })
 
-postApiTickets({ serviceType: TicketServiceType.TAKE_AWAY })
+postApiTickets({ serviceType: TicketServiceType.TAKE_AWAY, dinerCount: 1 })
     .then(ticket => navigateTo(`/cashier/tickets/${ticket.id}`))
 </script>
 

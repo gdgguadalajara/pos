@@ -19,6 +19,7 @@ public class CreateTicket {
         ticket.owner = getCurrentSession.run().user;
         ticket.status = TicketStatus.OPEN;
         ticket.serviceType = request.serviceType();
+        ticket.dinerCount = request.dinerCount();
         ticket.persist();
         return ticket;
     }
