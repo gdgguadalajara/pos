@@ -27,6 +27,8 @@ const onLoginSubmit = (e) => {
                 return navigateTo('/admin')
             case AccountRole.CASHIER:
                 return navigateTo('/cashier')
+            case AccountRole.WAITER:
+                return navigateTo('/waiter')
         }
     }).catch((e) => toast.error({ title: 'Error', message: e.message }))
 }
