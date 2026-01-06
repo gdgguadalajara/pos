@@ -34,7 +34,7 @@ const onLoginSubmit = (e) => {
 
 <template>
     <div class="grid place-items-center h-screen">
-        <div class="card lg:card-side bg-base-100 shadow-sm max-w-lg">
+        <div class="card lg:card-side bg-base-200 shadow-sm max-w-lg">
             <figure>
                 <img src="/favicon.svg" alt="favicon" class="h-42 lg:h-52 ml-5" />
             </figure>
