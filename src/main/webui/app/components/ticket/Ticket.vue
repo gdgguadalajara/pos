@@ -30,7 +30,7 @@ onMounted(() => {
                     <span>${{ ticket?.totalAmount }}</span>
                 </div>
                 <div class="divider m-0"></div>
-                <TicketActions :isQuicksale="props.isQuicksale" />
+                <TicketActions :is-quicksale="props.isQuicksale" />
             </div>
         </div>
     </div>

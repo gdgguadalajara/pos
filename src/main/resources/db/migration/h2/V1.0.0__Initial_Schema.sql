@@ -140,22 +140,24 @@ create table Ticket (
 	updatedAt timestamp(6),
 	id uuid not null,
 	user_id uuid not null,
+	serviceType enum ('DELIVERY','DINE_IN','TAKE_AWAY') not null,
 	status enum ('CANCELED','OPEN','PAID') not null,
 	tableSnapshot json,
 	primary key (id)
 );
 
 create table TicketItem (
+	isTakeAway boolean not null,
 	unitPrice numeric(38,2) not null,
 	createdAt timestamp(6) not null,
 	updatedAt timestamp(6),
 	author_id uuid not null,
 	id uuid not null,
-	originalProductId uuid,
+	originalProductId uuid not null,
 	ticket_id uuid,
 	productName varchar(255) not null,
 	productSnapshot json,
-	status enum ('ADDED','CANCELED','ORDERED','PAID','SERVED') not null,
+	status enum ('ADDED','CANCELED','DELIVERED','ORDERED','PREPARING','READY') not null,
 	primary key (id)
 );
 

@@ -7,6 +7,7 @@ import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
 import com.gdgguadalajara.pos.ticket.application.OrderTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.ticket.model.dto.CreateTicketRequest;
 import com.gdgguadalajara.pos.ticket.model.dto.ReadTicketsFilter;
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.model.DomainException;
@@ -37,8 +38,8 @@ public class TicketResource {
     @POST
     @Transactional
     @Authenticated
-    public Ticket create() {
-        return createTicket.run();
+    public Ticket create(@Valid CreateTicketRequest request) {
+        return createTicket.run(request);
     }
 
     @GET

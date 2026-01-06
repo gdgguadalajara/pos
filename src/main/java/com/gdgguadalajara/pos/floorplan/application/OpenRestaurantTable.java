@@ -9,6 +9,8 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTable;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
+import com.gdgguadalajara.pos.ticket.model.TicketServiceType;
+import com.gdgguadalajara.pos.ticket.model.dto.CreateTicketRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ public class OpenRestaurantTable {
         var restaurantTable = RestaurantTable.<RestaurantTable>findById(uuid);
         if (!restaurantTable.status.equals(RestaurantTableStatus.AVAILABLE))
             throw DomainException.badRequest("La mesa no está disponible");
-        var ticket = createTicket.run();
+        var ticket = createTicket.run(new CreateTicketRequest(TicketServiceType.DINE_IN));
         restaurantTable.status = RestaurantTableStatus.OCCUPIED;
         restaurantTable.ticket = ticket;
         restaurantTable.persistAndFlush();

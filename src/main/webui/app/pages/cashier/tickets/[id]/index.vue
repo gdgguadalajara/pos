@@ -25,7 +25,7 @@ watch(status, () => {
             <div v-if="status != 'success'" class="grid place-items-center h-screen">
                 <span class="loading loading-ring loading-xl"></span>
             </div>
-            <Ticket v-else :ticket="ticket" />
+            <Ticket v-else :ticket="ticket" :is-quicksale="ticket.serviceType == 'TAKE_AWAY'" />
         </NuxtLayout>
     </div>
 </template>

@@ -1,12 +1,13 @@
 <script setup>
+import { TicketServiceType } from '~/models';
 import { postApiTickets } from '~/services/ticket-resource/ticket-resource';
 
 definePageMeta({
     middleware: ['only-cashier'],
 })
 
-postApiTickets()
-    .then(ticket => navigateTo(`/cashier/tickets/${ticket.id}/quicksale`))
+postApiTickets({ serviceType: TicketServiceType.TAKE_AWAY })
+    .then(ticket => navigateTo(`/cashier/tickets/${ticket.id}`))
 </script>
 
 <template>

@@ -19,11 +19,11 @@ public class PayTicket {
         if (!ticket.status.equals(TicketStatus.OPEN))
             throw DomainException.badRequest("No puedes modificar este ticket");
         ticket.items.stream()
-                .filter(item -> item.status.equals(TicketItemStatus.ADDED)
-                        || item.status.equals(TicketItemStatus.ORDERED))
+                .filter(item -> item.status.equals(TicketItemStatus.ADDED))
                 .forEach(item -> {
-                    item.status = TicketItemStatus.PAID;
+                    item.status = TicketItemStatus.ORDERED;
                     item.persistAndFlush();
+                    // TODO: Send to print
                 });
         ticket.status = TicketStatus.PAID;
         ticket.closedAt = LocalDateTime.now();

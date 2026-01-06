@@ -46,6 +46,9 @@ public class TicketItem extends PanacheEntityBase {
     @Column(nullable = false)
     public TicketItemStatus status;
 
+    @Column(nullable = false)
+    public Boolean isTakeAway;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
     @JsonIgnore
