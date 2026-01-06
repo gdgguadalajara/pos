@@ -8,5 +8,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     switch (user.account.role) {
         case AccountRole.CASHIER:
             return navigateTo('/cashier')
+        case AccountRole.WAITER:
+            return navigateTo('/waiter')
     }
 });
