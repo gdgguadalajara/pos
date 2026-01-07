@@ -97,7 +97,7 @@ watch(params, _ => refresh())
                                             <div class="tooltip" data-tip="Productos">
                                                 <NuxtLink :to="`/admin/categories/${category.id}/products`"
                                                     class="btn btn-outline btn-sm btn-info">
-                                                    <Icon name="material-symbols:package-2" class="text-xl" />
+                                                    <Icon name="material-symbols:fastfood" class="text-xl" />
                                                 </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Editar">

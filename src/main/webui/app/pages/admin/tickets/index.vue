@@ -63,7 +63,7 @@ watch(params, _ => refresh())
                                             <div class="tooltip" data-tip="Productos">
                                                 <button class="btn btn-outline btn-sm btn-primary"
                                                     @click="openModal(`ticket-items-${ticket.id}`)">
-                                                    <Icon name="material-symbols:package-2" class="text-2xl" />
+                                                    <Icon name="material-symbols:fastfood" class="text-2xl" />
                                                 </button>
                                             </div>
                                             <dialog :id="`ticket-items-${ticket.id}`" class="modal">

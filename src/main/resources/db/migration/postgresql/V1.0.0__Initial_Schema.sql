@@ -4,10 +4,16 @@ create table Account (
     id uuid not null,
     user_id uuid unique,
     password varchar(255),
-    role varchar(255) not null check ((role in ('ADMIN','WAITER','CASHIER'))),
+    role varchar(255) not null check ((role in ('ADMIN','WAITER','CASHIER','PREPARER'))),
     status varchar(255) not null check ((status in ('PENDING_SETUP','ACTIVE','LOCKED','DISABLED'))),
     username varchar(255) not null unique,
     primary key (id)
+);
+
+create table account_production_center (
+    account_id uuid not null,
+    production_center_id uuid not null,
+    primary key (account_id, production_center_id)
 );
 
 create table CashSession (
@@ -35,6 +41,7 @@ create table Category (
     createdAt timestamp(6) not null,
     updatedAt timestamp(6),
     id uuid not null,
+    production_center_id uuid not null,
     description varchar(255) not null,
     name varchar(255) not null,
     primary key (id)
@@ -106,6 +113,7 @@ create table Product (
     createdAt timestamp(6) not null,
     updatedAt timestamp(6),
     id uuid not null,
+    production_center_id uuid,
     description varchar(255) not null,
     name varchar(255) not null,
     primary key (id)
@@ -115,6 +123,16 @@ create table product_available_days (
     product_id uuid not null,
     day_of_week varchar(255) not null check ((day_of_week in ('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'))),
     primary key (product_id, day_of_week)
+);
+
+create table ProductionCenter (
+    isActive boolean not null,
+    id uuid not null,
+    description varchar(255),
+    name varchar(255) not null unique,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    primary key (id)
 );
 
 create table RestaurantTable (
@@ -175,6 +193,16 @@ alter table if exists Account
     foreign key (user_id) 
     references user_pos;
 
+alter table if exists account_production_center 
+    add constraint FK7615g58vstvl0lny8i6p6e97t 
+    foreign key (production_center_id) 
+    references ProductionCenter;
+
+alter table if exists account_production_center 
+    add constraint FK57q8e3wyk813e0ghlnelb11po 
+    foreign key (account_id) 
+    references Account;
+
 alter table if exists CashSession 
     add constraint FKjs8t67ihrfo72g5xlhubs5s3e 
     foreign key (closed_by_id) 
@@ -184,6 +212,11 @@ alter table if exists CashSession
     add constraint FKhkkiy8iaeud3ea5aqk4tdk1qc 
     foreign key (opened_by_id) 
     references user_pos;
+
+alter table if exists Category 
+    add constraint FK9ec3m11c3hbjvtdv1w1nfac8l 
+    foreign key (production_center_id) 
+    references ProductionCenter;
 
 alter table if exists category_available_days 
     add constraint FKss606wiif65x2ia8tfqwon4bn 
@@ -224,6 +257,11 @@ alter table if exists Payment
     add constraint FKa8060tn2ahf51m5dkujnperot 
     foreign key (ticket_id) 
     references Ticket;
+
+alter table if exists Product 
+    add constraint FKeonoylap4aogqeewa57rf37qa 
+    foreign key (production_center_id) 
+    references ProductionCenter;
 
 alter table if exists product_available_days 
     add constraint FK2ppoobvaj1s8l5xs9oxmowft0 
