@@ -8,7 +8,7 @@ definePageMeta({
 
 const route = useRoute()
 
-const { params } = useParams('adminGetApiCashSessionsParams', { page: 1, id: route.query.id })
+const { params, setParam } = useParams('adminGetApiCashSessionsParams', { page: 1, id: route.query.id })
 
 const { data: PaginatedCashSessions, status, refresh } = useAsyncData('getApiCashSessions', () => getApiCashSessions(params.value))
 
