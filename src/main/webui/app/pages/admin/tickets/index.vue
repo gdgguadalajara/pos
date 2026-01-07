@@ -8,7 +8,7 @@ definePageMeta({
 
 const route = useRoute()
 
-const { params } = useParams('adminGetApiTicketsParams', { page: 1, id: route.query.id })
+const { params, setParam } = useParams('adminGetApiTicketsParams', { page: 1, id: route.query.id })
 
 const { data: paginatedTickets, status, refresh } = useAsyncData('getApiTickets', () => getApiTickets(params.value), { default: () => [] })
 
