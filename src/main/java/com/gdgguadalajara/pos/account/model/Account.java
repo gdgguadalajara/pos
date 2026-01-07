@@ -54,6 +54,7 @@ public class Account extends PanacheEntityBase {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_production_center", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "production_center_id"))
+    @JsonIgnore
     public Set<ProductionCenter> productionCenters = new HashSet<>();
 
     @CreationTimestamp
