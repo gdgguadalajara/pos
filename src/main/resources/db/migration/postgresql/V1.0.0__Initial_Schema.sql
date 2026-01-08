@@ -16,6 +16,20 @@ create table account_production_center (
     primary key (account_id, production_center_id)
 );
 
+create table BusinessProfile (
+    id uuid not null,
+    address varchar(500),
+    ticketFooter varchar(1000),
+    email varchar(255),
+    legalName varchar(255) not null,
+    logoUrl varchar(255),
+    name varchar(255) not null,
+    phone varchar(255),
+    taxId varchar(255),
+    website varchar(255),
+    primary key (id)
+);
+
 create table CashSession (
     difference numeric(38,2),
     initialBalance numeric(38,2) not null,
@@ -127,11 +141,11 @@ create table product_available_days (
 
 create table ProductionCenter (
     isActive boolean not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
     id uuid not null,
     description varchar(255),
     name varchar(255) not null unique,
-    createdAt timestamp(6) not null,
-    updatedAt timestamp(6),
     primary key (id)
 );
 
