@@ -26,6 +26,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-hibernate-orm'
     implementation 'commons-codec:commons-codec:1.17.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.20.1'
     implementation 'io.freefair.lombok:io.freefair.lombok.gradle.plugin:8.13.1'
 
     testImplementation 'io.quarkus:quarkus-junit5'
