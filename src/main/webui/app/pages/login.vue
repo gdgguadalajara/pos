@@ -60,4 +60,10 @@ const onLoginSubmit = (e) => {
             </div>
         </div>
     </div>
+    <a target="_blank" href="https://github.com/gdgguadalajara/pos" class="absolute right-5 bottom-3">
+        Hecho con ❤️ por el
+        <span class="font-bold">
+            GDG Guadalajara
+        </span>
+    </a>
 </template>
