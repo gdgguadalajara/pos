@@ -67,7 +67,8 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     </li>
                     <li>
                         <NuxtLink to="/admin/production-centers"
-                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Centros de produccion">
+                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Centros de produccion">
                             <Icon name="material-symbols:factory-outline" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Centros de producción</span>
                         </NuxtLink>
@@ -112,6 +113,13 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                             data-tip="Gastos">
                             <Icon name="material-symbols:wallet" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Gastos</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/admin/settings" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Configuraciones">
+                            <Icon name="material-symbols:settings" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Configuraciones</span>
                         </NuxtLink>
                     </li>
                     <li></li>
