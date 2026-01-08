@@ -15,7 +15,7 @@ const onSubmitCreateCenter = (e) => {
     })
         .then(_ => e.target.reset())
         .then(_ => toast.success({ title: 'Centro de producción creado' }))
-        .then(_ => navigateTo("/admin/production_centers"))
+        .then(_ => navigateTo("/admin/production-centers"))
         .catch(_ => toast.error({ title: 'Error al crear la centro de producción' }))
 }
 </script>

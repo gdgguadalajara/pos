@@ -33,7 +33,7 @@ watch(params, _ => refresh())
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
                     <div class="mb-3">
-                        <NuxtLink to="/admin/production_centers/new" class="btn btn-primary flex-none">
+                        <NuxtLink to="/admin/production-centers/new" class="btn btn-primary flex-none">
                             Nuevo centro de producción
                         </NuxtLink>
                     </div>
