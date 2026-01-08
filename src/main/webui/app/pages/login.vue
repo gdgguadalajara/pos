@@ -1,6 +1,5 @@
 <script setup>
 import { postApiAuth } from '@/services/auth-resource/auth-resource'
-import { AccountRole } from '@/models/accountRole'
 import { AccountStatus } from '~/models'
 
 const toast = useToast()
@@ -22,14 +21,7 @@ const onLoginSubmit = (e) => {
             title: 'Sesión iniciada',
             message: 'Bienvenido ' + user.name
         })
-        switch (user.account.role) {
-            case AccountRole.ADMIN:
-                return navigateTo('/admin')
-            case AccountRole.CASHIER:
-                return navigateTo('/cashier')
-            case AccountRole.WAITER:
-                return navigateTo('/waiter')
-        }
+        return navigateTo(`/${user.account.role.toLowerCase()}`)
     }).catch((e) => toast.error({ title: 'Error', message: e.message }))
 }
 </script>
