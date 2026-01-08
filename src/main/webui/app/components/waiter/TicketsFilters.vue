@@ -1,5 +1,5 @@
 <script setup>
-const { customFilters, setParam } = useParams('waiterGetApiTicketsParams')
+const { customFilters, params, setParam } = useParams('waiterGetApiTicketsParams')
 
 const isLgScreen = useMediaQuery('(min-width: 1024px)')
 const detailsRef = useTemplateRef('details')

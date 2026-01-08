@@ -1,5 +1,5 @@
 <script setup>
-const { customFilters, setParam } = useParams('cashierGetApiTicketsParams')
+const { params, customFilters, setParam } = useParams('cashierGetApiTicketsParams')
 
 const isLgScreen = useMediaQuery('(min-width: 1024px)')
 const detailsRef = useTemplateRef('details')
