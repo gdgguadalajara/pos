@@ -1,0 +1,7 @@
+INSERT INTO user_pos (createdat, updatedat, id, email, name) VALUES
+    (NOW(),NOW(),'8b7589a5-e03c-4b39-a0db-79d809503c63','cashier@gdgguadalajara.com','cashier'),
+    (NOW(),NOW(), '397c4452-692f-4dd5-ab2a-6149718dc321', 'waiter@gdgguadalajara.com', 'waiter');
+
+INSERT INTO account (createdat, updatedat, id, user_id, password, role, status, username) VALUES
+    (NOW(),NOW(),'e0ff54f5-650c-4930-b69f-dab4dd53417d','8b7589a5-e03c-4b39-a0db-79d809503c63','5c059532f570b150b396b6da22f56a6595efc66775bbf2dde2217d6b86bcfa6b','CASHIER','ACTIVE','cashier'),
+    (NOW(),NOW(),'aa0c9fe3-30a2-434c-b68b-306ad4ed25d4','397c4452-692f-4dd5-ab2a-6149718dc321','c76510aa6e1941eaee9f450d1178d7300bd7fdf7c62736c9229a3fc5d10503c9', 'WAITER', 'ACTIVE', 'waiter');
