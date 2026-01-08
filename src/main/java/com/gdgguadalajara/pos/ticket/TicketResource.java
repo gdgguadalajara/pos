@@ -6,9 +6,11 @@ import java.util.UUID;
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.application.DeleteTicket;
 import com.gdgguadalajara.pos.ticket.application.OrderTicket;
+import com.gdgguadalajara.pos.ticket.application.TicketCompressor;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.dto.CreateTicketRequest;
 import com.gdgguadalajara.pos.ticket.model.dto.ReadTicketsFilter;
+import com.gdgguadalajara.pos.ticket.model.dto.TicketCompressorResponse;
 import com.gdgguadalajara.pos.account.model.AccountRole;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
@@ -34,6 +36,7 @@ public class TicketResource {
     private final CreateTicket createTicket;
     private final DeleteTicket deleteTicket;
     private final OrderTicket orderTicket;
+    private final TicketCompressor ticketCompressor;
 
     @POST
     @Transactional
@@ -89,5 +92,12 @@ public class TicketResource {
     @Path("/{id}/payments")
     public List<Payment> read(UUID id) {
         return Payment.<Payment>find("ticket.id", id).list();
+    }
+
+    @GET
+    @Authenticated
+    @Path("/{id}/qr")
+    public TicketCompressorResponse qrticket(UUID id) {
+        return ticketCompressor.run(id);
     }
 }

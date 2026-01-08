@@ -44,7 +44,7 @@ onMounted(() => {
                 </div>
                 <div class="flex-none">
                     <div class="divider m-0"></div>
-                    <div class="flex flex-row justify-between">
+                    <div class="flex flex-row justify-between text-xl">
                         <span>Total:</span>
                         <span>${{ ticket?.totalAmount }}</span>
                     </div>

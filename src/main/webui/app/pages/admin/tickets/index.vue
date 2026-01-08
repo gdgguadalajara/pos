@@ -1,12 +1,14 @@
 <script setup>
 import dayjs from 'dayjs';
-import { getApiTickets } from '~/services/ticket-resource/ticket-resource';
+import QRCode from 'qrcode'
+import { getApiTickets, getApiTicketsIdQr } from '~/services/ticket-resource/ticket-resource';
 
 definePageMeta({
     middleware: ['only-admin'],
 })
 
 const route = useRoute()
+const isLoadingQR = ref(false)
 
 const { params, setParam } = useParams('adminGetApiTicketsParams', { page: 1, id: route.query.id })
 
@@ -14,6 +16,15 @@ const { data: paginatedTickets, status, refresh } = useAsyncData('getApiTickets'
 
 const prevPage = _ => setParam('page', params.value.page - 1)
 const nextPage = _ => setParam('page', params.value.page + 1)
+
+const drawQR = (ticketId) => Promise.resolve()
+    .then(_ => isLoadingQR.value = true)
+    .then(_ => openModal(`ticket-qr`))
+    .then(_ => getApiTicketsIdQr(ticketId))
+    .then(({ payload }) => QRCode.toCanvas(document.getElementById('canvas'), payload, (err) => {
+        if (err) return console.error(err)
+        isLoadingQR.value = false
+    }))
 
 watch(params, _ => refresh())
 </script>
@@ -89,6 +100,12 @@ watch(params, _ => refresh())
                                                     <button>close</button>
                                                 </form>
                                             </dialog>
+                                            <div class="tooltip" data-tip="QR">
+                                                <button class="btn btn-outline btn-sm btn-secondary"
+                                                    @click="drawQR(ticket.id)">
+                                                    <Icon name="material-symbols:qr-code-2-rounded" class="text-2xl" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -107,6 +124,19 @@ watch(params, _ => refresh())
                     </div>
                 </div>
             </div>
+            <dialog id="ticket-qr" class="modal">
+                <div class="modal-box">
+                    <div v-if="isLoadingQR" class="grid place-items-center">
+                        <span class="loading loading-ring loading-xl"></span>
+                    </div>
+                    <div class="grid place-items-center">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                </div>
+                <form method="dialog" class="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
         </NuxtLayout>
     </div>
 </template>

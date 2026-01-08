@@ -1,7 +1,8 @@
 <script setup>
-import { AccountRole, PaymentMethod, TicketItemStatus, TicketStatus } from '~/models';
+import QRCode from 'qrcode'
+import { AccountRole, PaymentMethod, TicketItemStatus } from '~/models';
 import { postApiCashSessionsIdTicketsTicketIdPayments } from '~/services/cash-session-ticket-payments-resource/cash-session-ticket-payments-resource';
-import { deleteApiTicketsId, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
+import { deleteApiTicketsId, getApiTicketsIdQr, putApiTicketsIdOrder } from '~/services/ticket-resource/ticket-resource';
 
 const { isQuicksale } = defineProps(['isQuicksale'])
 
@@ -13,6 +14,7 @@ const session = useSession()
 const role = session.value.account.role
 
 const changeGiven = ref(0)
+const isLoadingQR = ref()
 
 const order = () => putApiTicketsIdOrder(ticket.value.id)
     .then(_ => toast.success({ title: 'Productos ordenados con éxito' }))
@@ -28,20 +30,16 @@ const pay = (e) => {
             .then(toast.error({ title: 'No hay una sesión de caja abierta' }))
             .then(_ => closeModal('pay_ticket_modal'))
     postApiCashSessionsIdTicketsTicketIdPayments(cashSession.value.id, ticket.value.id, { amount, method })
-        .then(payment => {
-            refreshNuxtData('getApiCashSessionsSummary')
-            if (method === PaymentMethod.CASH && payment.ticket.status == TicketStatus.PAID && payment.changeGiven > 0) {
-                changeGiven.value = payment.changeGiven
-                closeModal('pay_ticket_modal')
-                openModal('change_given_modal')
-                return toast.success({ title: 'Ticket pagado con éxito' })
-            }
-            if (payment.ticket.status == TicketStatus.PAID) {
-                toast.success({ title: 'Ticket pagado con éxito' })
-                return navigateTo(`/${role}/tickets`)
-            }
-            toast.success({ title: 'Pago registrado con exito' })
-        })
+        .then(payment => changeGiven.value = payment.changeGiven)
+        .then(_ => isLoadingQR.value = true)
+        .then(_ => refreshNuxtData('getApiCashSessionsSummary'))
+        .then(_ => getApiTicketsIdQr(ticket.value.id))
+        .then(({ payload }) => QRCode.toCanvas(document.getElementById('pay-ticket-canvas'), payload, (err) => {
+            if (err) return console.error(err)
+            isLoadingQR.value = false
+        }))
+        .then(_ => closeModal('pay_ticket_modal'))
+        .then(_ => openModal('change_given_modal'))
         .catch(err => toast.error({ title: err.message }))
 }
 
@@ -94,9 +92,15 @@ const cancel = () => deleteApiTicketsId(ticket.value.id)
     </div>
     <dialog id="change_given_modal" class="modal">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">Cambio</h3>
-            <div class="text-6xl grid place-content-center">
-                ${{ changeGiven }}
+            <h3 class="text-lg font-bold">Ticket</h3>
+            <div v-if="changeGiven > 0" class="text-6xl grid place-content-center mb-3">
+                Cambio: ${{ changeGiven }}
+            </div>
+            <div v-if="isLoadingQR" class="grid place-items-center">
+                <span class="loading loading-ring loading-xl"></span>
+            </div>
+            <div class="grid place-items-center">
+                <canvas id="pay-ticket-canvas"></canvas>
             </div>
             <div class="modal-action">
                 <form method="dialog" @submit.prevent="() => navigateTo(`/${role}/tickets`)">
