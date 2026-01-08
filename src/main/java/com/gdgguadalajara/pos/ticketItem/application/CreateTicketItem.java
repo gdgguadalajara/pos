@@ -11,6 +11,7 @@ import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.TicketServiceType;
+import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 import com.gdgguadalajara.pos.ticketItem.model.dto.CreateTicketItemRequest;
@@ -46,6 +47,8 @@ public class CreateTicketItem {
             throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(account.user.id))
             throw DomainException.forbidden("No tienes permisos para modificar este ticket");
+        if (!ticket.status.equals(TicketStatus.OPEN))
+            throw DomainException.forbidden("No se pueden agregar productos a un ticket cerrado o pagado");
         var ticketItem = new TicketItem();
         ticketItem.ticket = ticket;
         ticketItem.author = account.user;
