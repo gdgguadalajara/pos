@@ -68,7 +68,7 @@ watch(params, _ => refresh())
                                     <td>${{ cashSession.totalExpenses }}</td>
                                     <td>${{ cashSession.reportedBalance }}</td>
                                     <td>${{ cashSession.difference }}</td>
-                                    <td>{{ cashSession.status }}</td>
+                                    <td>{{ cashSession.status == 'OPEN' ? 'Abierto' : 'Cerrado' }}</td>
                                     <td>
                                         <div class="flex gap-1">
                                             <div class="tooltip" data-tip="Pagos">

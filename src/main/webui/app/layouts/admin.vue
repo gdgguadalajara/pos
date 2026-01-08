@@ -66,7 +66,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         </NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/admin/production_centers"
+                        <NuxtLink to="/admin/production-centers"
                             class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Centros de produccion">
                             <Icon name="material-symbols:factory-outline" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Centros de producción</span>
