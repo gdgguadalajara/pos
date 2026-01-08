@@ -41,6 +41,7 @@ public class CashSessionResource {
                 .eq("id", filter.id)
                 .like("openedBy.name", filter.openedBy)
                 .like("closedBy.name", filter.closedBy)
+                .eq("status", filter.status)
                 .page(filter.page, filter.size)
                 .orderBy("openingDate");
         if (filter.openingDate != null)
