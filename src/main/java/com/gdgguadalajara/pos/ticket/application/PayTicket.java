@@ -6,7 +6,6 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.TicketStatus;
-import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,16 +14,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PayTicket {
 
+    private final OrderTicket orderTicket;
+
     public Ticket run(Ticket ticket) {
         if (!ticket.status.equals(TicketStatus.OPEN))
             throw DomainException.badRequest("No puedes modificar este ticket");
-        ticket.items.stream()
-                .filter(item -> item.status.equals(TicketItemStatus.ADDED))
-                .forEach(item -> {
-                    item.status = TicketItemStatus.ORDERED;
-                    item.persistAndFlush();
-                    // TODO: Send to print
-                });
+        orderTicket.run(ticket.id);
         ticket.status = TicketStatus.PAID;
         ticket.closedAt = LocalDateTime.now();
         var table = ticket.table;
