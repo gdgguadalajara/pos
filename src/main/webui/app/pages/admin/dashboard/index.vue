@@ -41,13 +41,13 @@ const getMonthRange = (date = new Date()) => {
 const weekRange = getWeekRange()
 const monthRange = getMonthRange()
 
-const { data: topProductsWeek, status: topProductsWeekStatus } = useAsyncData(() =>
-    getApiDashboardProductPerformance({ start: weekRange.start, end: weekRange.end, limit: 2 }))
-const { data: topProductsMonth, status: topProductsMonthStatus } = useAsyncData(() =>
-    getApiDashboardProductPerformance({ start: monthRange.start, end: monthRange.end, limit: 2 }))
 const { data: worstProductsWeek, status: worstProductsWeekStatus } = useAsyncData(() =>
-    getApiDashboardProductPerformance({ start: weekRange.start, end: weekRange.end, limit: 2, isAscending: false }))
+    getApiDashboardProductPerformance({ start: weekRange.start, end: weekRange.end, limit: 2 }))
 const { data: worstProductsMonth, status: worstProductsMonthStatus } = useAsyncData(() =>
+    getApiDashboardProductPerformance({ start: monthRange.start, end: monthRange.end, limit: 2 }))
+const { data: topProductsWeek, status: topProductsWeekStatus } = useAsyncData(() =>
+    getApiDashboardProductPerformance({ start: weekRange.start, end: weekRange.end, limit: 2, isAscending: false }))
+const { data: toptProductsMonth, status: topProductsMonthStatus } = useAsyncData(() =>
     getApiDashboardProductPerformance({ start: monthRange.start, end: monthRange.end, limit: 2, isAscending: false }))
 
 const { data: AOVToday, status: AOVTodayStatus } = useAsyncData(() => getApiDashboardAverageOrderValueSingle())
@@ -107,10 +107,124 @@ const { data: sales, status: salesStatus } = useAsyncData(() => getApiDashboardA
                             <span class="loading loading-ring loading-xl"></span>
                         </div>
                     </div>
-                    <div class=" lg:col-span-3">
+                    <div class="lg:col-span-3">
                         <AdminSalesChart v-if="salesStatus == 'success'" :data="sales" />
                         <div v-else class="grid place-items-center">
                             <span class="loading loading-ring loading-xl"></span>
+                        </div>
+                    </div>
+                    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 lg:col-span-3">
+                        <div class="card bg-base-200 shadow-xl">
+                            <div class="card-body">
+                                <h3 class="card-title text-xl">Top 3 productos más vendidos - mensual</h3>
+                                <div v-if="topProductsMonthStatus == 'success'"
+                                    class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                                    <table class="table table-zebra">
+                                        <thead class="bg-base-200">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Ventas</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="first:bg-green-500/10" v-for="product in toptProductsMonth"
+                                                :key="product.id">
+                                                <td>{{ product.productName }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                                <td>${{ product.totalRevenue }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-else class="grid place-items-center">
+                                    <span class="loading loading-ring loading-xl"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-200 shadow-xl">
+                            <div class="card-body">
+                                <h3 class="card-title text-xl">Top 3 productos más vendidos - semanal</h3>
+                                <div v-if="topProductsWeekStatus == 'success'"
+                                    class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                                    <table class="table table-zebra">
+                                        <thead class="bg-base-200">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Ventas</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="first:bg-green-500/10" v-for="product in topProductsWeek"
+                                                :key="product.id">
+                                                <td>{{ product.productName }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                                <td>${{ product.totalRevenue }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-else class="grid place-items-center">
+                                    <span class="loading loading-ring loading-xl"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-200 shadow-xl">
+                            <div class="card-body">
+                                <h3 class="card-title text-xl">Top 3 productos menos vendidos - mensual</h3>
+                                <div v-if="worstProductsMonthStatus == 'success'"
+                                    class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                                    <table class="table table-zebra">
+                                        <thead class="bg-base-200">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Ventas</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="first:bg-red-500/10" v-for="product in worstProductsMonth"
+                                                :key="product.id">
+                                                <td>{{ product.productName }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                                <td>${{ product.totalRevenue }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-else class="grid place-items-center">
+                                    <span class="loading loading-ring loading-xl"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-200 shadow-xl">
+                            <div class="card-body">
+                                <h3 class="card-title text-xl">Top 3 productos menos vendidos - semanal</h3>
+                                <div v-if="worstProductsWeekStatus == 'success'"
+                                    class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                                    <table class="table table-zebra">
+                                        <thead class="bg-base-200">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Ventas</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="first:bg-red-500/10" v-for="product in worstProductsWeek"
+                                                :key="product.id">
+                                                <td>{{ product.productName }}</td>
+                                                <td>{{ product.quantity }}</td>
+                                                <td>${{ product.totalRevenue }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-else class="grid place-items-center">
+                                    <span class="loading loading-ring loading-xl"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
