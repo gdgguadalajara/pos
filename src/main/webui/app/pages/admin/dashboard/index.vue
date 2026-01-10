@@ -66,8 +66,9 @@ const { data: sales, status: salesStatus } = useAsyncData(() => getApiDashboardA
                     <div class="stats bg-base-200 shadow">
                         <div v-if="AOVTodayStatus == 'success'" class="stat">
                             <div class="stat-title">Ventas de hoy</div>
-                            <div class="stat-value">${{ AOVToday.totalAmount }}</div>
-                            <div class="stat-desc">{{ AOVToday.ticketCount }} tickets</div>
+                            <div class="stat-value">${{ AOVToday.totalAmount ?? 0 }}</div>
+                            <div class="stat-desc">{{ AOVToday.ticketCount }} Tickets</div>
+                            <div class="stat-desc">Ticket promedio: ${{ AOVToday.averageAmount ?? 0 }}</div>
                             <div class="stat-desc text-right">{{ dayjs().format('DD/MM/YYYY') }}</div>
                         </div>
                         <div v-else class="grid place-items-center">
@@ -77,8 +78,9 @@ const { data: sales, status: salesStatus } = useAsyncData(() => getApiDashboardA
                     <div class="stats bg-base-200 shadow">
                         <div v-if="AOVWeekStatus == 'success'" class="stat">
                             <div class="stat-title">Ventas de la semana</div>
-                            <div class="stat-value">${{ AOVWeek.totalAmount }}</div>
-                            <div class="stat-desc">{{ AOVWeek.ticketCount }} tickets</div>
+                            <div class="stat-value">${{ AOVWeek.totalAmount ?? 0 }}</div>
+                            <div class="stat-desc">{{ AOVWeek.ticketCount }} Tickets</div>
+                            <div class="stat-desc">Ticket promedio: ${{ AOVWeek.averageAmount ?? 0 }}</div>
                             <div class="stat-desc text-right">
                                 {{ dayjs(weekRange.start).format('DD/MM/YYYY') }}
                                 -
@@ -92,8 +94,9 @@ const { data: sales, status: salesStatus } = useAsyncData(() => getApiDashboardA
                     <div class="stats bg-base-200 shadow">
                         <div v-if="AOVMonthStatus == 'success'" class="stat">
                             <div class="stat-title">Ventas del mes</div>
-                            <div class="stat-value">${{ AOVMonth.totalAmount }}</div>
-                            <div class="stat-desc">{{ AOVMonth.ticketCount }} tickets</div>
+                            <div class="stat-value">${{ AOVMonth.totalAmount ?? 0 }}</div>
+                            <div class="stat-desc">{{ AOVMonth.ticketCount }} Tickets</div>
+                            <div class="stat-desc">Ticket promedio: ${{ AOVMonth.averageAmount ?? 0 }}</div>
                             <div class="stat-desc text-right">
                                 {{ dayjs(monthRange.start).format('DD/MM/YYYY') }}
                                 -
