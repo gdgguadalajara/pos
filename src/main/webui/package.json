@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/icon": "2.1.0",
     "@tailwindcss/vite": "^4.1.18",
+    "d3": "^7.9.0",
     "dayjs": "^1.11.19",
     "nuxt": "^4.2.2",
     "nuxt-toast": "^1.4.0",
