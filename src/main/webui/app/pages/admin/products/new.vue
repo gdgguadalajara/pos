@@ -1,6 +1,8 @@
 <script setup>
 import dayjs from 'dayjs'
 import { DayOfWeek } from '~/models'
+import { postApiCategoriesCategoryIdProductsProductId } from '~/services/category-product-resouce/category-product-resouce'
+import { getApiCategories } from '~/services/category-resource/category-resource'
 import { postApiProducts } from '~/services/product-resource/product-resource'
 
 definePageMeta({
@@ -8,6 +10,39 @@ definePageMeta({
 })
 
 const toast = useToast()
+
+const selectedCategories = ref([])
+const categorySearch = ref('')
+
+const addSelectedCategory = (category) => Promise.resolve()
+    .then(_ => document.activeElement.blur())
+    .then(_ => selectedCategories.value)
+    .then(c => c.findIndex(cat => cat.id == category.id))
+    .then(index => index != -1 && (() => { throw new Error('Ya esta agregada esa categoria') })())
+    .then(_ => selectedCategories.value.push(category))
+    .catch(e => toast.error({ title: e.message }))
+
+const removeSelectedCategory = (category) => Promise.resolve()
+    .then(_ => document.activeElement.blur())
+    .then(_ => selectedCategories.value)
+    .then(c => c.findIndex(cat => cat.id == category.id))
+    .then(index => index != -1 ? index : (() => { throw new Error('No se encontro la categoria') })())
+    .then(index => selectedCategories.value.splice(index, 1))
+    .catch(e => toast.error({ title: e.message }))
+
+const {
+    data: categories,
+    refresh: refreshCategories,
+    status: categoriesStatus
+} = useAsyncData(() => getApiCategories({ name: categorySearch.value }),
+    { immediate: false, default: () => [] })
+
+const debounceRefreshCategories = debounce(() => refreshCategories(), 1000)
+
+watchEffect(() => {
+    if (categorySearch.value == '') return
+    debounceRefreshCategories()
+})
 
 const onSubmitCreateProduct = (e) => {
     const availableDays = []
@@ -20,10 +55,9 @@ const onSubmitCreateProduct = (e) => {
     if (e.target.sunday.checked) availableDays.push(DayOfWeek.SUNDAY)
     const payload = {
         name: e.target.name.value,
-        description: '', // TODO
+        description: e.target.description.value,
         price: +e.target.price.value,
-        isEnabled: true, // TODO
-        // TODO: add categories to link
+        isEnabled: e.target.isEnabled.checked,
         availableFrom: dayjs(e.target.available_from.value).toISOString(),
         availableUntil: dayjs(e.target.available_until.value).toISOString(),
         availableFromTime: e.target.available_from_hour.value,
@@ -31,9 +65,14 @@ const onSubmitCreateProduct = (e) => {
         availableDays: availableDays
     }
     postApiProducts(payload)
-        .then(_ => e.target.reset())
-        .then(_ => toast.success({ title: "Producto creado" }))
-        .then(_ => navigateTo("/admin/products"))
+        .then(product => Promise.resolve()
+            .then(_ => e.target.reset())
+            .then(_ => selectedCategories.value.length > 0)
+            .then(hasItems => hasItems && selectedCategories.value.forEach(category =>
+                postApiCategoriesCategoryIdProductsProductId(category.id, product.id)))
+            .then(_ => toast.success({ title: "Producto creado" }))
+            .then(_ => navigateTo("/admin/products"))
+        )
         .catch(() => toast.error({ title: "Error al crear producto" }))
 }
 </script>
@@ -51,6 +90,10 @@ const onSubmitCreateProduct = (e) => {
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Precio</legend>
                             <input type="number" inputmode="numeric" name="price" class="input input-bordered w-full" />
+                        </fieldset>
+                        <fieldset class="fieldset lg:col-span-2">
+                            <legend class="fieldset-legend">Descripción</legend>
+                            <textarea class="textarea w-full" name="description"></textarea>
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible desde</legend>
@@ -117,6 +160,49 @@ const onSubmitCreateProduct = (e) => {
                                 </fieldset>
                             </div>
                         </div>
+                        <div class="dropdown lg:col-span-2">
+                            <fieldset class="fieldset">
+                                <legend class="fieldset-legend">Categorias</legend>
+                                <input v-model="categorySearch" type="text" class="input w-full" />
+                            </fieldset>
+                            <ul tabindex="-1"
+                                class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm">
+                                <li v-if="categoriesStatus == 'pending'">
+                                    <div class="grid place-items-center">
+                                        <span class="loading loading-ring loading-xl"></span>
+                                    </div>
+                                </li>
+                                <template v-if="categoriesStatus == 'success'">
+                                    <li v-for="category in categories?.data" :key="category.id">
+                                        <div class="hidden">{{selected = selectedCategories.map(c =>
+                                            c.id).includes(category.id)}}</div>
+                                        <a @click="selected ? removeSelectedCategory(category) : addSelectedCategory(category)"
+                                            :class="{ 'bg-primary': selected }">
+                                            {{ category.name }}
+                                        </a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div class="lg:col-span-2 flex flex-wrap gap-2">
+                            <button v-for="category in selectedCategories" :key="category.id"
+                                @click="removeSelectedCategory(category)" :class="[
+                                    'group btn btn-outline btn-primary items-center',
+                                    'hover:btn-error'
+                                ]">
+                                <div class="hidden group-hover:flex justify-center">
+                                    <Icon name="material-symbols:cancel-outline" class="text-2xl" />
+                                </div>
+                                {{ category.name }}
+                            </button>
+                        </div>
+                        <fieldset class="fieldset py-2">
+                            <legend class="fieldset-legend">Opciones</legend>
+                            <label class="label">
+                                <input type="checkbox" checked class="toggle toggle-success" name="isEnabled" />
+                                Habilidado
+                            </label>
+                        </fieldset>
                         <div class="lg:col-span-2 lg:grid lg:justify-end mt-3">
                             <button class="w-full btn btn-primary lg:w-60">Crear nuevo producto</button>
                         </div>
