@@ -61,7 +61,7 @@ public class DashboardResource {
                                 + "FROM Ticket t "
                                 + "WHERE t.createdAt BETWEEN :start AND :end "
                                 + "AND t.status != 'CANCELED' "
-                                + "GROUP BY DATE(t.createdAt) ",
+                                + "GROUP BY CAST(t.createdAt as DATE) ",
                         AverageOrderValueResponse.class)
                 .setParameter("start", request.start)
                 .setParameter("end", request.end)
