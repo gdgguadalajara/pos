@@ -9,7 +9,7 @@ definePageMeta({
 const toast = useToast()
 const { params, setParam } = useParams('adminGetApiCategoriesParams', { page: 1, sort: 'name' })
 
-const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_categories', () => getApiCategories(params.value))
+const { data: paginatedCategories, status, refresh } = useLazyAsyncData('adminGetApiCategories', () => getApiCategories(params.value))
 
 const deleteCategory = (category) =>
     deleteApiCategoriesUuid(category.id)

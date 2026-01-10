@@ -9,7 +9,7 @@ definePageMeta({
 const toast = useToast()
 const { params, setParam } = useParams('adminGetApiProductsParams', { page: 1, sort: 'name' })
 
-const { data: paginatedProducts, status, refresh } = useAsyncData('getApiProducts', () => getApiProducts(params.value))
+const { data: paginatedProducts, status, refresh } = useAsyncData('adminGetApiProducts', () => getApiProducts(params.value))
 
 const deleteProduct = (product) =>
     deleteApiProductsUuid(product.id)
