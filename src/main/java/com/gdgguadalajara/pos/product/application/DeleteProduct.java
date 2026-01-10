@@ -8,6 +8,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class DeleteProduct {
 
     public void run(Product product) {
+        product.categories.forEach(category -> {
+            category.products.remove(product);
+            category.persistAndFlush();
+        });
         product.delete();
     }
 }
