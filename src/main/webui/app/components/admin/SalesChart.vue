@@ -93,7 +93,9 @@ watch(() => props.data, () => {
 </template>
 
 <style>
+@reference "@/assets/css/main.css";
+
 .helper {
-    @apply not-lg: transform not-lg:translate-y-5 not-lg:-translate-x-6 not-lg:-rotate-45 not-lg:text-left fill-base-content hover:fill-primary/80
+    @apply not-lg:transform not-lg:translate-y-5 not-lg:-translate-x-6 not-lg:-rotate-45 not-lg:text-left fill-base-content hover:fill-primary/80
 }
 </style>

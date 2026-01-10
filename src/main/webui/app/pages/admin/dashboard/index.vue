@@ -105,7 +105,7 @@ const { data: sales, status: salesStatus } = useAsyncData(() => getApiDashboardA
                         </div>
                     </div>
                     <div class=" lg:col-span-3">
-                        <AdminSales v-if="salesStatus == 'success'" :data="sales" />
+                        <AdminSalesChart v-if="salesStatus == 'success'" :data="sales" />
                         <div v-else class="grid place-items-center">
                             <span class="loading loading-ring loading-xl"></span>
                         </div>
