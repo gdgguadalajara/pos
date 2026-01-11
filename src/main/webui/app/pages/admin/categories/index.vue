@@ -101,9 +101,10 @@ watch(params, _ => refresh())
                                                 </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Editar">
-                                                <button class="btn btn-outline btn-sm btn-secondary">
+                                                <NuxtLink :to="`/admin/categories/${category.id}`"
+                                                    class="btn btn-outline btn-sm btn-secondary">
                                                     <Icon name="material-symbols:edit-outline" class="text-xl" />
-                                                </button>
+                                                </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Eliminar">
                                                 <button class="btn btn-outline btn-sm btn-error"
