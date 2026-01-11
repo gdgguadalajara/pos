@@ -2,12 +2,16 @@
 import dayjs from 'dayjs'
 import { DayOfWeek } from '~/models'
 import { postApiCategories } from '~/services/category-resource/category-resource'
+import { getApiProductionCenters } from '~/services/production-center-resource/production-center-resource'
 
 definePageMeta({
     middleware: ['only-admin'],
 })
 
 const toast = useToast()
+
+const { data: paginatedProductionCenters } = useLazyAsyncData(() =>
+    getApiProductionCenters({ size: 100 }), { default: () => [] })
 
 const onSubmitCreateCategory = (e) => {
     const availableDays = []
@@ -26,14 +30,13 @@ const onSubmitCreateCategory = (e) => {
         availableUntil: dayjs(e.target.available_until.value).toISOString(),
         availableFromTime: e.target.available_from_hour.value,
         availableUntilTime: e.target.available_until_hour.value,
-        availableDays: availableDays
+        availableDays: availableDays,
+        productionCenterId: e.target.production_center.value,
     }
     postApiCategories(payload)
-        .then(() => {
-            e.target.reset()
-            toast.success({ title: 'Categoria creada' })
-            navigateTo("/admin/categories")
-        })
+        .then(_ => e.target.reset())
+        .then(_ => toast.success({ title: 'Categoria creada' }))
+        .then(_ => navigateTo("/admin/categories"))
         .catch(() => toast.error({ title: 'Error al crear la categoria' }))
 }
 </script>
@@ -117,6 +120,16 @@ const onSubmitCreateCategory = (e) => {
                                 </fieldset>
                             </div>
                         </div>
+                        <fieldset class="fieldset flex-1 p-0 w-full">
+                            <legend class="fieldset-legend">Centro de producción</legend>
+                            <select class="select w-full" name="production_center">
+                                <option disabled="" value="" selected="true">Seleccione un centro de producción</option>
+                                <option v-for="center in paginatedProductionCenters.data" :key="center.id"
+                                    :value="center.id">
+                                    {{ center.name }}
+                                </option>
+                            </select>
+                        </fieldset>
                         <fieldset class="fieldset py-2">
                             <legend class="fieldset-legend">Opciones</legend>
                             <label class="label">
