@@ -19,10 +19,7 @@ const openTable = (table) => (e) => putApiTablesUuidOpen(table.id, { dinerCount:
 
 const openTicket = (table) => navigateTo(`/${session.value.account.role.toLowerCase()}/tickets/${table.ticket.id}`)
 
-const isMyTable = (table) => {
-    console.log(table.ticket.owner.id, session.value.id);
-    return table.ticket.owner.id == session.value.id
-}
+const isMyTable = (table) => table.ticket.owner.id == session.value.id
 
 const arrangedTables = computed(() => arrangeTables(currentFloor.value, tables.value ?? [], !isLgScreen.value))
 
