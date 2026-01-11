@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+    middleware: ['only-waiter'],
+})
 navigateTo('/waiter/tables')
 </script>
 
