@@ -56,13 +56,6 @@ const openTicketModal = () => getApiTicketsIdQr(ticket.value.id)
 const cancel = () => deleteApiTicketsId(ticket.value.id)
     .then(_ => toast.success({ title: 'Ticket cancelado con éxito' }))
     .then(_ => navigateTo(`/${role}/tickets`))
-
-const numberBtn = (value) =>
-    amount.value.value = amount.value.value + value
-
-const clear = () => amount.value.value = ''
-
-const remove = () => amount.value.value = amount.value.value.slice(0, -1)
 </script>
 
 <template>
@@ -104,32 +97,6 @@ const remove = () => amount.value.value = amount.value.value.slice(0, -1)
                     <legend class="fieldset-legend">Monto</legend>
                     <input ref="amount" type="number" class="input w-full" name="amount" />
                 </fieldset>
-                <div class="flex flex-col">
-                    <div class="flex flex-row w-full">
-                        <button @click="numberBtn('1')" class="btn btn-xl flex-1" type="button">1</button>
-                        <button @click="numberBtn('2')" class="btn btn-xl flex-1" type="button">2</button>
-                        <button @click="numberBtn('3')" class="btn btn-xl flex-1" type="button">3</button>
-                    </div>
-                    <div class="flex flex-row w-full">
-                        <button @click="numberBtn('4')" class="btn btn-xl flex-1" type="button">4</button>
-                        <button @click="numberBtn('5')" class="btn btn-xl flex-1" type="button">5</button>
-                        <button @click="numberBtn('6')" class="btn btn-xl flex-1" type="button">6</button>
-                    </div>
-                    <div class="flex flex-row w-full">
-                        <button @click="numberBtn('7')" class="btn btn-xl flex-1" type="button">7</button>
-                        <button @click="numberBtn('8')" class="btn btn-xl flex-1" type="button">8</button>
-                        <button @click="numberBtn('9')" class="btn btn-xl flex-1" type="button">9</button>
-                    </div>
-                    <div class="flex flex-row w-full">
-                        <button @click="clear" class="btn btn-xl flex-1" type="button">
-                            <Icon name="material-symbols:cancel-outline" class="text-3xl" />
-                        </button>
-                        <button @click="numberBtn('0')" class="btn btn-xl flex-1" type="button">0</button>
-                        <button @click="remove" class="btn btn-xl flex-1" type="button">
-                            <Icon name="material-symbols:arrow-back-rounded" class="text-3xl" />
-                        </button>
-                    </div>
-                </div>
             </form>
             <div class="modal-action">
                 <form method="dialog" class="flex-1">
