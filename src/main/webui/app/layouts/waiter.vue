@@ -52,13 +52,6 @@ const session = useSession()
                     </li>
                     <li></li>
                     <li>
-                        <NuxtLink to="/waiter/dashboard" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Dashboard">
-                            <Icon name="material-symbols:dashboard-outline-rounded" class="text-2xl" />
-                            <span class="is-drawer-close:hidden">Dashboard</span>
-                        </NuxtLink>
-                    </li>
-                    <li>
                         <NuxtLink to="/waiter/tables" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Mesas">
                             <Icon name="material-symbols:table-bar-outline-rounded" class="text-2xl" />

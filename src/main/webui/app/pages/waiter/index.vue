@@ -1,5 +1,5 @@
 <script setup>
-
+navigateTo('/waiter/tables')
 </script>
 
 <template>
