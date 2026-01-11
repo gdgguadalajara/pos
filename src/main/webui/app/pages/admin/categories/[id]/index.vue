@@ -57,7 +57,7 @@ watchEffect(() => {
         <NuxtLayout name="admin" :title="title">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <div v-if="categoryStatus == 'pending'" class="grid place-items-center">
+                    <div v-if="categoryStatus != 'success'" class="grid place-items-center">
                         <span class="loading loading-ring loading-xl"></span>
                     </div>
                     <form v-else @submit.prevent="onSubmitUpdateCategory" class="grid grid-cols-1 lg:grid-cols-2 gap-2">
@@ -77,8 +77,8 @@ watchEffect(() => {
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible hasta</legend>
-                            <input :value="dayjs(category.availableUntil).add(1, 'year').format('YYYY-MM-DD')"
-                                type="date" name="available_until" class="input w-full" />
+                            <input :value="dayjs(category.availableUntil).format('YYYY-MM-DD')" type="date"
+                                name="available_until" class="input w-full" />
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible desde la hora</legend>
@@ -164,7 +164,7 @@ watchEffect(() => {
                             </label>
                         </fieldset>
                         <div class="lg:col-span-2 lg:grid lg:justify-end mt-3">
-                            <button class="w-full btn btn-primary lg:w-60">Crear nueva categoria</button>
+                            <button class="w-full btn btn-primary lg:w-60">Actualizar</button>
                         </div>
                     </form>
                 </div>
