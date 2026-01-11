@@ -1,6 +1,9 @@
 package com.gdgguadalajara.pos.user;
 
+import java.util.UUID;
+
 import com.gdgguadalajara.pos.account.model.AccountRole;
+import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.user.model.User;
@@ -28,5 +31,15 @@ public class UserResource {
                 .orderBy(filter.sort)
                 .page(filter.page, filter.size)
                 .getResult();
+    }
+
+    @GET
+    @Path("/{uuid}")
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
+    public User read(UUID uuid) {
+        var user = User.<User>findById(uuid);
+        if (user == null)
+            throw DomainException.notFound("Usuario no encontrado");
+        return user;
     }
 }
