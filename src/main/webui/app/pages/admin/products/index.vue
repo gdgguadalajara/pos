@@ -79,7 +79,7 @@ watch(params, _ => refresh())
                                         + ' - '
                                         + product.availableUntilTime.slice(0, 5)
                                         + ' hrs' }}</td>
-                                    <td>
+                                    <td class="whitespace-nowrap">
                                         <div class="badge badge-soft badge-primary">
                                             {{ shortenAvailableDays(product.availableDays) }}
                                         </div>
