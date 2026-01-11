@@ -49,6 +49,11 @@ watchEffect(() => {
     if (product.value != null)
         title.value = `Acualizar producto: ${product.value.name}`
 })
+watchEffect(() => {
+    if (productStatus.value == 'error')
+        navigateTo("/admin/products")
+            .then(_ => toast.error({ title: 'Error al cargar producto' }))
+})
 </script>
 
 <template>
@@ -81,8 +86,8 @@ watchEffect(() => {
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible hasta</legend>
-                            <input :value="dayjs(product.availableUntil).format('YYYY-MM-DD')"
-                                type="date" name="available_until" class="input w-full" />
+                            <input :value="dayjs(product.availableUntil).format('YYYY-MM-DD')" type="date"
+                                name="available_until" class="input w-full" />
                         </fieldset>
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">Disponible desde la hora</legend>

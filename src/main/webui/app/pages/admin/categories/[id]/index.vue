@@ -50,6 +50,11 @@ watchEffect(() => {
     if (category.value != null)
         title.value = `Acualizar categoria: ${category.value.name}`
 })
+watchEffect(() => {
+    if (categoryStatus.value == 'error')
+        navigateTo("/admin/categories")
+            .then(_ => toast.error({ title: 'Error al cargar categoria' }))
+})
 </script>
 
 <template>
