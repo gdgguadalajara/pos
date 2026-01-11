@@ -7,7 +7,8 @@ const detailsRef = useTemplateRef('details')
 const onSubmitFilters = (e) => {
     const checkedBoxes = document.querySelectorAll('input[name="day_of_week"]:checked')
     const checkedValues = Array.from(checkedBoxes).map(cb => cb.value)
-    detailsRef.value.removeAttribute('open')
+    if (!isLgScreen.value)
+        detailsRef.value.removeAttribute('open')
     setParam({
         id: e.target.search_id.value,
         name: e.target.search_name.value,

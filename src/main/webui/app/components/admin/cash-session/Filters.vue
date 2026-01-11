@@ -7,7 +7,8 @@ const detailsRef = useTemplateRef('details')
 const route = useRoute()
 
 const onSubmitFilters = (e) => {
-    detailsRef.value.removeAttribute('open')
+    if (!isLgScreen.value)
+        detailsRef.value.removeAttribute('open')
     setParam({
         id: e.target.search_id.value,
         openedBy: e.target.search_openedBy.value,

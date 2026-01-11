@@ -5,7 +5,8 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
 const detailsRef = useTemplateRef('details')
 
 const onSubmitFilters = (e) => {
-    detailsRef.value.removeAttribute('open')
+    if (!isLgScreen.value)
+        detailsRef.value.removeAttribute('open')
     setParam({
         id: e.target.search_id.value,
         amount: e.target.search_amount.value,
