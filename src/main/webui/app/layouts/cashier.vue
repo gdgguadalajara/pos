@@ -58,13 +58,6 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
                     </li>
                     <li></li>
                     <li>
-                        <NuxtLink to="/cashier/dashboard" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Dashboard">
-                            <Icon name="material-symbols:dashboard-outline-rounded" class="text-2xl" />
-                            <span class="is-drawer-close:hidden">Dashboard</span>
-                        </NuxtLink>
-                    </li>
-                    <li>
                         <NuxtLink to="/cashier/quick-sales"
                             class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Venta rapida">
                             <Icon name="material-symbols:point-of-sale-rounded" class="text-2xl" />

@@ -2,6 +2,7 @@
 definePageMeta({
     middleware: ['only-cashier'],
 })
+navigateTo('/cashier/tables')
 </script>
 
 <template>
