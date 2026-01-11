@@ -32,7 +32,7 @@ onMounted(() => setParam({ status: TicketStatus.OPEN, createdAt: dayjs().format(
             <div class="card bg-base-200">
                 <div class="card-body">
                     <CashierTicketsFilters />
-                    <div class="grid grid-cols-2 lg:grid-cols-4">
+                    <div class="grid gap-2 grid-cols-2 lg:grid-cols-4">
                         <NuxtLink v-if="paginatedTickets?.data.length" :to="`/cashier/tickets/${ticket.id}`"
                             class="card bg-base-100 cursor-pointer" v-for="ticket in paginatedTickets?.data"
                             :key="ticket.id">
