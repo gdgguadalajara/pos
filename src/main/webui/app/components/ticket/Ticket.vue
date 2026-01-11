@@ -6,11 +6,12 @@ const route = useRoute()
 const isLgScreen = useMediaQuery('(min-width: 1024px)')
 
 useState('currentCategory', () => route.query.category)
-useState('isTakeAway', () => props.isQuicksale)
+const isTakeAway = useState('isTakeAway', () => false)
 const ticket = useState('ticket', () => props.ticket)
 
 onMounted(() => {
     ticket.value = props.ticket
+    isTakeAway.value = props.isQuicksale
 })
 </script>
 
