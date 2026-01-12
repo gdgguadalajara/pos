@@ -58,11 +58,11 @@ Al usar el volumen, tanto la base de datos (gdgguadalajara_pos.mv.db) como tus l
 Una vez que el contenedor esté corriendo, abre tu navegador en `http://localhost:8080`.
 
 #### Credenciales por defecto
-| Usuario                      | Contraseña |
-| ---------------------------- | ---------- |
-| `admin@gdgguadalajara.com`   | `admin`    |
-| `cashier@gdgguadalajara.com` | `cashier`  |
-| `waiter@gdgguadalajara.com`  | `waiter`   |
+| Usuario   | Contraseña |
+| --------- | ---------- |
+| `admin`   | `admin`    |
+| `cashier` | `cashier`  |
+| `waiter`  | `waiter`   |
 
 ## ⚙️ Configuración Avanzada
 
