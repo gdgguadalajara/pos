@@ -27,6 +27,7 @@ const accountRoleToText = (status) => {
         case 'ADMIN': return 'Administrador'
         case 'CASHIER': return 'Cajero'
         case 'WAITER': return 'Mesero'
+        case 'PREPARER': return 'Personal de Producción'
         default: return status
     }
 }
