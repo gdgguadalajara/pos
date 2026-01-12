@@ -1,186 +1,308 @@
-CREATE TABLE PUBLIC.CATEGORY (
-	AVAILABLEFROM DATE NOT NULL,
-	AVAILABLEFROMTIME TIME NOT NULL,
-	AVAILABLEUNTIL DATE NOT NULL,
-	AVAILABLEUNTILTIME TIME NOT NULL,
-	ISENABLED BOOLEAN NOT NULL,
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	DESCRIPTION CHARACTER VARYING(255) NOT NULL,
-	NAME CHARACTER VARYING(255) NOT NULL,
-	CONSTRAINT CONSTRAINT_3 PRIMARY KEY (ID)
+create table Account (
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	user_id uuid unique,
+	password varchar(255),
+	username varchar(255) not null unique,
+	role enum ('ADMIN','CASHIER','PREPARER','WAITER') not null,
+	status enum ('ACTIVE','DISABLED','LOCKED','PENDING_SETUP') not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.FLOOR (
-	GRIDHEIGHT INTEGER NOT NULL,
-	GRIDWIDTH INTEGER NOT NULL,
-	LEVELORDER INTEGER NOT NULL,
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	NAME CHARACTER VARYING(255) NOT NULL,
-	CONSTRAINT CONSTRAINT_3F PRIMARY KEY (ID)
+create table account_production_center (
+	account_id uuid not null,
+	production_center_id uuid not null,
+	primary key (account_id, production_center_id)
 );
 
-CREATE TABLE PUBLIC.PRODUCT (
-	AVAILABLEFROM DATE NOT NULL,
-	AVAILABLEFROMTIME TIME NOT NULL,
-	AVAILABLEUNTIL DATE NOT NULL,
-	AVAILABLEUNTILTIME TIME NOT NULL,
-	ISENABLED BOOLEAN NOT NULL,
-	PRICE NUMERIC(38,2) NOT NULL,
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	DESCRIPTION CHARACTER VARYING(255) NOT NULL,
-	NAME CHARACTER VARYING(255) NOT NULL,
-	CONSTRAINT CONSTRAINT_1 PRIMARY KEY (ID)
+create table BusinessProfile (
+	id uuid not null,
+	address varchar(500),
+	ticketFooter varchar(1000),
+	email varchar(255),
+	legalName varchar(255) not null,
+	logoUrl varchar(255),
+	name varchar(255) not null,
+	phone varchar(255),
+	taxId varchar(255),
+	website varchar(255),
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.USER_POS (
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	EMAIL CHARACTER VARYING(255) NOT NULL,
-	NAME CHARACTER VARYING(255) NOT NULL,
-	CONSTRAINT CONSTRAINT_1E UNIQUE (EMAIL),
-	CONSTRAINT CONSTRAINT_1ED PRIMARY KEY (ID)
+create table CashSession (
+	difference numeric(38,2),
+	initialBalance numeric(38,2) not null,
+	reportedBalance numeric(38,2),
+	totalExpenses numeric(38,2),
+	totalSales numeric(38,2),
+	closingDate timestamp(6),
+	openingDate timestamp(6) not null,
+	closed_by_id uuid,
+	id uuid not null,
+	opened_by_id uuid,
+	note TEXT,
+	status enum ('CLOSED','OPEN'),
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.ACCOUNT (
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	USER_ID UUID,
-	PASSWORD CHARACTER VARYING(255),
-	USERNAME CHARACTER VARYING(255) NOT NULL,
-	"ROLE" ENUM('ADMIN', 'CASHIER', 'WAITER') NOT NULL,
-	STATUS ENUM('ACTIVE', 'DISABLED', 'LOCKED', 'PENDING_SETUP') NOT NULL,
-	CONSTRAINT CONSTRAINT_E UNIQUE (USER_ID),
-	CONSTRAINT CONSTRAINT_E4 UNIQUE (USERNAME),
-	CONSTRAINT CONSTRAINT_E49 PRIMARY KEY (ID),
-	CONSTRAINT FKOKMC0M1YICO9HMTE4W16WGJVW FOREIGN KEY (USER_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Category (
+	availableFrom date not null,
+	availableFromTime time(0) not null,
+	availableUntil date not null,
+	availableUntilTime time(0) not null,
+	isEnabled boolean not null,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	production_center_id uuid not null,
+	description varchar(255) not null,
+	name varchar(255) not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.CASHSESSION (
-	DIFFERENCE NUMERIC(38,2),
-	INITIALBALANCE NUMERIC(38,2) NOT NULL,
-	REPORTEDBALANCE NUMERIC(38,2),
-	TOTALSALES NUMERIC(38,2),
-	TOTALEXPENSES NUMERIC(38,2),
-	CLOSINGDATE TIMESTAMP,
-	OPENINGDATE TIMESTAMP NOT NULL,
-	CLOSED_BY_ID UUID,
-	ID UUID NOT NULL,
-	OPENED_BY_ID UUID,
-	NOTE CHARACTER VARYING,
-	STATUS ENUM('CLOSED', 'OPEN'),
-	CONSTRAINT CONSTRAINT_E9 PRIMARY KEY (ID),
-	CONSTRAINT FKHKKIY8IAEUD3EA5AQK4TDK1QC FOREIGN KEY (OPENED_BY_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FKJS8T67IHRFO72G5XLHUBS5S3E FOREIGN KEY (CLOSED_BY_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table category_available_days (
+	category_id uuid not null,
+	day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY') not null,
+	primary key (category_id, day_of_week)
 );
 
-CREATE TABLE PUBLIC.CATEGORY_AVAILABLE_DAYS (
-	CATEGORY_ID UUID NOT NULL,
-	DAY_OF_WEEK ENUM('FRIDAY', 'MONDAY', 'SATURDAY', 'SUNDAY', 'THURSDAY', 'TUESDAY', 'WEDNESDAY') NOT NULL,
-	CONSTRAINT CONSTRAINT_7 PRIMARY KEY (CATEGORY_ID,DAY_OF_WEEK),
-	CONSTRAINT FKSS606WIIF65X2IA8TFQWON4BN FOREIGN KEY (CATEGORY_ID) REFERENCES PUBLIC.CATEGORY(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table category_product (
+	category_id uuid not null,
+	product_id uuid not null,
+	primary key (category_id, product_id)
 );
 
-CREATE TABLE PUBLIC.CATEGORY_PRODUCT (
-	CATEGORY_ID UUID NOT NULL,
-	PRODUCT_ID UUID NOT NULL,
-	CONSTRAINT CONSTRAINT_C PRIMARY KEY (CATEGORY_ID,PRODUCT_ID),
-	CONSTRAINT FK55QIX17XKIMF4QTVDESJ17IGH FOREIGN KEY (PRODUCT_ID) REFERENCES PUBLIC.PRODUCT(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FK93BALDCQYK0PNF4LBFRQ4LIB5 FOREIGN KEY (CATEGORY_ID) REFERENCES PUBLIC.CATEGORY(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Expense (
+	amount numeric(38,2) not null,
+	createdAt timestamp(6) not null,
+	cash_session_id uuid,
+	created_by_user_id uuid not null,
+	id uuid not null,
+	description varchar(255) not null,
+	category enum ('CLEANING','MAINTENANCE','OTHER','SUPPLIES','WAGES') not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.INVITATION (
-	CREATEDAT TIMESTAMP NOT NULL,
-	EXPIRESAT TIMESTAMP NOT NULL,
-	USEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	USER_ID UUID NOT NULL,
-	TOKEN CHARACTER VARYING(255) NOT NULL,
-	CONSTRAINT CONSTRAINT_6 UNIQUE (TOKEN),
-	CONSTRAINT CONSTRAINT_64 PRIMARY KEY (ID),
-	CONSTRAINT FKQHRI2VER75OUOB5VERV508C6T FOREIGN KEY (USER_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Floor (
+	gridHeight integer not null,
+	gridWidth integer not null,
+	levelOrder integer not null,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	name varchar(255) not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.PRODUCT_AVAILABLE_DAYS (
-	PRODUCT_ID UUID NOT NULL,
-	DAY_OF_WEEK ENUM('FRIDAY', 'MONDAY', 'SATURDAY', 'SUNDAY', 'THURSDAY', 'TUESDAY', 'WEDNESDAY') NOT NULL,
-	CONSTRAINT CONSTRAINT_F1 PRIMARY KEY (PRODUCT_ID,DAY_OF_WEEK),
-	CONSTRAINT FK2PPOOBVAJ1S8L5XS9OXMOWFT0 FOREIGN KEY (PRODUCT_ID) REFERENCES PUBLIC.PRODUCT(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Invitation (
+	createdAt timestamp(6) not null,
+	expiresAt timestamp(6) not null,
+	usedAt timestamp(6),
+	id uuid not null,
+	user_id uuid not null,
+	token varchar(255) not null unique,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.TICKET (
-	DINERCOUNT INTEGER NOT NULL,
-	TOTALAMOUNT NUMERIC(38,2) NOT NULL,
-	CLOSEDAT TIMESTAMP,
-	CREATEDAT TIMESTAMP,
-	UPDATEDAT TIMESTAMP,
-	ID UUID NOT NULL,
-	USER_ID UUID NOT NULL,
-	STATUS ENUM('CANCELED', 'OPEN', 'PAID') NOT NULL,
-	TABLESNAPSHOT JSON,
-	CONSTRAINT CONSTRAINT_9 PRIMARY KEY (ID),
-	CONSTRAINT FK1VDL14UM7AXD8RC6DAHO7ATFU FOREIGN KEY (USER_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Payment (
+	amount numeric(38,2) not null,
+	changeGiven numeric(38,2),
+	createdAt timestamp(6) not null,
+	cash_session_id uuid not null,
+	id uuid not null,
+	ticket_id uuid not null,
+	externalReference varchar(255),
+	method enum ('CASH','CREDIT_CARD','DEBIT_CARD','OTHER','TRANSFER') not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.TICKETITEM (
-	UNITPRICE NUMERIC(38,2) NOT NULL,
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	AUTHOR_ID UUID NOT NULL,
-	ID UUID NOT NULL,
-	ORIGINALPRODUCTID UUID,
-	TICKET_ID UUID,
-	PRODUCTNAME CHARACTER VARYING(255) NOT NULL,
-	PRODUCTSNAPSHOT JSON,
-	STATUS ENUM('ADDED', 'CANCELED', 'ORDERED', 'PAID', 'SERVED') NOT NULL,
-	CONSTRAINT CONSTRAINT_99 PRIMARY KEY (ID),
-	CONSTRAINT FKIYE407WPVEOS507R9FPNMSOM9 FOREIGN KEY (TICKET_ID) REFERENCES PUBLIC.TICKET(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FKONFXJPKEH0HKC3PKBD7V6BFCI FOREIGN KEY (AUTHOR_ID) REFERENCES PUBLIC.USER_POS(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table Product (
+	availableFrom date not null,
+	availableFromTime time(0) not null,
+	availableUntil date not null,
+	availableUntilTime time(0) not null,
+	isEnabled boolean not null,
+	price numeric(38,2) not null,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	production_center_id uuid,
+	description varchar(255) not null,
+	name varchar(255) not null,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.PAYMENT (
-	AMOUNT NUMERIC(38,2) NOT NULL,
-	CHANGEGIVEN NUMERIC(38,2),
-	CREATEDAT TIMESTAMP NOT NULL,
-	ID UUID NOT NULL,
-	TICKET_ID UUID NOT NULL,
-	EXTERNALREFERENCE CHARACTER VARYING(255),
-	"METHOD" ENUM('CASH', 'CREDIT_CARD', 'DEBIT_CARD', 'OTHER', 'TRANSFER') NOT NULL,
-	CONSTRAINT CONSTRAINT_F PRIMARY KEY (ID),
-	CONSTRAINT FKA8060TN2AHF51M5DKUJNPEROT FOREIGN KEY (TICKET_ID) REFERENCES PUBLIC.TICKET(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table product_available_days (
+	product_id uuid not null,
+	day_of_week enum ('FRIDAY','MONDAY','SATURDAY','SUNDAY','THURSDAY','TUESDAY','WEDNESDAY') not null,
+	primary key (product_id, day_of_week)
 );
 
-CREATE TABLE PUBLIC.RESTAURANTTABLE (
-	HEIGHT INTEGER,
-	POSX INTEGER NOT NULL,
-	POSY INTEGER NOT NULL,
-	WIDTH INTEGER,
-	CREATEDAT TIMESTAMP NOT NULL,
-	UPDATEDAT TIMESTAMP,
-	FLOOR_ID UUID,
-	ID UUID NOT NULL,
-	TICKET_ID UUID,
-	NAME CHARACTER VARYING(255) NOT NULL,
-	STATUS ENUM('AVAILABLE', 'CLEANING', 'NOT_AVAILABLE', 'OCCUPIED', 'RESERVED') NOT NULL,
-	CONSTRAINT CONSTRAINT_FE UNIQUE (TICKET_ID),
-	CONSTRAINT CONSTRAINT_FE9 PRIMARY KEY (ID),
-	CONSTRAINT FKJQQMN2AHEVT8H7ISFHC2MR0H1 FOREIGN KEY (TICKET_ID) REFERENCES PUBLIC.TICKET(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FKLGKO8WGQ5G9UTTDTBPTNTEADQ FOREIGN KEY (FLOOR_ID) REFERENCES PUBLIC.FLOOR(ID) ON DELETE RESTRICT ON UPDATE RESTRICT
+create table ProductionCenter (
+	isActive boolean not null,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	description varchar(255),
+	name varchar(255) not null unique,
+	primary key (id)
 );
 
-CREATE TABLE PUBLIC.EXPENSE (
-    ID UUID PRIMARY KEY,
-    DESCRIPTION CHARACTER VARYING(255) NOT NULL,
-    AMOUNT NUMERIC(38,2) NOT NULL,
-    CATEGORY ENUM('SUPPLIES', 'CLEANING', 'MAINTENANCE', 'WAGES', 'OTHER') NOT NULL,
-    CREATEDAT TIMESTAMP NOT NULL,
-    CREATED_BY_USER_ID UUID NOT NULL,
-    CONSTRAINT fK_EXPENSE_USER FOREIGN KEY (CREATED_BY_USER_ID) REFERENCES PUBLIC.USER_POS(ID)
+create table RestaurantTable (
+	height integer,
+	posX integer not null,
+	posY integer not null,
+	width integer,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	floor_id uuid,
+	id uuid not null,
+	ticket_id uuid unique,
+	name varchar(255) not null,
+	status enum ('AVAILABLE','CLEANING','NOT_AVAILABLE','OCCUPIED','RESERVED') not null,
+	primary key (id)
 );
+
+create table Ticket (
+	dinerCount integer not null,
+	totalAmount numeric(38,2) not null,
+	closedAt timestamp(6),
+	createdAt timestamp(6),
+	updatedAt timestamp(6),
+	id uuid not null,
+	user_id uuid not null,
+	serviceType enum ('DELIVERY','DINE_IN','TAKE_AWAY') not null,
+	status enum ('CANCELED','OPEN','PAID') not null,
+	tableSnapshot json,
+	primary key (id)
+);
+
+create table TicketItem (
+	isTakeAway boolean not null,
+	unitPrice numeric(38,2) not null,
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	author_id uuid not null,
+	id uuid not null,
+	originalProductId uuid not null,
+	ticket_id uuid,
+	productName varchar(255) not null,
+	productSnapshot json,
+	status enum ('ADDED','CANCELED','DELIVERED','ORDERED','PREPARING','READY') not null,
+	primary key (id)
+);
+
+create table user_pos (
+	createdAt timestamp(6) not null,
+	updatedAt timestamp(6),
+	id uuid not null,
+	email varchar(255) not null unique,
+	name varchar(255) not null,
+	primary key (id)
+);
+
+alter table if exists Account 
+	add constraint FKokmc0m1yico9hmte4w16wgjvw 
+	foreign key (user_id) 
+	references user_pos;
+
+alter table if exists account_production_center 
+	add constraint FK7615g58vstvl0lny8i6p6e97t 
+	foreign key (production_center_id) 
+	references ProductionCenter;
+
+alter table if exists account_production_center 
+	add constraint FK57q8e3wyk813e0ghlnelb11po 
+	foreign key (account_id) 
+	references Account;
+
+alter table if exists CashSession 
+	add constraint FKjs8t67ihrfo72g5xlhubs5s3e 
+	foreign key (closed_by_id) 
+	references user_pos;
+
+alter table if exists CashSession 
+	add constraint FKhkkiy8iaeud3ea5aqk4tdk1qc 
+	foreign key (opened_by_id) 
+	references user_pos;
+
+alter table if exists Category 
+	add constraint FK9ec3m11c3hbjvtdv1w1nfac8l 
+	foreign key (production_center_id) 
+	references ProductionCenter;
+
+alter table if exists category_available_days 
+	add constraint FKss606wiif65x2ia8tfqwon4bn 
+	foreign key (category_id) 
+	references Category;
+
+alter table if exists category_product 
+	add constraint FK55qix17xkimf4qtvdesj17igh 
+	foreign key (product_id) 
+	references Product;
+
+alter table if exists category_product 
+	add constraint FK93baldcqyk0pnf4lbfrq4lib5 
+	foreign key (category_id) 
+	references Category;
+
+alter table if exists Expense 
+	add constraint FK9ag9pnitm8lndgy7o99i1lf3i 
+	foreign key (cash_session_id) 
+	references CashSession;
+
+alter table if exists Expense 
+	add constraint FKlh3yf9skcfid2d1bhfm416kkk 
+	foreign key (created_by_user_id) 
+	references user_pos;
+
+alter table if exists Invitation 
+	add constraint FKqhri2ver75ouob5verv508c6t 
+	foreign key (user_id) 
+	references user_pos;
+
+alter table if exists Payment 
+	add constraint FK1pkgyxlik7sj7ubboyygk8xc1 
+	foreign key (cash_session_id) 
+	references CashSession;
+
+alter table if exists Payment 
+	add constraint FKa8060tn2ahf51m5dkujnperot 
+	foreign key (ticket_id) 
+	references Ticket;
+
+alter table if exists Product 
+	add constraint FKeonoylap4aogqeewa57rf37qa 
+	foreign key (production_center_id) 
+	references ProductionCenter;
+
+alter table if exists product_available_days 
+	add constraint FK2ppoobvaj1s8l5xs9oxmowft0 
+	foreign key (product_id) 
+	references Product;
+
+alter table if exists RestaurantTable 
+	add constraint FKlgko8wgq5g9uttdtbptnteadq 
+	foreign key (floor_id) 
+	references Floor;
+
+alter table if exists RestaurantTable 
+	add constraint FKjqqmn2ahevt8h7isfhc2mr0h1 
+	foreign key (ticket_id) 
+	references Ticket;
+
+alter table if exists Ticket 
+	add constraint FK1vdl14um7axd8rc6daho7atfu 
+	foreign key (user_id) 
+	references user_pos;
+
+alter table if exists TicketItem 
+	add constraint FKonfxjpkeh0hkc3pkbd7v6bfci 
+	foreign key (author_id) 
+	references user_pos;
+
+alter table if exists TicketItem 
+	add constraint FKiye407wpveos507r9fpnmsom9 
+	foreign key (ticket_id) 
+	references Ticket;

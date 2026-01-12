@@ -2,6 +2,7 @@
 localStorage.removeItem(Keys.TOKEN)
 localStorage.removeItem(Keys.USER)
 navigateTo('/login')
+clearNuxtState('session')
 </script>
 
 <template>

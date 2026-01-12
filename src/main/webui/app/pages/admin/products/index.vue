@@ -9,7 +9,7 @@ definePageMeta({
 const toast = useToast()
 const { params, setParam } = useParams('adminGetApiProductsParams', { page: 1, sort: 'name' })
 
-const { data: paginatedProducts, status, refresh } = useAsyncData('getApiProducts', () => getApiProducts(params.value))
+const { data: paginatedProducts, status, refresh } = useAsyncData('adminGetApiProducts', () => getApiProducts(params.value))
 
 const deleteProduct = (product) =>
     deleteApiProductsUuid(product.id)
@@ -79,7 +79,7 @@ watch(params, _ => refresh())
                                         + ' - '
                                         + product.availableUntilTime.slice(0, 5)
                                         + ' hrs' }}</td>
-                                    <td>
+                                    <td class="whitespace-nowrap">
                                         <div class="badge badge-soft badge-primary">
                                             {{ shortenAvailableDays(product.availableDays) }}
                                         </div>
@@ -103,9 +103,10 @@ watch(params, _ => refresh())
                                                 </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Editar">
-                                                <button class="btn btn-outline btn-sm btn-secondary">
+                                                <NuxtLink :to="`/admin/products/${product.id}`"
+                                                    class="btn btn-outline btn-sm btn-secondary">
                                                     <Icon name="material-symbols:edit-outline" class="text-xl" />
-                                                </button>
+                                                </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Eliminar">
                                                 <button class="btn btn-outline btn-sm btn-error"

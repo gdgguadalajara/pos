@@ -1,28 +1,32 @@
 <script setup>
-import { getApiTickets } from '~/services/ticket-resource/ticket-resource';
+import dayjs from 'dayjs';
+import QRCode from 'qrcode'
+import { getApiTickets, getApiTicketsIdQr } from '~/services/ticket-resource/ticket-resource';
 
 definePageMeta({
     middleware: ['only-admin'],
 })
 
-const currentPage = ref(1)
+const route = useRoute()
+const isLoadingQR = ref(false)
 
-const { data: paginatedTickets, status, refresh } = useAsyncData('getApiTickets', () => getApiTickets({
-    page: currentPage.value
-}), { default: () => [] })
+const { params, setParam } = useParams('adminGetApiTicketsParams', { page: 1, id: route.query.id })
 
-const nextPage = () => {
-    if (paginatedTickets.value.meta.nextPage) {
-        currentPage.value += 1
-        refresh()
-    }
-}
-const prevPage = () => {
-    if (paginatedTickets.value.meta.prevPage) {
-        currentPage.value -= 1
-        refresh()
-    }
-}
+const { data: paginatedTickets, status, refresh } = useAsyncData('getApiTickets', () => getApiTickets(params.value), { default: () => [] })
+
+const prevPage = _ => setParam('page', params.value.page - 1)
+const nextPage = _ => setParam('page', params.value.page + 1)
+
+const drawQR = (ticketId) => Promise.resolve()
+    .then(_ => isLoadingQR.value = true)
+    .then(_ => openModal(`ticket-qr`))
+    .then(_ => getApiTicketsIdQr(ticketId))
+    .then(({ payload }) => QRCode.toCanvas(document.getElementById('canvas'), payload, (err) => {
+        if (err) return console.error(err)
+        isLoadingQR.value = false
+    }))
+
+watch(params, _ => refresh())
 </script>
 
 <template>
@@ -30,6 +34,7 @@ const prevPage = () => {
         <NuxtLayout name="admin" title="Tickets">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
+                    <AdminTicketsFilters />
                     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                         <table class="table table-zebra">
                             <thead class="bg-base-200">
@@ -39,6 +44,8 @@ const prevPage = () => {
                                     <th>Productos</th>
                                     <th>Total</th>
                                     <th>Estado</th>
+                                    <th>Creación</th>
+                                    <th>Cierre</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -52,7 +59,7 @@ const prevPage = () => {
                                 </tr>
                                 <tr v-if="status == 'success'" v-for="ticket in paginatedTickets.data" :key="ticket.id">
                                     <td>
-                                        <button class="btn btn-link" @click="copyId(ticket.id)">
+                                        <button class="btn btn-link" @click="copy(ticket.id, 'ID copiado')">
                                             {{ ticket.id.slice(0, 8) }}...
                                         </button>
                                     </td>
@@ -60,12 +67,14 @@ const prevPage = () => {
                                     <td>{{ ticket.items.length }}</td>
                                     <td>${{ ticket.totalAmount }}</td>
                                     <td>{{ ticket.status }}</td>
+                                    <td>{{ dayjs(ticket.createdAt).format('DD/MM/YYYY HH:mm') }}</td>
+                                    <td>{{ dayjs(ticket.closedAt).format('DD/MM/YYYY HH:mm') }}</td>
                                     <td>
                                         <div class="flex gap-1">
                                             <div class="tooltip" data-tip="Productos">
                                                 <button class="btn btn-outline btn-sm btn-primary"
                                                     @click="openModal(`ticket-items-${ticket.id}`)">
-                                                    <Icon name="material-symbols:package-2" class="text-2xl" />
+                                                    <Icon name="material-symbols:fastfood" class="text-2xl" />
                                                 </button>
                                             </div>
                                             <dialog :id="`ticket-items-${ticket.id}`" class="modal">
@@ -91,6 +100,12 @@ const prevPage = () => {
                                                     <button>close</button>
                                                 </form>
                                             </dialog>
+                                            <div class="tooltip" data-tip="QR">
+                                                <button class="btn btn-outline btn-sm btn-secondary"
+                                                    @click="drawQR(ticket.id)">
+                                                    <Icon name="material-symbols:qr-code-2-rounded" class="text-2xl" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -109,6 +124,19 @@ const prevPage = () => {
                     </div>
                 </div>
             </div>
+            <dialog id="ticket-qr" class="modal">
+                <div class="modal-box">
+                    <div v-if="isLoadingQR" class="grid place-items-center">
+                        <span class="loading loading-ring loading-xl"></span>
+                    </div>
+                    <div class="grid place-items-center">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                </div>
+                <form method="dialog" class="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
         </NuxtLayout>
     </div>
 </template>

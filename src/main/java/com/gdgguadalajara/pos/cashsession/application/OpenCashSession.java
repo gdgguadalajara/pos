@@ -16,14 +16,15 @@ import lombok.AllArgsConstructor;
 public class OpenCashSession {
 
     private final GetCurrentSession getCurrentSession;
-    private final GetCurrentCashSession getCurrentCashSession;
 
     public CashSession run(OpenCashSessionRequest request) {
         var sessionAccount = getCurrentSession.run();
-        var currentCashSession = getCurrentCashSession.run();
-        if (currentCashSession != null)
-            throw DomainException.forbidden("Ya hay una sesión de caja abierta");
-        var cashSession = new CashSession();
+        var cashSession = CashSession
+                .<CashSession>find("openedBy.id = ?1 AND status = ?2", sessionAccount.user.id, CashSessionStatus.OPEN)
+                .firstResult();
+        if (cashSession != null)
+            throw DomainException.forbidden("Ya tienes una sesión de caja abierta");
+        cashSession = new CashSession();
         cashSession.openedBy = sessionAccount.user;
         cashSession.initialBalance = request.initialBalance();
         cashSession.openingDate = LocalDateTime.now();

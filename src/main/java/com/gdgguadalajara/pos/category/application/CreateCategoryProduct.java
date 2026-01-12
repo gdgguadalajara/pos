@@ -20,6 +20,7 @@ public class CreateCategoryProduct {
             throw DomainException.notFound("Producto no encontrado");
         category.products.add(product);
         category.persistAndFlush();
+        category.productionCenter.name.toString();
         return category;
     }
 }

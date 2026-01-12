@@ -15,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gdgguadalajara.pos.category.model.Category;
+import com.gdgguadalajara.pos.productioncenter.model.ProductionCenter;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.CollectionTable;
@@ -29,6 +30,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Product extends PanacheEntityBase {
@@ -71,6 +73,10 @@ public class Product extends PanacheEntityBase {
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     public Set<Category> categories;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "production_center_id")
+    public ProductionCenter productionCenter;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

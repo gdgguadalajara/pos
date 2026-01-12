@@ -42,7 +42,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
 
         <div class="drawer-side is-drawer-close:overflow-visible">
             <label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-52">
+            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-60">
 
                 <ul class="menu w-full grow">
                     <li class="menu-disabled">
@@ -66,6 +66,14 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         </NuxtLink>
                     </li>
                     <li>
+                        <NuxtLink to="/admin/production-centers"
+                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Centros de produccion">
+                            <Icon name="material-symbols:factory-outline" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Centros de producción</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
                         <NuxtLink to="/admin/categories" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Categorias">
                             <Icon name="material-symbols:category-rounded" class="text-2xl" />
@@ -75,7 +83,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     <li>
                         <NuxtLink to="/admin/products" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Productos">
-                            <Icon name="material-symbols:package-2" class="text-2xl" />
+                            <Icon name="material-symbols:fastfood" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Productos</span>
                         </NuxtLink>
                     </li>
@@ -98,6 +106,20 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                             data-tip="Tickets">
                             <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Tickets</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/admin/expenses" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Gastos">
+                            <Icon name="material-symbols:wallet" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Gastos</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/admin/settings" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Configuraciones">
+                            <Icon name="material-symbols:settings" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Configuraciones</span>
                         </NuxtLink>
                     </li>
                     <li></li>

@@ -39,7 +39,7 @@ watch(params, () => refresh())
         <NuxtLayout name="admin" title="Usuarios">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <div class="flex justify-end mb-3">
+                    <div class="mb-3">
                         <NuxtLink to="/admin/users/invitations/new" class="btn btn-primary">
                             Nuevo Usuario
                         </NuxtLink>
@@ -87,6 +87,11 @@ watch(params, () => refresh())
                                     <td>{{ accountRoleToText(user.account.role) }}</td>
                                     <td>
                                         <div class="flex gap-1">
+                                            <NuxtLink :to="`/admin/users/${user.id}/production-centers`"
+                                                class="tooltip btn btn-sm btn-primary btn-outline"
+                                                data-tip="Centros de produccion">
+                                                <Icon name="material-symbols:factory-outline" class="text-xl" />
+                                            </NuxtLink>
                                         </div>
                                     </td>
                                 </tr>

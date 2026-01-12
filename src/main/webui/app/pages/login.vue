@@ -1,6 +1,5 @@
 <script setup>
 import { postApiAuth } from '@/services/auth-resource/auth-resource'
-import { AccountRole } from '@/models/accountRole'
 import { AccountStatus } from '~/models'
 
 const toast = useToast()
@@ -22,21 +21,16 @@ const onLoginSubmit = (e) => {
             title: 'Sesión iniciada',
             message: 'Bienvenido ' + user.name
         })
-        switch (user.account.role) {
-            case AccountRole.ADMIN:
-                return navigateTo('/admin')
-            case AccountRole.CASHIER:
-                return navigateTo('/cashier')
-        }
+        return navigateTo(`/${user.account.role.toLowerCase()}`)
     }).catch((e) => toast.error({ title: 'Error', message: e.message }))
 }
 </script>
 
 <template>
     <div class="grid place-items-center h-screen">
-        <div class="card lg:card-side bg-base-100 shadow-sm max-w-lg">
+        <div class="card lg:card-side bg-base-200 shadow-sm max-w-lg">
             <figure>
-                <img src="/favicon.svg" alt="favicon" class="h-42 lg:h-52 ml-5" />
+                <img src="/favicon.svg" alt="favicon" class="h-42 mt-6 lg:mt-0 lg:h-52 lg:ml-5" />
             </figure>
             <div class="card-body">
                 <h2 class="card-title">Punto de Venta</h2>
@@ -58,4 +52,10 @@ const onLoginSubmit = (e) => {
             </div>
         </div>
     </div>
+    <a target="_blank" href="https://github.com/gdgguadalajara/pos" class="absolute right-5 bottom-3">
+        Hecho con ❤️ por el
+        <span class="font-bold">
+            GDG Guadalajara
+        </span>
+    </a>
 </template>

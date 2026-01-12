@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.common.model.DomainException;
+import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,12 @@ public class DeleteTicket {
             throw DomainException.forbidden("No puedes modificar este ticket");
         if (ticket.items.size() > 0)
             throw DomainException.badRequest("No puedes eliminar un ticket con items");
+        var table = ticket.table;
+        if (table != null) {
+            table.status = RestaurantTableStatus.AVAILABLE;
+            table.ticket = null;
+            table.persistAndFlush();
+        }
         ticket.delete();
     }
 }

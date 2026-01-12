@@ -2,8 +2,12 @@ package com.gdgguadalajara.pos.cashsession.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gdgguadalajara.pos.expense.model.Expense;
+import com.gdgguadalajara.pos.payment.model.Payment;
 import com.gdgguadalajara.pos.user.model.User;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -16,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class CashSession extends PanacheEntityBase {
@@ -49,4 +54,12 @@ public class CashSession extends PanacheEntityBase {
 
     @Column(columnDefinition = "TEXT")
     public String note;
+
+    @OneToMany(mappedBy = "cashSession")
+    @JsonIgnore
+    public List<Payment> payments;
+
+    @OneToMany(mappedBy = "cashSession")
+    @JsonIgnore
+    public List<Expense> expenses;
 }

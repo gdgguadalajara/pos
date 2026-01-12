@@ -10,8 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdgguadalajara.pos.auth.application.GetCurrentSession;
 import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.ticket.model.TicketServiceType;
+import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
+import com.gdgguadalajara.pos.ticketItem.model.dto.CreateTicketItemRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +27,7 @@ public class CreateTicketItem {
     private final GetCurrentSession getCurrentSession;
     private final ObjectMapper objectMapper;
 
-    public TicketItem run(UUID ticketId, UUID productId) {
+    public TicketItem run(UUID ticketId, UUID productId, CreateTicketItemRequest request) {
         var account = getCurrentSession.run();
         var product = Product.<Product>findById(productId);
         if (product == null)
@@ -44,6 +47,8 @@ public class CreateTicketItem {
             throw DomainException.notFound("Ticket no encontrado");
         if (!ticket.owner.id.equals(account.user.id))
             throw DomainException.forbidden("No tienes permisos para modificar este ticket");
+        if (!ticket.status.equals(TicketStatus.OPEN))
+            throw DomainException.forbidden("No se pueden agregar productos a un ticket cerrado o pagado");
         var ticketItem = new TicketItem();
         ticketItem.ticket = ticket;
         ticketItem.author = account.user;
@@ -53,6 +58,9 @@ public class CreateTicketItem {
         ticketItem.status = TicketItemStatus.ADDED;
         ticketItem.productSnapshot = objectMapper.convertValue(product, new TypeReference<Map<String, Object>>() {
         });
+        ticketItem.isTakeAway = ticket.serviceType == TicketServiceType.TAKE_AWAY
+                ? Boolean.TRUE
+                : request.isTakeAway();
         ticketItem.persistAndFlush();
         ticket.totalAmount = ticket.totalAmount.add(ticketItem.unitPrice);
         ticket.persistAndFlush();

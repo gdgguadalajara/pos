@@ -44,6 +44,8 @@ public class Authenticate {
                 throw DomainException.badRequest("Cuenta bloqueada, contacta al administrador");
             case AccountStatus.DISABLED:
                 throw DomainException.badRequest("Cuenta inhabilitada, contacta al administrador");
+            case AccountStatus.ACTIVE:
+                break;
         }
 
         var jwt = Jwt

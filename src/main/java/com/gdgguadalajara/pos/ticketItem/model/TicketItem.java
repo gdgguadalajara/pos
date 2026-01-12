@@ -33,7 +33,7 @@ public class TicketItem extends PanacheEntityBase {
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     public UUID originalProductId;
 
     @Column(nullable = false)
@@ -45,6 +45,9 @@ public class TicketItem extends PanacheEntityBase {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public TicketItemStatus status;
+
+    @Column(nullable = false)
+    public Boolean isTakeAway;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")

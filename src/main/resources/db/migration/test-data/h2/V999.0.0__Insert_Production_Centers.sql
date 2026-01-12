@@ -1,0 +1,3 @@
+INSERT INTO PRODUCTIONCENTER (ID, NAME, DESCRIPTION, ISACTIVE, CREATEDAT, UPDATEDAT) VALUES 
+('6f9bbd11-634c-4e91-8c0e-d03ff9aecd33', 'Cocina', 'Centro de producción para comidas', TRUE, CURRENT_DATE(), CURRENT_DATE()),
+('f4a8b816-a933-4247-8696-1a4856fa05b4', 'Bar', 'Centro de producción para bebidas', TRUE, CURRENT_DATE(), CURRENT_DATE());

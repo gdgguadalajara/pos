@@ -10,7 +10,7 @@ import com.gdgguadalajara.pos.cashsession.model.CashSessionStatus;
 import com.gdgguadalajara.pos.cashsession.model.dto.CloseCashSessionRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.expense.model.Expense;
-import com.gdgguadalajara.pos.ticket.model.Ticket;
+import com.gdgguadalajara.pos.payment.model.Payment;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,26 +20,28 @@ import lombok.AllArgsConstructor;
 public class CloseCashSession {
 
     private final GetCurrentSession getCurrentSession;
-    private final GetCurrentCashSession getCurrentCashSession;
 
     public CashSession run(CloseCashSessionRequest request) {
         var currentSession = getCurrentSession.run();
-        var currentCashSession = getCurrentCashSession.run();
+        var sessionAccount = getCurrentSession.run();
+        var currentCashSession = CashSession
+                .<CashSession>find("openedBy.id = ?1 AND status = ?2", sessionAccount.user.id, CashSessionStatus.OPEN)
+                .firstResult();
         if (currentCashSession == null)
-            throw DomainException.forbidden("No hay una sesión de caja abierta");
+            throw DomainException.forbidden("No tienes una sesión de caja abierta");
         if (!currentSession.user.account.role.equals(AccountRole.ADMIN)
                 && !currentSession.user.equals(currentCashSession.openedBy))
             throw DomainException.forbidden("No tienes permiso para cerrar esta sesión");
-        var sales = Ticket.getEntityManager()
+        var sales = Payment.getEntityManager()
                 .createQuery(
-                        "SELECT SUM(t.totalAmount) FROM Ticket t WHERE t.status = 'PAID' AND t.closedAt BETWEEN :opened AND NOW()",
+                        "SELECT SUM(amount - changeGiven) FROM Payment WHERE cashSession.id = :cashsession",
                         BigDecimal.class)
-                .setParameter("opened", currentCashSession.openingDate)
+                .setParameter("cashsession", currentCashSession.id)
                 .getSingleResult();
         var totalExpenses = Expense.getEntityManager()
-                .createQuery("SELECT SUM(e.amount) FROM Expense e WHERE createdAt BETWEEN :openingDate AND NOW()",
+                .createQuery("SELECT SUM(amount) FROM Expense WHERE cashSession.id = :cashsession",
                         BigDecimal.class)
-                .setParameter("openingDate", currentCashSession.openingDate)
+                .setParameter("cashsession", currentCashSession.id)
                 .getSingleResult();
         totalExpenses = (totalExpenses != null) ? totalExpenses : BigDecimal.ZERO;
         sales = (sales != null) ? sales : BigDecimal.ZERO;

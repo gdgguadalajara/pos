@@ -7,6 +7,7 @@ const props = defineProps({
 })
 
 const session = useSession()
+const isLgScreen = useMediaQuery('(min-width: 1024px)')
 </script>
 
 <template>
@@ -21,8 +22,8 @@ const session = useSession()
                     <div class="px-4">{{ props.title }}</div>
                 </div>
                 <div class="flex items-center gap-1 flex-none mr-3">
-                    <CashSession />
-                    <div class="dropdown">
+                    <CashSession v-if="isLgScreen" />
+                    <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-dash btn-ghost">
                             <Icon name="material-symbols:account-circle" class="text-2xl" />
                             {{ session.name }}
@@ -31,6 +32,10 @@ const session = useSession()
                             class="dropdown-content menu bg-base-100 rounded-box z-1 mt-1 w-40 px-3 py-1 shadow-sm">
                             <li>
                                 <NuxtLink to="/cashier/profile">Profile</NuxtLink>
+                            </li>
+                            <li v-if="!isLgScreen"></li>
+                            <li v-if="!isLgScreen">
+                                <CashSession />
                             </li>
                         </ul>
                     </div>
@@ -53,13 +58,6 @@ const session = useSession()
                     </li>
                     <li></li>
                     <li>
-                        <NuxtLink to="/cashier/dashboard" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Dashboard">
-                            <Icon name="material-symbols:dashboard-outline-rounded" class="text-2xl" />
-                            <span class="is-drawer-close:hidden">Dashboard</span>
-                        </NuxtLink>
-                    </li>
-                    <li>
                         <NuxtLink to="/cashier/quick-sales"
                             class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Venta rapida">
                             <Icon name="material-symbols:point-of-sale-rounded" class="text-2xl" />
@@ -78,6 +76,13 @@ const session = useSession()
                             data-tip="Tickets">
                             <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Tickets</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/cashier/expenses" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Gastos">
+                            <Icon name="material-symbols:wallet" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Gastos</span>
                         </NuxtLink>
                     </li>
                     <li></li>

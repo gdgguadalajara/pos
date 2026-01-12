@@ -1,264 +1,308 @@
-CREATE TABLE public.account (
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    user_id uuid,
-    password character varying(255),
-    role character varying(255) NOT NULL,
-    status character varying(255) NOT NULL,
-    username character varying(255) NOT NULL,
-    CONSTRAINT account_role_check CHECK (((role)::text = ANY ((ARRAY['ADMIN'::character varying, 'WAITER'::character varying, 'CASHIER'::character varying])::text[]))),
-    CONSTRAINT account_status_check CHECK (((status)::text = ANY ((ARRAY['PENDING_SETUP'::character varying, 'ACTIVE'::character varying, 'LOCKED'::character varying, 'DISABLED'::character varying])::text[])))
+create table Account (
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    user_id uuid unique,
+    password varchar(255),
+    role varchar(255) not null check ((role in ('ADMIN','WAITER','CASHIER','PREPARER'))),
+    status varchar(255) not null check ((status in ('PENDING_SETUP','ACTIVE','LOCKED','DISABLED'))),
+    username varchar(255) not null unique,
+    primary key (id)
 );
 
-CREATE TABLE public.cashsession (
+create table account_production_center (
+    account_id uuid not null,
+    production_center_id uuid not null,
+    primary key (account_id, production_center_id)
+);
+
+create table BusinessProfile (
+    id uuid not null,
+    address varchar(500),
+    ticketFooter varchar(1000),
+    email varchar(255),
+    legalName varchar(255) not null,
+    logoUrl varchar(255),
+    name varchar(255) not null,
+    phone varchar(255),
+    taxId varchar(255),
+    website varchar(255),
+    primary key (id)
+);
+
+create table CashSession (
     difference numeric(38,2),
-    initialbalance numeric(38,2) NOT NULL,
-    reportedbalance numeric(38,2),
-    totalsales numeric(38,2),
-    totalexpenses numeric(38,2),
-    closingdate timestamp(6) without time zone,
-    openingdate timestamp(6) without time zone NOT NULL,
+    initialBalance numeric(38,2) not null,
+    reportedBalance numeric(38,2),
+    totalExpenses numeric(38,2),
+    totalSales numeric(38,2),
+    closingDate timestamp(6),
+    openingDate timestamp(6) not null,
     closed_by_id uuid,
-    id uuid NOT NULL,
+    id uuid not null,
     opened_by_id uuid,
-    note text,
-    status character varying(255),
-    CONSTRAINT cashsession_status_check CHECK (((status)::text = ANY ((ARRAY['OPEN'::character varying, 'CLOSED'::character varying])::text[])))
+    note TEXT,
+    status varchar(255) check ((status in ('OPEN','CLOSED'))),
+    primary key (id)
 );
 
-CREATE TABLE public.category (
-    availablefrom date NOT NULL,
-    availablefromtime time(0) without time zone NOT NULL,
-    availableuntil date NOT NULL,
-    availableuntiltime time(0) without time zone NOT NULL,
-    isenabled boolean NOT NULL,
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    description character varying(255) NOT NULL,
-    name character varying(255) NOT NULL
+create table Category (
+    availableFrom date not null,
+    availableFromTime time(0) not null,
+    availableUntil date not null,
+    availableUntilTime time(0) not null,
+    isEnabled boolean not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    production_center_id uuid not null,
+    description varchar(255) not null,
+    name varchar(255) not null,
+    primary key (id)
 );
 
-CREATE TABLE public.category_available_days (
-    category_id uuid NOT NULL,
-    day_of_week character varying(255) NOT NULL,
-    CONSTRAINT category_available_days_day_of_week_check CHECK (((day_of_week)::text = ANY ((ARRAY['MONDAY'::character varying, 'TUESDAY'::character varying, 'WEDNESDAY'::character varying, 'THURSDAY'::character varying, 'FRIDAY'::character varying, 'SATURDAY'::character varying, 'SUNDAY'::character varying])::text[])))
+create table category_available_days (
+    category_id uuid not null,
+    day_of_week varchar(255) not null check ((day_of_week in ('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'))),
+    primary key (category_id, day_of_week)
 );
 
-CREATE TABLE public.category_product (
-    category_id uuid NOT NULL,
-    product_id uuid NOT NULL
+create table category_product (
+    category_id uuid not null,
+    product_id uuid not null,
+    primary key (category_id, product_id)
 );
 
-CREATE TABLE public.floor (
-    gridheight integer NOT NULL,
-    gridwidth integer NOT NULL,
-    levelorder integer NOT NULL,
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    name character varying(255) NOT NULL
+create table Expense (
+    amount numeric(38,2) not null,
+    createdAt timestamp(6) not null,
+    cash_session_id uuid,
+    created_by_user_id uuid not null,
+    id uuid not null,
+    category varchar(255) not null check ((category in ('SUPPLIES','CLEANING','MAINTENANCE','WAGES','OTHER'))),
+    description varchar(255) not null,
+    primary key (id)
 );
 
-CREATE TABLE public.invitation (
-    createdat timestamp(6) without time zone NOT NULL,
-    expiresat timestamp(6) without time zone NOT NULL,
-    usedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    token character varying(255) NOT NULL
+create table Floor (
+    gridHeight integer not null,
+    gridWidth integer not null,
+    levelOrder integer not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    name varchar(255) not null,
+    primary key (id)
 );
 
-CREATE TABLE public.payment (
-    amount numeric(38,2) NOT NULL,
-    changegiven numeric(38,2),
-    createdat timestamp(6) without time zone NOT NULL,
-    id uuid NOT NULL,
-    ticket_id uuid NOT NULL,
-    externalreference character varying(255),
-    method character varying(255) NOT NULL,
-    CONSTRAINT payment_method_check CHECK (((method)::text = ANY ((ARRAY['CASH'::character varying, 'CREDIT_CARD'::character varying, 'DEBIT_CARD'::character varying, 'TRANSFER'::character varying, 'OTHER'::character varying])::text[])))
+create table Invitation (
+    createdAt timestamp(6) not null,
+    expiresAt timestamp(6) not null,
+    usedAt timestamp(6),
+    id uuid not null,
+    user_id uuid not null,
+    token varchar(255) not null unique,
+    primary key (id)
 );
 
-CREATE TABLE public.product (
-    availablefrom date NOT NULL,
-    availablefromtime time(0) without time zone NOT NULL,
-    availableuntil date NOT NULL,
-    availableuntiltime time(0) without time zone NOT NULL,
-    isenabled boolean NOT NULL,
-    price numeric(38,2) NOT NULL,
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    description character varying(255) NOT NULL,
-    name character varying(255) NOT NULL
+create table Payment (
+    amount numeric(38,2) not null,
+    changeGiven numeric(38,2),
+    createdAt timestamp(6) not null,
+    cash_session_id uuid not null,
+    id uuid not null,
+    ticket_id uuid not null,
+    externalReference varchar(255),
+    method varchar(255) not null check ((method in ('CASH','CREDIT_CARD','DEBIT_CARD','TRANSFER','OTHER'))),
+    primary key (id)
 );
 
-CREATE TABLE public.product_available_days (
-    product_id uuid NOT NULL,
-    day_of_week character varying(255) NOT NULL,
-    CONSTRAINT product_available_days_day_of_week_check CHECK (((day_of_week)::text = ANY ((ARRAY['MONDAY'::character varying, 'TUESDAY'::character varying, 'WEDNESDAY'::character varying, 'THURSDAY'::character varying, 'FRIDAY'::character varying, 'SATURDAY'::character varying, 'SUNDAY'::character varying])::text[])))
+create table Product (
+    availableFrom date not null,
+    availableFromTime time(0) not null,
+    availableUntil date not null,
+    availableUntilTime time(0) not null,
+    isEnabled boolean not null,
+    price numeric(38,2) not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    production_center_id uuid,
+    description varchar(255) not null,
+    name varchar(255) not null,
+    primary key (id)
 );
 
-CREATE TABLE public.restauranttable (
+create table product_available_days (
+    product_id uuid not null,
+    day_of_week varchar(255) not null check ((day_of_week in ('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'))),
+    primary key (product_id, day_of_week)
+);
+
+create table ProductionCenter (
+    isActive boolean not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    description varchar(255),
+    name varchar(255) not null unique,
+    primary key (id)
+);
+
+create table RestaurantTable (
     height integer,
-    posx integer NOT NULL,
-    posy integer NOT NULL,
+    posX integer not null,
+    posY integer not null,
     width integer,
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
     floor_id uuid,
-    id uuid NOT NULL,
+    id uuid not null,
+    ticket_id uuid unique,
+    name varchar(255) not null,
+    status varchar(255) not null check ((status in ('AVAILABLE','OCCUPIED','RESERVED','CLEANING','NOT_AVAILABLE'))),
+    primary key (id)
+);
+
+create table Ticket (
+    dinerCount integer not null,
+    totalAmount numeric(38,2) not null,
+    closedAt timestamp(6),
+    createdAt timestamp(6),
+    updatedAt timestamp(6),
+    id uuid not null,
+    user_id uuid not null,
+    serviceType varchar(255) not null check ((serviceType in ('DINE_IN','TAKE_AWAY','DELIVERY'))),
+    status varchar(255) not null check ((status in ('OPEN','PAID','CANCELED'))),
+    tableSnapshot json,
+    primary key (id)
+);
+
+create table TicketItem (
+    isTakeAway boolean not null,
+    unitPrice numeric(38,2) not null,
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    author_id uuid not null,
+    id uuid not null,
+    originalProductId uuid not null,
     ticket_id uuid,
-    name character varying(255) NOT NULL,
-    status character varying(255) NOT NULL,
-    CONSTRAINT restauranttable_status_check CHECK (((status)::text = ANY ((ARRAY['AVAILABLE'::character varying, 'OCCUPIED'::character varying, 'RESERVED'::character varying, 'CLEANING'::character varying, 'NOT_AVAILABLE'::character varying])::text[])))
+    productName varchar(255) not null,
+    status varchar(255) not null check ((status in ('ADDED','ORDERED','PREPARING','READY','DELIVERED','CANCELED'))),
+    productSnapshot json,
+    primary key (id)
 );
 
-CREATE TABLE public.ticket (
-    dinercount integer NOT NULL,
-    totalamount numeric(38,2) NOT NULL,
-    closedat timestamp(6) without time zone,
-    createdat timestamp(6) without time zone,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    status character varying(255) NOT NULL,
-    tablesnapshot json,
-    CONSTRAINT ticket_status_check CHECK (((status)::text = ANY ((ARRAY['OPEN'::character varying, 'PAID'::character varying, 'CANCELED'::character varying])::text[])))
+create table user_pos (
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    email varchar(255) not null unique,
+    name varchar(255) not null,
+    primary key (id)
 );
 
-CREATE TABLE public.ticketitem (
-    unitprice numeric(38,2) NOT NULL,
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    author_id uuid NOT NULL,
-    id uuid NOT NULL,
-    originalproductid uuid,
-    ticket_id uuid,
-    productname character varying(255) NOT NULL,
-    status character varying(255) NOT NULL,
-    productsnapshot json,
-    CONSTRAINT ticketitem_status_check CHECK (((status)::text = ANY ((ARRAY['ADDED'::character varying, 'ORDERED'::character varying, 'SERVED'::character varying, 'PAID'::character varying, 'CANCELED'::character varying])::text[])))
-);
+alter table if exists Account 
+    add constraint FKokmc0m1yico9hmte4w16wgjvw 
+    foreign key (user_id) 
+    references user_pos;
 
-CREATE TABLE public.user_pos (
-    createdat timestamp(6) without time zone NOT NULL,
-    updatedat timestamp(6) without time zone,
-    id uuid NOT NULL,
-    email character varying(255) NOT NULL,
-    name character varying(255) NOT NULL
-);
+alter table if exists account_production_center 
+    add constraint FK7615g58vstvl0lny8i6p6e97t 
+    foreign key (production_center_id) 
+    references ProductionCenter;
 
-CREATE TABLE public.expense (
-    id uuid PRIMARY KEY,
-    description character varying(255) NOT NULL,
-    amount numeric(38,2) NOT NULL,
-    category character varying(50) NOT NULL,
-    createdat timestamp(6) without time zone NOT NULL,
-    created_by_user_id uuid NOT NULL,
-    CONSTRAINT expense_category_check CHECK (((category)::text = ANY ((ARRAY['SUPPLIES'::character varying, 'CLEANING'::character varying, 'MAINTENANCE'::character varying, 'WAGES'::character varying, 'OTHER'::character varying])::text[])))
-);
+alter table if exists account_production_center 
+    add constraint FK57q8e3wyk813e0ghlnelb11po 
+    foreign key (account_id) 
+    references Account;
 
-ALTER TABLE ONLY public.account
-    ADD CONSTRAINT account_pkey PRIMARY KEY (id);
+alter table if exists CashSession 
+    add constraint FKjs8t67ihrfo72g5xlhubs5s3e 
+    foreign key (closed_by_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.account
-    ADD CONSTRAINT account_user_id_key UNIQUE (user_id);
+alter table if exists CashSession 
+    add constraint FKhkkiy8iaeud3ea5aqk4tdk1qc 
+    foreign key (opened_by_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.account
-    ADD CONSTRAINT account_username_key UNIQUE (username);
+alter table if exists Category 
+    add constraint FK9ec3m11c3hbjvtdv1w1nfac8l 
+    foreign key (production_center_id) 
+    references ProductionCenter;
 
-ALTER TABLE ONLY public.cashsession
-    ADD CONSTRAINT cashsession_pkey PRIMARY KEY (id);
+alter table if exists category_available_days 
+    add constraint FKss606wiif65x2ia8tfqwon4bn 
+    foreign key (category_id) 
+    references Category;
 
-ALTER TABLE ONLY public.category_available_days
-    ADD CONSTRAINT category_available_days_pkey PRIMARY KEY (category_id, day_of_week);
+alter table if exists category_product 
+    add constraint FK55qix17xkimf4qtvdesj17igh 
+    foreign key (product_id) 
+    references Product;
 
-ALTER TABLE ONLY public.category
-    ADD CONSTRAINT category_pkey PRIMARY KEY (id);
+alter table if exists category_product 
+    add constraint FK93baldcqyk0pnf4lbfrq4lib5 
+    foreign key (category_id) 
+    references Category;
 
-ALTER TABLE ONLY public.category_product
-    ADD CONSTRAINT category_product_pkey PRIMARY KEY (category_id, product_id);
+alter table if exists Expense 
+    add constraint FK9ag9pnitm8lndgy7o99i1lf3i 
+    foreign key (cash_session_id) 
+    references CashSession;
 
-ALTER TABLE ONLY public.floor
-    ADD CONSTRAINT floor_pkey PRIMARY KEY (id);
+alter table if exists Expense 
+    add constraint FKlh3yf9skcfid2d1bhfm416kkk 
+    foreign key (created_by_user_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.invitation
-    ADD CONSTRAINT invitation_pkey PRIMARY KEY (id);
+alter table if exists Invitation 
+    add constraint FKqhri2ver75ouob5verv508c6t 
+    foreign key (user_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.invitation
-    ADD CONSTRAINT invitation_token_key UNIQUE (token);
+alter table if exists Payment 
+    add constraint FK1pkgyxlik7sj7ubboyygk8xc1 
+    foreign key (cash_session_id) 
+    references CashSession;
 
-ALTER TABLE ONLY public.payment
-    ADD CONSTRAINT payment_pkey PRIMARY KEY (id);
+alter table if exists Payment 
+    add constraint FKa8060tn2ahf51m5dkujnperot 
+    foreign key (ticket_id) 
+    references Ticket;
 
-ALTER TABLE ONLY public.product_available_days
-    ADD CONSTRAINT product_available_days_pkey PRIMARY KEY (product_id, day_of_week);
+alter table if exists Product 
+    add constraint FKeonoylap4aogqeewa57rf37qa 
+    foreign key (production_center_id) 
+    references ProductionCenter;
 
-ALTER TABLE ONLY public.product
-    ADD CONSTRAINT product_pkey PRIMARY KEY (id);
+alter table if exists product_available_days 
+    add constraint FK2ppoobvaj1s8l5xs9oxmowft0 
+    foreign key (product_id) 
+    references Product;
 
-ALTER TABLE ONLY public.restauranttable
-    ADD CONSTRAINT restauranttable_pkey PRIMARY KEY (id);
+alter table if exists RestaurantTable 
+    add constraint FKlgko8wgq5g9uttdtbptnteadq 
+    foreign key (floor_id) 
+    references Floor;
 
-ALTER TABLE ONLY public.restauranttable
-    ADD CONSTRAINT restauranttable_ticket_id_key UNIQUE (ticket_id);
+alter table if exists RestaurantTable 
+    add constraint FKjqqmn2ahevt8h7isfhc2mr0h1 
+    foreign key (ticket_id) 
+    references Ticket;
 
-ALTER TABLE ONLY public.ticket
-    ADD CONSTRAINT ticket_pkey PRIMARY KEY (id);
+alter table if exists Ticket 
+    add constraint FK1vdl14um7axd8rc6daho7atfu 
+    foreign key (user_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.ticketitem
-    ADD CONSTRAINT ticketitem_pkey PRIMARY KEY (id);
+alter table if exists TicketItem 
+    add constraint FKonfxjpkeh0hkc3pkbd7v6bfci 
+    foreign key (author_id) 
+    references user_pos;
 
-ALTER TABLE ONLY public.user_pos
-    ADD CONSTRAINT user_pos_email_key UNIQUE (email);
-
-ALTER TABLE ONLY public.user_pos
-    ADD CONSTRAINT user_pos_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY public.ticket
-    ADD CONSTRAINT fk1vdl14um7axd8rc6daho7atfu FOREIGN KEY (user_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.product_available_days
-    ADD CONSTRAINT fk2ppoobvaj1s8l5xs9oxmowft0 FOREIGN KEY (product_id) REFERENCES public.product(id);
-
-ALTER TABLE ONLY public.category_product
-    ADD CONSTRAINT fk55qix17xkimf4qtvdesj17igh FOREIGN KEY (product_id) REFERENCES public.product(id);
-
-ALTER TABLE ONLY public.category_product
-    ADD CONSTRAINT fk93baldcqyk0pnf4lbfrq4lib5 FOREIGN KEY (category_id) REFERENCES public.category(id);
-
-ALTER TABLE ONLY public.payment
-    ADD CONSTRAINT fka8060tn2ahf51m5dkujnperot FOREIGN KEY (ticket_id) REFERENCES public.ticket(id);
-
-ALTER TABLE ONLY public.cashsession
-    ADD CONSTRAINT fkhkkiy8iaeud3ea5aqk4tdk1qc FOREIGN KEY (opened_by_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.ticketitem
-    ADD CONSTRAINT fkiye407wpveos507r9fpnmsom9 FOREIGN KEY (ticket_id) REFERENCES public.ticket(id);
-
-ALTER TABLE ONLY public.restauranttable
-    ADD CONSTRAINT fkjqqmn2ahevt8h7isfhc2mr0h1 FOREIGN KEY (ticket_id) REFERENCES public.ticket(id);
-
-ALTER TABLE ONLY public.cashsession
-    ADD CONSTRAINT fkjs8t67ihrfo72g5xlhubs5s3e FOREIGN KEY (closed_by_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.restauranttable
-    ADD CONSTRAINT fklgko8wgq5g9uttdtbptnteadq FOREIGN KEY (floor_id) REFERENCES public.floor(id);
-
-ALTER TABLE ONLY public.account
-    ADD CONSTRAINT fkokmc0m1yico9hmte4w16wgjvw FOREIGN KEY (user_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.ticketitem
-    ADD CONSTRAINT fkonfxjpkeh0hkc3pkbd7v6bfci FOREIGN KEY (author_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.invitation
-    ADD CONSTRAINT fkqhri2ver75ouob5verv508c6t FOREIGN KEY (user_id) REFERENCES public.user_pos(id);
-
-ALTER TABLE ONLY public.category_available_days
-    ADD CONSTRAINT fkss606wiif65x2ia8tfqwon4bn FOREIGN KEY (category_id) REFERENCES public.category(id);
-
-ALTER TABLE ONLY public.expense
-    ADD CONSTRAINT fk_expense_user FOREIGN KEY (created_by_user_id) REFERENCES public.user_pos(id);
+alter table if exists TicketItem 
+    add constraint FKiye407wpveos507r9fpnmsom9 
+    foreign key (ticket_id) 
+    references Ticket;

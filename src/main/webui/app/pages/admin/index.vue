@@ -2,6 +2,7 @@
 definePageMeta({
     middleware: ['only-admin'],
 })
+navigateTo('/admin/dashboard')
 </script>
 
 <template>

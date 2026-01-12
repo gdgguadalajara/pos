@@ -5,9 +5,11 @@ import java.util.UUID;
 import com.gdgguadalajara.pos.ticketItem.application.CreateTicketItem;
 import com.gdgguadalajara.pos.ticketItem.application.DeleteTicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
+import com.gdgguadalajara.pos.ticketItem.model.dto.CreateTicketItemRequest;
 
 import io.quarkus.security.Authenticated;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -24,8 +26,8 @@ public class TicketTicketItemResource {
     @Path("/{productId}")
     @Authenticated
     @Transactional
-    public TicketItem create(UUID ticketId, UUID productId) {
-        return createTicketItem.run(ticketId, productId);
+    public TicketItem create(UUID ticketId, UUID productId, @Valid CreateTicketItemRequest request) {
+        return createTicketItem.run(ticketId, productId, request);
     }
 
     @DELETE

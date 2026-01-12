@@ -1,5 +1,10 @@
 package com.gdgguadalajara.pos.ticketItem.model;
 
 public enum TicketItemStatus {
-    ADDED, ORDERED, SERVED, PAID, CANCELED
+    ADDED,
+    ORDERED,
+    PREPARING,
+    READY,
+    DELIVERED,
+    CANCELED
 }

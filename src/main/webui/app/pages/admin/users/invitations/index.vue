@@ -58,7 +58,7 @@ const accountStatusToText = (status) => {
         <NuxtLayout name="admin" title="Usuarios">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <div class="flex justify-end mb-3">
+                    <div class="mb-3">
                         <NuxtLink to="/admin/users/invitations/new" class="btn btn-primary">
                             Nuevo Usuario
                         </NuxtLink>

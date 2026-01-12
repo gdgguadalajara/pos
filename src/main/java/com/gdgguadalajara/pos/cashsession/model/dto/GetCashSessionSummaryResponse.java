@@ -13,6 +13,5 @@ public record GetCashSessionSummaryResponse(
         BigDecimal initialBalance,
         BigDecimal totalExpenses,
         BigDecimal totalSales,
-        Long salesCount,
         BigDecimal expectedBalance) {
 }

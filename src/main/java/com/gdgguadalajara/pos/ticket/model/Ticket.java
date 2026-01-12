@@ -50,6 +50,10 @@ public class Ticket extends PanacheEntityBase {
     @Column(nullable = false)
     public TicketStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    public TicketServiceType serviceType;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<TicketItem> items = new ArrayList<>();

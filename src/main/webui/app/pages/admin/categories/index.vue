@@ -9,7 +9,7 @@ definePageMeta({
 const toast = useToast()
 const { params, setParam } = useParams('adminGetApiCategoriesParams', { page: 1, sort: 'name' })
 
-const { data: paginatedCategories, status, refresh } = useLazyAsyncData('admin_categories', () => getApiCategories(params.value))
+const { data: paginatedCategories, status, refresh } = useLazyAsyncData('adminGetApiCategories', () => getApiCategories(params.value))
 
 const deleteCategory = (category) =>
     deleteApiCategoriesUuid(category.id)
@@ -77,7 +77,7 @@ watch(params, _ => refresh())
                                         + ' - '
                                         + category.availableUntilTime.slice(0, 5)
                                         + ' hrs' }}</td>
-                                    <td>
+                                    <td class="whitespace-nowrap">
                                         <div class="badge badge-soft badge-primary">
                                             {{ shortenAvailableDays(category.availableDays) }}
                                         </div>
@@ -97,13 +97,14 @@ watch(params, _ => refresh())
                                             <div class="tooltip" data-tip="Productos">
                                                 <NuxtLink :to="`/admin/categories/${category.id}/products`"
                                                     class="btn btn-outline btn-sm btn-info">
-                                                    <Icon name="material-symbols:package-2" class="text-xl" />
+                                                    <Icon name="material-symbols:fastfood" class="text-xl" />
                                                 </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Editar">
-                                                <button class="btn btn-outline btn-sm btn-secondary">
+                                                <NuxtLink :to="`/admin/categories/${category.id}`"
+                                                    class="btn btn-outline btn-sm btn-secondary">
                                                     <Icon name="material-symbols:edit-outline" class="text-xl" />
-                                                </button>
+                                                </NuxtLink>
                                             </div>
                                             <div class="tooltip" data-tip="Eliminar">
                                                 <button class="btn btn-outline btn-sm btn-error"
