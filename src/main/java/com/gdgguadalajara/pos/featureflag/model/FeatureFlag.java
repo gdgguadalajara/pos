@@ -17,7 +17,7 @@ public class FeatureFlag extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID key;
+    public UUID id;
 
     @Column(nullable = false)
     public Boolean enabled;

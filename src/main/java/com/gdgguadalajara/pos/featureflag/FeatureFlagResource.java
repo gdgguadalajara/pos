@@ -10,10 +10,10 @@ import com.gdgguadalajara.pos.featureflag.model.dto.CreateFeatureFlagRequest;
 import com.gdgguadalajara.pos.featureflag.model.dto.UpdateFeatureFlagRequest;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,16 +21,12 @@ import java.util.UUID;
 @Path("/api/feature-flags")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@AllArgsConstructor
 public class FeatureFlagResource {
 
-    @Inject
-    CreateFeatureFlag createFeatureFlag;
-
-    @Inject
-    UpdateFeatureFlag updateFeatureFlag;
-
-    @Inject
-    DeleteFeatureFlag deleteFeatureFlag;
+    private final CreateFeatureFlag createFeatureFlag;
+    private final UpdateFeatureFlag updateFeatureFlag;
+    private final DeleteFeatureFlag deleteFeatureFlag;
 
     @GET
     public List<FeatureFlag> list() {
@@ -38,9 +34,9 @@ public class FeatureFlagResource {
     }
 
     @GET
-    @Path("/{key}")
-    public FeatureFlag get(@PathParam("key") UUID key) {
-        FeatureFlag flag = FeatureFlag.findById(key);
+    @Path("/{uuid}")
+    public FeatureFlag get(@PathParam("uuid") UUID uuid) {
+        FeatureFlag flag = FeatureFlag.findById(uuid);
         if (flag == null)
             throw DomainException.notFound("Feature flag no encontrada");
         return flag;
@@ -54,18 +50,18 @@ public class FeatureFlagResource {
     }
 
     @PUT
-    @Path("/{key}")
+    @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
-    public FeatureFlag update(@PathParam("key") UUID key, UpdateFeatureFlagRequest request) {
-        return updateFeatureFlag.execute(key, request);
+    public FeatureFlag update(@PathParam("uuid") UUID uuid, UpdateFeatureFlagRequest request) {
+        return updateFeatureFlag.execute(uuid, request);
     }
 
     @DELETE
-    @Path("/{key}")
+    @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
-    public void delete(@PathParam("key") UUID key) {
-        deleteFeatureFlag.execute(key);
+    public void delete(@PathParam("uuid") UUID uuid) {
+        deleteFeatureFlag.execute(uuid);
     }
 }
