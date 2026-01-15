@@ -17,7 +17,7 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
             <nav class="flex-none navbar w-full bg-base-300 sticky top-0 z-10">
                 <div class="flex items-center flex-1">
                     <label for="admin-drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
-                        <Icon name="material-symbols:left-panel-open-outline" class="text-2xl" />
+                        <Icon name="material-symbols:left-panel-open" class="text-2xl" />
                     </label>
                     <div class="px-4">{{ props.title }}</div>
                 </div>
@@ -67,14 +67,14 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
                     <li>
                         <NuxtLink to="/cashier/tables" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Mesas">
-                            <Icon name="material-symbols:table-bar-outline-rounded" class="text-2xl" />
+                            <Icon name="material-symbols:table-bar-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Mesas</span>
                         </NuxtLink>
                     </li>
                     <li>
                         <NuxtLink to="/cashier/tickets" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Tickets">
-                            <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
+                            <Icon name="material-symbols:receipt-long-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Tickets</span>
                         </NuxtLink>
                     </li>
