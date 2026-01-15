@@ -7,7 +7,7 @@ definePageMeta({
 <template>
     <div>
         <NuxtLayout name="cashier" title="Mesas">
-            <Tables />
+            <SharedTables />
         </NuxtLayout>
     </div>
 </template>
