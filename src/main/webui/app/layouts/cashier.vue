@@ -22,7 +22,7 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
                     <div class="px-4">{{ props.title }}</div>
                 </div>
                 <div class="flex items-center gap-1 flex-none mr-3">
-                    <CashSession v-if="isLgScreen" />
+                    <CashierCashSession v-if="isLgScreen" />
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-dash btn-ghost">
                             <Icon name="material-symbols:account-circle" class="text-2xl" />
@@ -35,7 +35,7 @@ const isLgScreen = useMediaQuery('(min-width: 1024px)')
                             </li>
                             <li v-if="!isLgScreen"></li>
                             <li v-if="!isLgScreen">
-                                <CashSession />
+                                <CashierCashSession />
                             </li>
                         </ul>
                     </div>
