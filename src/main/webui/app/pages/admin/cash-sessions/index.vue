@@ -23,7 +23,7 @@ watch(params, _ => refresh())
         <NuxtLayout name="admin" title="Sesiones de caja">
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <AdminCashSessionFilters />
+                    <AdminCashSessionsFilters />
                     <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
                         <table class="table table-zebra">
                             <thead class="bg-base-200">
