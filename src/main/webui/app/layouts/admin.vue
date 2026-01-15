@@ -16,7 +16,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
             <nav class="flex-none navbar w-full bg-base-300 sticky top-0 z-10">
                 <div class="flex items-center flex-1">
                     <label for="admin-drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
-                        <Icon name="material-symbols:left-panel-open-outline" class="text-2xl" />
+                        <Icon name="material-symbols:left-panel-open" class="text-2xl" />
                     </label>
                     <div class="px-4">{{ props.title }}</div>
                 </div>
@@ -54,7 +54,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     <li>
                         <NuxtLink to="/admin/dashboard" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Dashboard">
-                            <Icon name="material-symbols:dashboard-outline-rounded" class="text-2xl" />
+                            <Icon name="material-symbols:dashboard-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Dashboard</span>
                         </NuxtLink>
                     </li>
@@ -69,7 +69,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         <NuxtLink to="/admin/production-centers"
                             class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Centros de produccion">
-                            <Icon name="material-symbols:factory-outline" class="text-2xl" />
+                            <Icon name="material-symbols:factory" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Centros de producción</span>
                         </NuxtLink>
                     </li>
@@ -88,9 +88,30 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         </NuxtLink>
                     </li>
                     <li>
+                        <NuxtLink to="#/admin/ingredients" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Ingredientes">
+                            <Icon name="material-symbols:nutrition" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Ingredientes</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="#/admin/recipes" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Recetas">
+                            <Icon name="material-symbols:list-alt" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Recetas</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="#/admin/inventory" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Inventario">
+                            <Icon name="material-symbols:inventory-2" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Inventario</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
                         <NuxtLink to="/admin/floorplan" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Mapa de mesas">
-                            <Icon name="material-symbols:map-outline-rounded" class="text-2xl" />
+                            <Icon name="material-symbols:map-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Mapa de mesas</span>
                         </NuxtLink>
                     </li>
@@ -104,7 +125,7 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                     <li>
                         <NuxtLink to="/admin/tickets" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Tickets">
-                            <Icon name="material-symbols:receipt-long-outline-rounded" class="text-2xl" />
+                            <Icon name="material-symbols:receipt-long-rounded" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Tickets</span>
                         </NuxtLink>
                     </li>
