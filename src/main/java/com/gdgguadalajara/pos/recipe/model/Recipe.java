@@ -15,10 +15,13 @@ import com.gdgguadalajara.pos.product.model.Product;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -34,13 +37,15 @@ public class Recipe extends PanacheEntityBase {
     @Column(nullable = false)
     public String description;
 
-    @OneToOne
+    @OneToOne()
     @JsonManagedReference
+    @JoinColumn(nullable = false)
     public Product product;
 
-    @OneToMany(mappedBy = "recipe")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ingredient_recipe", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     @JsonIgnore
-    public Set<Ingredient> ingredients;
+    public Set<Ingredient> ingredients = new java.util.HashSet<>();
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

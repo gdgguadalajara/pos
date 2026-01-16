@@ -7,10 +7,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.EnumType;
+
+import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gdgguadalajara.pos.recipe.model.Recipe;
 
 @Entity
@@ -37,8 +40,9 @@ public class Ingredient extends PanacheEntityBase {
     @Column(nullable = false)
     public Double costPerPurchaseUnit;
 
-    @ManyToOne
-    public Recipe recipe;
+    @ManyToMany(mappedBy = "ingredients")
+    @JsonIgnore
+    public Set<Recipe> recipes;
 
     static public Double getUsageToPurchaseFactor(Ingredient ingredient) {
         return IngredientUnitType.getConversionFactor(ingredient.usageUnit, ingredient.purchaseUnit);
