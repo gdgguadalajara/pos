@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dark --default;
+};
 body {
   -webkit-touch-callout: none;
   /* iOS Safari */
