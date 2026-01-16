@@ -46,7 +46,10 @@ public class ProcessRecipeDeduction {
                 this.createStockOutEvent.run(
                         new CreateStockOutEventRequest(recipe.product, ingredient,
                                 factor, ingredient.systemStock));
-            ingredient.systemStock -= factor;
+            var newStock = ingredient.systemStock - factor;
+            if(newStock < 0)
+                newStock = 0.0;
+            ingredient.systemStock = newStock;
             ingredient.persistAndFlush();
         }
         recipe = Recipe.findById(recipe.id);
