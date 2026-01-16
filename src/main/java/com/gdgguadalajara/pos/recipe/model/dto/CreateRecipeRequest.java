@@ -1,5 +1,11 @@
 package com.gdgguadalajara.pos.recipe.model.dto;
 
-public record CreateRecipeRequest(String name, String description) {
-        
+import java.util.List;
+import java.util.UUID;
+
+public record CreateRecipeRequest(
+        String name,
+        String description,
+        UUID productId,
+        List<UUID> ingredientIds) {
 }
