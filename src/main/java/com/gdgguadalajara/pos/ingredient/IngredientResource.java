@@ -3,18 +3,19 @@ package com.gdgguadalajara.pos.ingredient;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
-import com.gdgguadalajara.pos.common.PageBuilder;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
-import com.gdgguadalajara.pos.common.model.dto.PaginationRequestParams;
+import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 import com.gdgguadalajara.pos.ingredient.application.CreateIngredient;
 import com.gdgguadalajara.pos.ingredient.application.UpdateIngredient;
 import com.gdgguadalajara.pos.ingredient.model.Ingredient;
 import com.gdgguadalajara.pos.ingredient.model.dto.CreateIngredientRequest;
+import com.gdgguadalajara.pos.ingredient.model.dto.ReadIngredientsFilter;
 import com.gdgguadalajara.pos.ingredient.model.dto.UpdateIngredientRequest;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -29,14 +30,19 @@ import lombok.AllArgsConstructor;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class IngredientResource {
-    
+
     private final CreateIngredient createIngredient;
     private final UpdateIngredient updateIngredient;
 
     @GET
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    public PaginatedResponse<Ingredient> read(@Valid PaginationRequestParams params) {
-        return PageBuilder.of(Ingredient.findAll(), params.page, params.size);
+    public PaginatedResponse<Ingredient> read(@BeanParam @Valid ReadIngredientsFilter params) {
+        return PanacheCriteria.of(Ingredient.class)
+                .eq("id", params.id)
+                .like("name", params.name)
+                .page(params.page, params.size)
+                .orderBy(params.sort)
+                .getResult();
     }
 
     @POST
