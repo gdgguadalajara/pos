@@ -37,7 +37,7 @@ public class Recipe extends PanacheEntityBase {
     @Column(nullable = false)
     public String description;
 
-    @OneToOne()
+    @OneToOne
     @JsonManagedReference
     @JoinColumn(nullable = false)
     public Product product;
