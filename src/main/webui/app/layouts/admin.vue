@@ -88,24 +88,17 @@ const user = JSON.parse(localStorage.getItem(Keys.USER))
                         </NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="#/admin/ingredients" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Ingredientes">
-                            <Icon name="material-symbols:nutrition" class="text-2xl" />
-                            <span class="is-drawer-close:hidden">Ingredientes</span>
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink to="#/admin/recipes" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                            data-tip="Recetas">
-                            <Icon name="material-symbols:list-alt" class="text-2xl" />
-                            <span class="is-drawer-close:hidden">Recetas</span>
-                        </NuxtLink>
-                    </li>
-                    <li>
-                        <NuxtLink to="#/admin/inventory" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                        <NuxtLink to="/admin/inventory" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                             data-tip="Inventario">
                             <Icon name="material-symbols:inventory-2" class="text-2xl" />
                             <span class="is-drawer-close:hidden">Inventario</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/admin/recipes" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                            data-tip="Recetas">
+                            <Icon name="material-symbols:list-alt" class="text-2xl" />
+                            <span class="is-drawer-close:hidden">Recetas</span>
                         </NuxtLink>
                     </li>
                     <li>
