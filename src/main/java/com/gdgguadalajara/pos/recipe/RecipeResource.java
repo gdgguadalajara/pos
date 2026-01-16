@@ -8,6 +8,7 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.common.model.dto.PaginationRequestParams;
 import com.gdgguadalajara.pos.recipe.application.CreateRecipe;
+import com.gdgguadalajara.pos.recipe.application.DeleteRecipe;
 import com.gdgguadalajara.pos.recipe.application.UpdateRecipe;
 import com.gdgguadalajara.pos.recipe.model.Recipe;
 import com.gdgguadalajara.pos.recipe.model.dto.CreateRecipeRequest;
@@ -16,6 +17,7 @@ import com.gdgguadalajara.pos.recipe.model.dto.UpdateRecipeRequest;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -32,6 +34,7 @@ public class RecipeResource {
 
     private final CreateRecipe createRecipe;
     private final UpdateRecipe updateRecipe;
+    private final DeleteRecipe deleteRecipe;
 
     @GET
     @RolesAllowed(AccountRole.ADMIN_ROLE)
@@ -60,5 +63,12 @@ public class RecipeResource {
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Recipe update(UUID id, UpdateRecipeRequest request) {
         return updateRecipe.run(id, request);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @RolesAllowed(AccountRole.ADMIN_ROLE)
+    public void update(UUID id) {
+        deleteRecipe.run(id);
     }
 }
