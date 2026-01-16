@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import com.gdgguadalajara.pos.account.model.AccountRole;
+import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.ingredient.model.Ingredient;
 import com.gdgguadalajara.pos.recipe.application.AddIngredientToRecipe;
 import com.gdgguadalajara.pos.recipe.application.RemoveIngredientFromRecipe;
+import com.gdgguadalajara.pos.recipe.model.Recipe;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.Consumes;
@@ -30,7 +32,10 @@ public class RecipeIngredientsResource {
     @GET
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public List<Ingredient> read(UUID id) {
-        return Ingredient.<Ingredient>list("recipe.id", id);
+        var recipe = Recipe.<Recipe>findById(id);
+        if (recipe == null)
+            throw DomainException.notFound("Receta no encontrada");
+        return recipe.ingredients.stream().toList();
     }
 
     @POST
