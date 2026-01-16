@@ -29,7 +29,8 @@ public class CreateIngredient {
         ingredient.usageUnit = request.usageUnit();
         ingredient.systemStock = request.systemStock();
         ingredient.costPerPurchaseUnit = request.costPerPurchaseUnit();
-        ingredient.recipe = recipe;
+        if (recipe != null)
+            ingredient.recipes.add(recipe);
         ingredient.persistAndFlush();
         return ingredient;
     }

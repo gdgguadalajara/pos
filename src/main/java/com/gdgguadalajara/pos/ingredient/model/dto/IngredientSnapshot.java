@@ -1,7 +1,9 @@
 package com.gdgguadalajara.pos.ingredient.model.dto;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.gdgguadalajara.pos.ingredient.model.Ingredient;
 import com.gdgguadalajara.pos.ingredient.model.IngredientUnitType;
@@ -14,12 +16,13 @@ public record IngredientSnapshot(
         IngredientUnitType usageUnit,
         Double systemStock,
         Double costPerPurchaseUnit,
-        RecipeSnapshot recipe) {
+        Set<RecipeSnapshot> recipe) {
 
     public IngredientSnapshot(Ingredient ingredient) {
         this(ingredient.id, ingredient.name, ingredient.purchaseUnit,
                 ingredient.usageUnit, ingredient.systemStock,
-                ingredient.costPerPurchaseUnit, new RecipeSnapshot(ingredient.recipe));
+                ingredient.costPerPurchaseUnit,
+                ingredient.recipes.stream().map(RecipeSnapshot::new).collect(Collectors.toSet()));
     }
 
     public record RecipeSnapshot(
