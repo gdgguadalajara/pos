@@ -23,7 +23,7 @@ public class CreateRecipe {
         recipe.description = request.description();
         recipe.product = product;
         recipe.ingredients.addAll(ingredients);
-        recipe.persist();
+        recipe.persistAndFlush();
         return recipe;
     }
 }

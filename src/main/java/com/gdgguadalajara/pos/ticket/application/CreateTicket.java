@@ -20,7 +20,7 @@ public class CreateTicket {
         ticket.status = TicketStatus.OPEN;
         ticket.serviceType = request.serviceType();
         ticket.dinerCount = request.dinerCount();
-        ticket.persist();
+        ticket.persistAndFlush();
         return ticket;
     }
 

@@ -13,7 +13,7 @@ public class CreateProductionCenter {
         productionCenter.name = request.name();
         productionCenter.description = request.description();
         productionCenter.isActive = request.isActive();
-        productionCenter.persist();
+        productionCenter.persistAndFlush();
         return productionCenter;
     }
 

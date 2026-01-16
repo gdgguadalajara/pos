@@ -22,7 +22,7 @@ public class UpdateIngredient {
         ingredient.usageUnit = request.usageUnit();
         ingredient.systemStock = request.systemStock();
         ingredient.costPerPurchaseUnit = request.costPerPurchaseUnit();
-        ingredient.persist();
+        ingredient.persistAndFlush();
         return ingredient;
     }
 }

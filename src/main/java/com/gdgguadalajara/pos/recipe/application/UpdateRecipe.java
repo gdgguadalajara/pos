@@ -19,7 +19,7 @@ public class UpdateRecipe {
             throw DomainException.notFound("Receta no encontrada");
         recipe.name = request.name();
         recipe.description = request.description();
-        recipe.persist();
+        recipe.persistAndFlush();
         return recipe;
     }
 }
