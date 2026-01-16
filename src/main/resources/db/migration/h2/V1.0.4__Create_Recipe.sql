@@ -1,11 +1,11 @@
 create table Recipe (
-	createdAt timestamp(6) not null,
-	updatedAt timestamp(6),
-	id uuid not null,
-	product_id uuid unique,
-	description varchar(255) not null,
-	name varchar(255) not null,
-	primary key (id)
+    createdAt timestamp(6) not null,
+    updatedAt timestamp(6),
+    id uuid not null,
+    product_id uuid unique not null,
+    description varchar(255) not null,
+    name varchar(255) not null,
+    primary key (id)
 );
 
 alter table if exists Recipe 
