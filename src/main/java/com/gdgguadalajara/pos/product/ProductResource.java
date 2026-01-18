@@ -90,7 +90,7 @@ public class ProductResource {
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
-    public Product update(UUID uuid, UpdateProductRequest request) {
+    public Product update(UUID uuid, @Valid UpdateProductRequest request) {
         return updateProduct.run(uuid, request);
     }
 
