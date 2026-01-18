@@ -41,7 +41,7 @@ public class ProductResource {
     @POST
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    public Product create(CreateProductRequest request) {
+    public Product create(@Valid CreateProductRequest request) {
         return createProduct.run(request);
     }
 
