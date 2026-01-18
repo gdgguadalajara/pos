@@ -1,4 +1,12 @@
 package com.gdgguadalajara.pos.featureflag.model.dto;
 
-public record CreateFeatureFlagRequest(String name, Boolean enabled, String description) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateFeatureFlagRequest(
+        @NotBlank
+        String name,
+        @NotNull
+        Boolean enabled,
+        String description) {
 }

@@ -41,7 +41,7 @@ public class CategoryResource {
     @POST
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    public Category create(CreateCategoryRequest request) {
+    public Category create(@Valid CreateCategoryRequest request) {
         return createCategory.run(request);
     }
 
