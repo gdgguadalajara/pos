@@ -8,6 +8,8 @@ import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 import com.gdgguadalajara.pos.common.model.DomainException;
+import com.gdgguadalajara.pos.inventory.application.ProcessRecipeDeduction;
+import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.productioncenter.application.GetEffectiveProductionCenter;
 import com.gdgguadalajara.pos.productioncenter.application.ServerSideProductionCenterEvents;
 
@@ -20,6 +22,7 @@ public class OrderTicket {
 
     private final GetCurrentSession getCurrentSession;
     private final GetEffectiveProductionCenter getEffectiveProductionCenter;
+    private final ProcessRecipeDeduction processRecipeDeduction;
     private final ServerSideProductionCenterEvents serverSideProductionCenterEvents;
 
     public Ticket run(UUID uuid) {
@@ -37,6 +40,7 @@ public class OrderTicket {
                     item.status = TicketItemStatus.ORDERED;
                     item.persistAndFlush();
                     serverSideProductionCenterEvents.publish(getEffectiveProductionCenter.run(item.originalProductId));
+                    processRecipeDeduction.run(Product.<Product>findById(item.originalProductId));
                 });
         return ticket;
     }
