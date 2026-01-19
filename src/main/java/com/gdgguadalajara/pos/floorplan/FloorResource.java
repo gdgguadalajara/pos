@@ -16,6 +16,7 @@ import io.quarkus.panache.common.Sort;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -33,7 +34,7 @@ public class FloorResource {
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
-    public Floor create(CreateFloorRequest request) {
+    public Floor create(@Valid CreateFloorRequest request) {
         return createFloor.run(request);
     }
 
@@ -41,7 +42,7 @@ public class FloorResource {
     @Path("/{floorId}/tables")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Transactional
-    public RestaurantTable create(UUID floorId, CreateRestaurantTableRequest request) {
+    public RestaurantTable create(UUID floorId, @Valid CreateRestaurantTableRequest request) {
         return createRestaurantTable.run(floorId, request);
     }
 
