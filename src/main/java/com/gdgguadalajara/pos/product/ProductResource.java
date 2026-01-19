@@ -41,7 +41,7 @@ public class ProductResource {
     @POST
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    public Product create(CreateProductRequest request) {
+    public Product create(@Valid CreateProductRequest request) {
         return createProduct.run(request);
     }
 
@@ -90,7 +90,7 @@ public class ProductResource {
     @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
-    public Product update(UUID uuid, UpdateProductRequest request) {
+    public Product update(UUID uuid, @Valid UpdateProductRequest request) {
         return updateProduct.run(uuid, request);
     }
 

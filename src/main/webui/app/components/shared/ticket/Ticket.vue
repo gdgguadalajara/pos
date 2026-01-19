@@ -20,9 +20,9 @@ onMounted(() => {
     <div class="lg:flex h-[calc(100vh-110px)]">
         <div class="h-full grow card bg-base-200">
             <div class="card-body h-full">
-                <TicketCategories />
+                <SharedTicketCategories />
                 <div class="flex-1 overflow-auto">
-                    <TicketProducts />
+                    <SharedTicketProducts />
                 </div>
             </div>
         </div>
@@ -39,10 +39,10 @@ onMounted(() => {
             </label>
             <div :class="['not-lg:grow lg:h-full card-body p-3', { 'collapse-content': !isLgScreen }]">
                 <template v-if="isLgScreen">
-                    <TicketItems />
+                    <SharedTicketItems />
                 </template>
                 <div v-else class="grow h-60 flex">
-                    <TicketItems />
+                    <SharedTicketItems />
                 </div>
                 <div class="flex-none">
                     <div class="divider m-0"></div>
@@ -51,7 +51,7 @@ onMounted(() => {
                         <span>${{ ticket?.totalAmount }}</span>
                     </div>
                     <div class="divider m-0"></div>
-                    <TicketActions :is-quicksale="props.isQuicksale" />
+                    <SharedTicketActions :is-quicksale="props.isQuicksale" />
                 </div>
             </div>
         </div>

@@ -17,7 +17,7 @@
 
 ## ⚙️ Configuración y DevOps
 - [ ] ¿Hay nuevas **variables de entorno** necesarias?
-- [ ] ¿Se modificaron los **Dockerfiles** o los scripts de build (`build-all.sh`)?
+- [ ] ¿Se modificaron los **Dockerfiles**?
 - [ ] ¿Se requiere actualizar el volumen local `/data`?
 
 ---
