@@ -8,10 +8,12 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class DeleteTicket {
 
     private final GetCurrentSession getCurrentSession;

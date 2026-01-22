@@ -14,7 +14,6 @@ import com.gdgguadalajara.pos.expense.model.dto.CreateExpenseRequest;
 import com.gdgguadalajara.pos.expense.model.dto.ReadExpensesFilter;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
@@ -31,7 +30,6 @@ public class CashSessionExpenseResource {
 
     @POST
     @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
-    @Transactional
     public Expense createExpense(UUID id, CreateExpenseRequest request) {
         return createExpense.run(id, request);
     }

@@ -40,6 +40,7 @@ public class TicketCompressor {
             while (!compresser.finished())
                 baos.write(buffer, 0, compresser.deflate(buffer));
             compresser.end();
+            // TODO: migrate to Base45 QR?
             var url = ticketViewer + "?t=" + Base64.getEncoder().encodeToString(baos.toByteArray());
             return new TicketCompressorResponse(url);
         } catch (IOException e) {

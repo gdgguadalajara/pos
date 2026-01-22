@@ -1,4 +1,4 @@
-package com.gdgguadalajara.pos.floorplan.application;
+package com.gdgguadalajara.pos.floorplan.model.dto;
 
 import io.smallrye.common.constraint.NotNull;
 import jakarta.validation.constraints.Positive;

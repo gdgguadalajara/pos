@@ -20,7 +20,6 @@ import com.gdgguadalajara.pos.product.model.dto.UpdateProductRequest;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
@@ -39,7 +38,6 @@ public class ProductResource {
     private final DeleteProduct deleteProduct;
 
     @POST
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Product create(@Valid CreateProductRequest request) {
         return createProduct.run(request);
@@ -87,7 +85,6 @@ public class ProductResource {
     }
 
     @PUT
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public Product update(UUID uuid, @Valid UpdateProductRequest request) {
@@ -95,7 +92,6 @@ public class ProductResource {
     }
 
     @DELETE
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public void delete(UUID uuid) {

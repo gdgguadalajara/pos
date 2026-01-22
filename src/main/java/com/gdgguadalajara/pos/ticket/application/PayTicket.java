@@ -8,10 +8,12 @@ import com.gdgguadalajara.pos.ticket.model.Ticket;
 import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class PayTicket {
 
     private final OrderTicket orderTicket;

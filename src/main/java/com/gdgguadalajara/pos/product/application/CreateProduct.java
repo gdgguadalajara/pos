@@ -4,8 +4,10 @@ import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.product.model.dto.CreateProductRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class CreateProduct {
 
     public Product run(CreateProductRequest request) {

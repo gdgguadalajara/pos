@@ -15,7 +15,6 @@ import com.gdgguadalajara.pos.floorplan.model.dto.CreateRestaurantTableRequest;
 import io.quarkus.panache.common.Sort;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -33,7 +32,6 @@ public class FloorResource {
 
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public Floor create(@Valid CreateFloorRequest request) {
         return createFloor.run(request);
     }
@@ -41,7 +39,6 @@ public class FloorResource {
     @POST
     @Path("/{floorId}/tables")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public RestaurantTable create(UUID floorId, @Valid CreateRestaurantTableRequest request) {
         return createRestaurantTable.run(floorId, request);
     }
@@ -62,7 +59,6 @@ public class FloorResource {
     @DELETE
     @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public void delete(UUID uuid) {
         try {
             deleteFloor.run(Floor.findById(uuid));

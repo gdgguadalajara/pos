@@ -9,10 +9,12 @@ import com.gdgguadalajara.pos.cashsession.model.dto.OpenCashSessionRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class OpenCashSession {
 
     private final GetCurrentSession getCurrentSession;

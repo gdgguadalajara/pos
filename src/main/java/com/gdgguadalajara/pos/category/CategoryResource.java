@@ -20,7 +20,6 @@ import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
@@ -39,7 +38,6 @@ public class CategoryResource {
     private final DeleteCategory deleteCategory;
 
     @POST
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Category create(@Valid CreateCategoryRequest request) {
         return createCategory.run(request);
@@ -89,7 +87,6 @@ public class CategoryResource {
     }
 
     @PUT
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public Category update(UUID uuid, UpdateCategoryRequest request) {
@@ -97,7 +94,6 @@ public class CategoryResource {
     }
 
     @DELETE
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{uuid}")
     public void delete(UUID uuid) {

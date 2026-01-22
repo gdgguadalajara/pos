@@ -4,8 +4,10 @@ import com.gdgguadalajara.pos.businessprofile.model.BusinessProfile;
 import com.gdgguadalajara.pos.businessprofile.model.dto.UpdateBusinessProfileRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class UpdateBusinessProfile {
 
     public BusinessProfile run(UpdateBusinessProfileRequest updateBusinessProfileRequest) {

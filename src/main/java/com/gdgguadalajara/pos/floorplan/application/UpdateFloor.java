@@ -7,8 +7,10 @@ import com.gdgguadalajara.pos.floorplan.model.dto.UpdateFloorRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class UpdateFloor {
 
     public Floor run(UUID uuid, UpdateFloorRequest request) {

@@ -11,7 +11,6 @@ import com.gdgguadalajara.pos.product.model.Product;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -32,7 +31,6 @@ public class ProductCategoryResource {
     }
 
     @POST
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{categoryId}")
     public Product create(UUID productId, UUID categoryId) {
@@ -40,7 +38,6 @@ public class ProductCategoryResource {
     }
 
     @DELETE
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{categoryId}")
     public void remove(UUID productId, UUID categoryId) {

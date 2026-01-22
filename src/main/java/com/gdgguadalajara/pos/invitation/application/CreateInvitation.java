@@ -11,10 +11,12 @@ import com.gdgguadalajara.pos.invitation.model.dto.CreateInvitationRequest;
 import com.gdgguadalajara.pos.user.model.User;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CreateInvitation {
 
     public Invitation run(CreateInvitationRequest request) {

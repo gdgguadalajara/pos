@@ -6,8 +6,10 @@ import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.productioncenter.model.ProductionCenter;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class DeleteProduncionCenter {
 
     public void run(ProductionCenter center) {

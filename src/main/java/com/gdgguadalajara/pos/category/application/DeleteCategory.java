@@ -3,8 +3,10 @@ package com.gdgguadalajara.pos.category.application;
 import com.gdgguadalajara.pos.category.model.Category;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class DeleteCategory {
     
     public void run(Category category) {

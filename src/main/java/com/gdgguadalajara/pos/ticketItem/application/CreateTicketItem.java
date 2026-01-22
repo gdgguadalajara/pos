@@ -18,10 +18,12 @@ import com.gdgguadalajara.pos.ticketItem.model.dto.CreateTicketItemRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CreateTicketItem {
 
     private final GetCurrentSession getCurrentSession;
