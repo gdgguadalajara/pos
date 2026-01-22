@@ -13,10 +13,12 @@ import com.gdgguadalajara.pos.expense.model.Expense;
 import com.gdgguadalajara.pos.payment.model.Payment;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CloseCashSession {
 
     private final GetCurrentSession getCurrentSession;

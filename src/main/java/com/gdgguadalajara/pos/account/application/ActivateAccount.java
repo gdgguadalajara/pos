@@ -12,10 +12,12 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.invitation.model.Invitation;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class ActivateAccount {
 
     public Account run(ActivateAccountRequest request) {

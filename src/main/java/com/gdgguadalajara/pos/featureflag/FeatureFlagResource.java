@@ -10,7 +10,6 @@ import com.gdgguadalajara.pos.featureflag.model.dto.CreateFeatureFlagRequest;
 import com.gdgguadalajara.pos.featureflag.model.dto.UpdateFeatureFlagRequest;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import lombok.AllArgsConstructor;
@@ -44,24 +43,21 @@ public class FeatureFlagResource {
 
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public FeatureFlag create(CreateFeatureFlagRequest request) {
-        return createFeatureFlag.execute(request);
+        return createFeatureFlag.run(request);
     }
 
     @PUT
     @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public FeatureFlag update(@PathParam("uuid") UUID uuid, UpdateFeatureFlagRequest request) {
-        return updateFeatureFlag.execute(uuid, request);
+        return updateFeatureFlag.run(uuid, request);
     }
 
     @DELETE
     @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public void delete(@PathParam("uuid") UUID uuid) {
-        deleteFeatureFlag.execute(uuid);
+        deleteFeatureFlag.run(uuid);
     }
 }

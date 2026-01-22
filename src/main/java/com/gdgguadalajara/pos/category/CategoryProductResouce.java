@@ -17,7 +17,6 @@ import com.gdgguadalajara.pos.product.model.Product;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
@@ -65,7 +64,6 @@ public class CategoryProductResouce {
     }
 
     @POST
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{productId}")
     public Category create(UUID categoryId, UUID productId) {
@@ -73,7 +71,6 @@ public class CategoryProductResouce {
     }
 
     @DELETE
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     @Path("/{productId}")
     public void delete(UUID categoryId, UUID productId) {

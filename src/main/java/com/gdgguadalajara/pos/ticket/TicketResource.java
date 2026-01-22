@@ -19,7 +19,6 @@ import com.gdgguadalajara.pos.payment.model.Payment;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
@@ -39,7 +38,6 @@ public class TicketResource {
     private final TicketCompressor ticketCompressor;
 
     @POST
-    @Transactional
     @Authenticated
     public Ticket create(@Valid CreateTicketRequest request) {
         return createTicket.run(request);
@@ -73,7 +71,6 @@ public class TicketResource {
 
     @PUT
     @Path("/{id}/order")
-    @Transactional
     @Authenticated
     public Ticket order(UUID id) {
         return orderTicket.run(id);
@@ -81,7 +78,6 @@ public class TicketResource {
 
     @DELETE
     @Path("/{id}")
-    @Transactional
     @Authenticated
     public void delete(UUID id) {
         deleteTicket.run(id);

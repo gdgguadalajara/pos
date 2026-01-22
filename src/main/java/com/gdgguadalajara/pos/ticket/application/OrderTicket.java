@@ -14,10 +14,12 @@ import com.gdgguadalajara.pos.productioncenter.application.GetEffectiveProductio
 import com.gdgguadalajara.pos.productioncenter.application.ServerSideProductionCenterEvents;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class OrderTicket {
 
     private final GetCurrentSession getCurrentSession;

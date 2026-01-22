@@ -6,7 +6,6 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.TicketItemStatus;
 
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
@@ -15,7 +14,6 @@ public class TicketItemResource {
 
     @PUT
     @Path("/{uuid}/preparing")
-    @Transactional
     public Boolean preparing(UUID uuid) {
         var item = TicketItem.<TicketItem>findById(uuid);
         if (item == null)
@@ -29,7 +27,6 @@ public class TicketItemResource {
 
     @PUT
     @Path("/{uuid}/ready")
-    @Transactional
     public Boolean ready(UUID uuid) {
         var item = TicketItem.<TicketItem>findById(uuid);
         if (item == null)

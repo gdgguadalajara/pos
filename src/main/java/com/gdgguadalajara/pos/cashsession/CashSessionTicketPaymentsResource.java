@@ -11,7 +11,6 @@ import com.gdgguadalajara.pos.payment.model.dto.CreatePaymentRequest;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class CashSessionTicketPaymentsResource {
 
     @POST
     @Path("/tickets/{ticketId}/payments")
-    @Transactional
     @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
     public Payment payTicket(UUID id, UUID ticketId, CreatePaymentRequest createPaymentRequest) {
         var cashSession = CashSession.<CashSession>findById(id);

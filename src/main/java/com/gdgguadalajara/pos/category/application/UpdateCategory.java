@@ -8,8 +8,10 @@ import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.productioncenter.model.ProductionCenter;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class UpdateCategory {
 
     public Category run(UUID uuid, UpdateCategoryRequest request) {

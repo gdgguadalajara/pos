@@ -11,10 +11,12 @@ import com.gdgguadalajara.pos.ticket.application.PayTicket;
 import com.gdgguadalajara.pos.ticket.model.Ticket;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CreatePayment {
 
     private final PayTicket payTicket;

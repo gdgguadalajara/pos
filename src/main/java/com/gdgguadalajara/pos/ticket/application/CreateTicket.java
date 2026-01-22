@@ -6,10 +6,12 @@ import com.gdgguadalajara.pos.ticket.model.TicketStatus;
 import com.gdgguadalajara.pos.ticket.model.dto.CreateTicketRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CreateTicket {
 
     private final GetCurrentSession getCurrentSession;

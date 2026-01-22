@@ -4,7 +4,9 @@ import com.gdgguadalajara.pos.floorplan.model.Floor;
 import com.gdgguadalajara.pos.floorplan.model.dto.CreateFloorRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
+@Transactional
 @ApplicationScoped
 public class CreateFloor {
     

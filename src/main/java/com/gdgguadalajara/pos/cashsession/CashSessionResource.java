@@ -16,7 +16,6 @@ import com.gdgguadalajara.pos.common.model.PaginatedResponse;
 import com.gdgguadalajara.pos.common.util.PanacheCriteria;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
@@ -57,7 +56,6 @@ public class CashSessionResource {
 
     @POST
     @Path("/open")
-    @Transactional
     @RolesAllowed({ AccountRole.CASHIER_ROLE })
     public CashSession open(OpenCashSessionRequest request) {
         return openCashSession.run(request);
@@ -65,7 +63,6 @@ public class CashSessionResource {
 
     @PUT
     @Path("/close")
-    @Transactional
     @RolesAllowed({ AccountRole.ADMIN_ROLE, AccountRole.CASHIER_ROLE })
     public CashSession close(CloseCashSessionRequest request) {
         return closeCashSession.run(request);

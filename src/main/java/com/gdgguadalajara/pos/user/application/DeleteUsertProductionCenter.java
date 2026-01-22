@@ -8,8 +8,10 @@ import com.gdgguadalajara.pos.productioncenter.model.ProductionCenter;
 import com.gdgguadalajara.pos.user.model.User;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class DeleteUsertProductionCenter {
 
     public Set<ProductionCenter> run(UUID userId, UUID productionCenterId) {

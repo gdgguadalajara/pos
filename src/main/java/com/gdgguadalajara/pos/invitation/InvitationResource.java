@@ -9,7 +9,6 @@ import com.gdgguadalajara.pos.invitation.model.dto.CreateInvitationRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
@@ -46,7 +45,6 @@ public class InvitationResource {
 
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public Invitation create(@Valid CreateInvitationRequest request) {
         return createInvitation.run(request);
     }

@@ -7,8 +7,10 @@ import com.gdgguadalajara.pos.product.model.dto.UpdateProductRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class UpdateProduct {
 
     public Product run(UUID uuid, UpdateProductRequest request) {
@@ -27,5 +29,4 @@ public class UpdateProduct {
         product.persistAndFlush();
         return product;
     }
-
 }

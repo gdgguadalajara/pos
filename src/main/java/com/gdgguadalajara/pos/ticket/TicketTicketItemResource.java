@@ -8,7 +8,6 @@ import com.gdgguadalajara.pos.ticketItem.model.TicketItem;
 import com.gdgguadalajara.pos.ticketItem.model.dto.CreateTicketItemRequest;
 
 import io.quarkus.security.Authenticated;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.POST;
@@ -25,7 +24,6 @@ public class TicketTicketItemResource {
     @POST
     @Path("/{productId}")
     @Authenticated
-    @Transactional
     public TicketItem create(UUID ticketId, UUID productId, @Valid CreateTicketItemRequest request) {
         return createTicketItem.run(ticketId, productId, request);
     }
@@ -33,7 +31,6 @@ public class TicketTicketItemResource {
     @DELETE
     @Path("/{ticketItemId}")
     @Authenticated
-    @Transactional
     public void delete(UUID ticketId, UUID ticketItemId) {
         deleteTicketItem.run(ticketId, ticketItemId);
     }

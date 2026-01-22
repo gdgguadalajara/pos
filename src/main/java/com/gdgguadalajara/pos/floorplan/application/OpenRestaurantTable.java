@@ -8,15 +8,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdgguadalajara.pos.common.model.DomainException;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTable;
 import com.gdgguadalajara.pos.floorplan.model.RestaurantTableStatus;
+import com.gdgguadalajara.pos.floorplan.model.dto.OpenRestauranTableRequest;
 import com.gdgguadalajara.pos.ticket.application.CreateTicket;
 import com.gdgguadalajara.pos.ticket.model.TicketServiceType;
 import com.gdgguadalajara.pos.ticket.model.dto.CreateTicketRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class OpenRestaurantTable {
 
     private final CreateTicket createTicket;

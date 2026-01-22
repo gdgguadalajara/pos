@@ -7,7 +7,6 @@ import com.gdgguadalajara.pos.businessprofile.model.dto.UpdateBusinessProfileReq
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
@@ -28,7 +27,6 @@ public class BusinessProfileResource {
 
     @PUT
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public BusinessProfile update(@Valid UpdateBusinessProfileRequest request) {
         return updateBusinessProfile.run(request);
     }

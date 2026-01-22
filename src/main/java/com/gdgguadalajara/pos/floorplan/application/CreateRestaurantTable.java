@@ -9,8 +9,10 @@ import com.gdgguadalajara.pos.floorplan.model.dto.CreateRestaurantTableRequest;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class CreateRestaurantTable {
 
     public RestaurantTable run(UUID floorId, CreateRestaurantTableRequest request) {

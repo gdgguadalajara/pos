@@ -18,7 +18,6 @@ import com.gdgguadalajara.pos.productioncenter.model.dto.CreateProductionCenterR
 import io.quarkus.security.Authenticated;
 import io.smallrye.mutiny.Multi;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.DELETE;
@@ -39,7 +38,6 @@ public class ProductionCenterResource {
 
     @POST
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public ProductionCenter create(@Valid CreateProductionCenterRequest request) {
         return createProductionCenter.run(request);
     }
@@ -63,7 +61,6 @@ public class ProductionCenterResource {
     @DELETE
     @Path("/{uuid}")
     @RolesAllowed(AccountRole.ADMIN_ROLE)
-    @Transactional
     public void delete(UUID uuid) {
         var productionCenter = ProductionCenter.<ProductionCenter>findById(uuid);
         if (productionCenter == null)

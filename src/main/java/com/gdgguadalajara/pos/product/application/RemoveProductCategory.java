@@ -7,8 +7,10 @@ import com.gdgguadalajara.pos.product.model.Product;
 import com.gdgguadalajara.pos.common.model.DomainException;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class RemoveProductCategory {
 
     public Product run(UUID productId, UUID categoryId) {

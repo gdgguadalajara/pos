@@ -13,7 +13,6 @@ import com.gdgguadalajara.pos.user.model.User;
 
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -42,7 +41,6 @@ public class UsersProductionCentersResource {
 
     @POST
     @Path("/{productionCenterId}")
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public Set<ProductionCenter> create(UUID userId, UUID productionCenterId) {
         return createUsertProductionCenter.run(userId, productionCenterId);
@@ -50,7 +48,6 @@ public class UsersProductionCentersResource {
 
     @DELETE
     @Path("/{productionCenterId}")
-    @Transactional
     @RolesAllowed(AccountRole.ADMIN_ROLE)
     public void delete(UUID userId, UUID productionCenterId) {
         deleteUsertProductionCenter.run(userId, productionCenterId);

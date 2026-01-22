@@ -10,10 +10,12 @@ import com.gdgguadalajara.pos.expense.model.Expense;
 import com.gdgguadalajara.pos.expense.model.dto.CreateExpenseRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
+@Transactional
 public class CreateExpense {
 
     private final GetCurrentSession getCurrentSession;

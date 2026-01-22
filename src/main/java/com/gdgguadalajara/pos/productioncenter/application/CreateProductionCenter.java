@@ -4,8 +4,10 @@ import com.gdgguadalajara.pos.productioncenter.model.ProductionCenter;
 import com.gdgguadalajara.pos.productioncenter.model.dto.CreateProductionCenterRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class CreateProductionCenter {
 
     public ProductionCenter run(CreateProductionCenterRequest request) {
